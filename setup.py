@@ -20,7 +20,9 @@ long_description = (
 setup(
     name='collective.eeafaceted.collectionwidget',
     version='0.1',
-    description="eea.facetednavigation widget that enables selecting a collection (among several) as base filter",
+    description=(
+        "eea.facetednavigation widget that enables selecting "
+        "a collection (among several) as base filter"),
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers
     classifiers=[
@@ -44,6 +46,7 @@ setup(
         'five.grok',
         'plone.api',
         'setuptools',
+        'eea.facetednavigation',
     ],
     extras_require={
         'test': [
