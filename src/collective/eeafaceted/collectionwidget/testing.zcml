@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.eeafaceted.collectionwidget">
+
+  <include file="configure.zcml" />
+
+  <include package="ecreall.helpers.testing" />
+
+  <genericsetup:registerProfile
+      name="testing"
+      title="collective.eeafaceted.collectionwidget tests"
+      directory="profiles/testing"
+      description="Steps to ease tests of collective.eeafaceted.collectionwidget"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      />
+
+</configure>
