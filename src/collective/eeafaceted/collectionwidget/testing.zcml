@@ -1,6 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="collective.eeafaceted.collectionwidget">
 
   <include file="configure.zcml" />
@@ -14,5 +15,18 @@
       description="Steps to ease tests of collective.eeafaceted.collectionwidget"
       provides="Products.GenericSetup.interfaces.EXTENSION"
       />
+
+  <browser:page
+    for="eea.facetednavigation.interfaces.IFacetedNavigable"
+    name="default_collection_widgets.xml"
+    template="testing/default_collection.xml"
+    permission="eea.faceted.configure"
+    />
+
+  <subscriber
+    for=".testing.interfaces.ICollectionFacetApplied
+         eea.facetednavigation.interfaces.IFacetedEnabledEvent"
+    handler=".testing.events.collection_faceted_enabled"
+    />
 
 </configure>

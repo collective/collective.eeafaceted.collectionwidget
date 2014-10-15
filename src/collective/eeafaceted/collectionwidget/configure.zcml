@@ -16,6 +16,7 @@
 
     <include package=".browser" />
     <include package=".content" />
+    <include package=".widgets" />
 
     <genericsetup:registerProfile
         name="default"
@@ -31,5 +32,13 @@
         description="Post install import step from collective.eeafaceted.collectionwidget"
         handler=".setuphandlers.post_install">
     </genericsetup:importStep>
+
+    <!-- Vocabularies -->
+
+    <utility component=".vocabulary.CollectionVocabularyFactory"
+             name="collective.eeafaceted.collectionwidget.collectionvocabulary" />
+
+    <utility component=".vocabulary.CollectionCategoryVocabularyFactory"
+             name="collective.eeafaceted.collectionwidget.collectioncategoryvocabulary" />
 
 </configure>

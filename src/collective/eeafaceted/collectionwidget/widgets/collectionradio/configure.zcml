@@ -1,0 +1,8 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:faceted="http://namespaces.zope.org/faceted"
+    i18n_domain="collective.eeafaceted.collectionwidget">
+
+  <faceted:widget factory=".widget.Widget" />
+
+</configure>

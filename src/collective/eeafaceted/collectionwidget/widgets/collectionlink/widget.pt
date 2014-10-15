@@ -1,0 +1,57 @@
+<div class="faceted-widget faceted-tagscloud-widget" style="display: none"
+     i18n:domain="eea" tal:define="
+  error_view nocall:context/@@faceted.widget.error;
+  wid python:view.data.getId();
+  hidden python:view.hidden;
+  hidezerocount python:view.hidezerocount;
+  sortcountable python:view.sortcountable;
+  default_value python:view.default or '';
+  css string:faceted-widget ${view/css_class};
+  css python:hidden and css + ' faceted-widget-hidden' or css;
+  css python:view.countable and css + ' faceted-count' or css;
+  css python:hidezerocount and css + ' faceted-zero-count-hidden' or css;
+  css python:sortcountable and css + ' faceted-sortcountable' or css;
+  maxitems python:view.data.get('maxitems', 0) or 0;
+  vocabulary view/vocabulary;"
+  tal:condition="vocabulary"
+  tal:attributes="id string:${wid}_widget; class css">
+
+<fieldset class="widget-fieldset">
+  <legend tal:define="title python:view.data.get('title', '')" tal:content="
+    python:view.translate(title)" i18n:translate="">HTML Widget</legend>
+  <form action="." method="get"
+  tal:on-error="structure python:error_view(error=error, cid=wid)">
+  <ul>
+    <li tal:condition="not:view/data/hidealloption|nothing">
+      <tal:term tal:attributes="
+       class python:default_value == '' and 'faceted-tag-selected' or '';
+       value string:;
+       title string:All;
+       id string:${wid}all;" i18n:attributes="title"
+       i18n:translate="">All</tal:term>
+    </li>
+    <tal:categories repeat="category view/categories">
+      <tal:category define="key python:category[0];
+                            title python:category[1];
+                            elements python:view.grouped_vocabulary[key];">
+        <li class="title" tal:content="title"></li>
+        <tal:items repeat="term elements">
+          <li tal:define="
+            term_id python:term[0];
+            term_label python:term[1];
+            term_label python:view.translate(term_label);
+            wbr_term_label python:view.word_break(term_label);"
+            tal:attributes="
+            class python:term_id == default_value and 'faceted-tag-selected' or '';
+            value python:term_id;
+            title term_label;
+            id string:${wid}${term_id}"
+            tal:content="wbr_term_label" />
+        </tal:items>
+      </tal:category>
+    </tal:categories>
+  </ul>
+  </form>
+  <span style="display:none" tal:content="maxitems" />
+</fieldset>
+</div>
