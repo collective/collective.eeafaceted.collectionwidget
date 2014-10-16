@@ -11,7 +11,8 @@ class CategoriesFromFolder(object):
         catalog = getToolByName(self.context, 'portal_catalog')
         brains = catalog(
             path=dict(query='/'.join(self.context.getPhysicalPath()), depth=1),
-            portal_type='Folder'
+            portal_type='Folder',
+            sort_on="getObjPositionInParent"
         )
         result = [(brain.getId, brain.Title) for brain in brains]
         return result
