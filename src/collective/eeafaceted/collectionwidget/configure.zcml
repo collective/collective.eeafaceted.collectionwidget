@@ -45,4 +45,11 @@
     <utility component=".vocabulary.CollectionCategoryVocabularyFactory"
              name="collective.eeafaceted.collectionwidget.collectioncategoryvocabulary" />
 
+
+    <adapter
+      for="*"
+      provides=".interfaces.ICollectionCategories"
+      factory=".categories.CategoriesAdapter"
+      />
+
 </configure>
