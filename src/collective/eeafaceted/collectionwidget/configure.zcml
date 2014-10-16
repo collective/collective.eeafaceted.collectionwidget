@@ -11,6 +11,10 @@
     <five:registerPackage package="." initialize=".initialize" />
     
     <include package="plone.api" />
+    <!-- 
+    TODO remove include of meta.zcml
+    when eea.facetednavigation > 7.2 is released 
+    -->
     <include package="eea.facetednavigation" file="meta.zcml" />
     <include package="eea.facetednavigation" />
 
