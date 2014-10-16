@@ -12,14 +12,6 @@ from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
-def safe_encode(term):
-    if isinstance(term, unicode):
-        # no need to use portal encoding for transitional encoding from
-        # unicode to ascii. utf-8 should be fine.
-        term = term.encode('utf-8')
-    return term
-
-
 class CollectionVocabulary(object):
     implements(IVocabularyFactory)
 
@@ -30,7 +22,6 @@ class CollectionVocabulary(object):
         items = [
             SimpleTerm(uid, uid, safe_unicode(title))
             for title, uid in results
-            if query is None or safe_encode(query) in safe_encode(title)
         ]
         sorted(items)
 
