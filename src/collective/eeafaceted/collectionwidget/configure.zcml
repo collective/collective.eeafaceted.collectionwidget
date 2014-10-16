@@ -49,7 +49,7 @@
     <adapter
       for="*"
       provides=".interfaces.ICollectionCategories"
-      factory=".categories.CategoriesAdapter"
+      factory=".categories.CategoriesFromFolder"
       />
 
 </configure>
