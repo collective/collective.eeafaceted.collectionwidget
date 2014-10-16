@@ -3,4 +3,5 @@ include =
     src/collective/*
 omit =
     */test*
-    */upgrades/*
+    src/collective/__init__.py
+    src/collective/eeafaceted/__init__.py
