@@ -6,12 +6,16 @@ from collective.eeafaceted.collectionwidget.interfaces import (
     IWidgetDefaultValue
 )
 from plone.app.querystring import queryparser
+from plone import api
+from Acquisition import aq_parent
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.schema.interfaces import IVocabularyFactory
 
+from eea.facetednavigation.widgets.widget import Widget
 
-class CollectionBaseWidget(object):
+
+class CollectionBaseWidget(Widget):
 
     def __call__(self, **kwargs):
         self.categories = self._get_categories()
@@ -84,6 +88,9 @@ class CollectionBaseWidget(object):
         voc = factory(self.context)
         return [(t.value, t.title) for t in voc]
 
+    def _get_category_keys(self):
+        return [id for (id, title) in self._get_categories()]
+
     def _generate_vocabulary(self):
         voc = OrderedDict()
         for key, value in self.categories:
@@ -94,6 +101,13 @@ class CollectionBaseWidget(object):
 
     def _get_category(self, uid):
         """Return the category for a given uid"""
-        catalog = getToolByName(self.context, 'portal_catalog')
-        brain = catalog(UID=uid)[0]
-        return brain.getObject().collectioncategory
+        catalog = api.portal.get_tool('portal_catalog')
+        brains = catalog(UID=uid)
+        if brains:
+            brain = brains[0]
+            collection = brain.getObject()
+        parent_id = aq_parent(collection).getId()
+        if parent_id in self._get_category_keys():
+            return parent_id
+        else:
+            return u''

@@ -39,7 +39,11 @@ class CollectionVocabulary(object):
     @property
     def brains(self):
         catalog = api.portal.get_tool('portal_catalog')
-        return catalog({'portal_type': 'Collection'})
+        brains = catalog(
+            path=dict(query='/'.join(self.context.getPhysicalPath())),
+            portal_type='Collection'
+        )
+        return brains
 
 
 CollectionVocabularyFactory = CollectionVocabulary()
