@@ -12,10 +12,18 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.schema.interfaces import IVocabularyFactory
 
-from eea.facetednavigation.widgets.widget import Widget
+from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
+
+collection_edit_schema = RadioWidget.edit_schema.copy()
+del collection_edit_schema["index"]
+del collection_edit_schema["catalog"]
 
 
-class CollectionBaseWidget(Widget):
+class CollectionBaseWidget(RadioWidget):
+    edit_schema = collection_edit_schema
+    category_vocabulary = (
+        'collective.eeafaceted.collectionwidget.collectioncategoryvocabulary'
+    )
 
     def __call__(self, **kwargs):
         self.categories = self._get_categories()
@@ -106,8 +114,7 @@ class CollectionBaseWidget(Widget):
         if brains:
             brain = brains[0]
             collection = brain.getObject()
-        parent_id = aq_parent(collection).getId()
-        if parent_id in self._get_category_keys():
-            return parent_id
-        else:
-            return u''
+            parent_id = aq_parent(collection).getId()
+            if parent_id in self._get_category_keys():
+                return parent_id
+        return u''

@@ -1,19 +1,15 @@
 # encoding: utf-8
 
 from eea.facetednavigation.widgets import ViewPageTemplateFile
-from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from collective.eeafaceted.collectionwidget.widgets.widget import (
     CollectionBaseWidget
 )
 
 
-class Widget(CollectionBaseWidget, RadioWidget):
+class Widget(CollectionBaseWidget):
 
     widget_type = 'collection-link'
     widget_label = 'Collection Link'
-    category_vocabulary = (
-        'collective.eeafaceted.collectionwidget.collectioncategoryvocabulary'
-    )
 
     index = ViewPageTemplateFile('widget.pt')
 
