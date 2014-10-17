@@ -10,11 +10,28 @@ Suite Teardown  Close all browsers
 
 *** Test cases ***
 
-Widget shows collections in categories
+Widget shows no collections or categories
     Make faceted folder
+    Click link  Faceted criteria
     Page should contain  Base collections
-    #Debug
     
+Widget shows empty categories
+    ${folder}=  Make faceted folder
+    ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
+    Click link  Faceted criteria
+    Page should contain  Base collections
+    Element Text Should Be  css=div#c1_widget li.title  News
+
+Widget shows categories
+    [tags]  current
+    ${folder}=  Make faceted folder
+    ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
+    Create content  type=Collection  title=Info  id=info  container=${category}
+    Go to  ${PLONE_URL}/faceted
+    Page Should Contain  Info
+    Click Element  css=li[title="Info"]
+    Wait Until Page Contains Element  css=div.eea-preview-items
+    element should contain  css=div.eea-preview-items  Faceted folder
 
 
 *** Keywords ***
@@ -23,8 +40,8 @@ Suite Setup
     Enable autologin as  Manager
 
 Make faceted folder
-    Create content  type=Folder  title=Faceted folder  id=faceted
+    ${folder}=  Create content  type=Folder  title=Faceted folder  id=faceted
     Go to  ${PLONE_URL}/faceted
     Click element  css=#plone-contentmenu-actions a
     Click element  plone-contentmenu-actions-faceted.enable
-    Click link  Faceted criteria
+    [Return]  ${folder}
