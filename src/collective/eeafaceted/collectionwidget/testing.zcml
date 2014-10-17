@@ -22,7 +22,7 @@
     />
 
   <subscriber
-    for=".testing.interfaces.ICollectionFacetApplied
+    for="eea.facetednavigation.interfaces.IFacetedNavigable
          eea.facetednavigation.interfaces.IFacetedEnabledEvent"
     handler=".testing.events.collection_faceted_enabled"
     />
