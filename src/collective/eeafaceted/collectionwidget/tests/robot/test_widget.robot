@@ -10,19 +10,19 @@ Suite Teardown  Close all browsers
 
 *** Test cases ***
 
-Widget shows no collections or categories
+Widget shows no collections or categories when folder is empty
     Make faceted folder
     Click link  Faceted criteria
     Page should contain  Base collections
     
-Widget shows empty categories
+Widget shows categories even when they do not hold collections
     ${folder}=  Make faceted folder
     ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
     Click link  Faceted criteria
     Page should contain  Base collections
     Element Text Should Be  css=div#c1_widget li.title  News
 
-Widget shows categories
+Widget shows collections in categories
     [tags]  current
     ${folder}=  Make faceted folder
     ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
