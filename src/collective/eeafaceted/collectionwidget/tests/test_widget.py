@@ -154,3 +154,14 @@ class TestWidget(IntegrationTestCase):
         data.sortreversed = u'1'
         widget = Widget(self.folder, request, data=data)
         self.assertTrue(widget.sortreversed)
+
+    def test_default_term_value(self):
+        request = self.layer['request']
+        from ..widgets.collectionlink.widget import Widget
+        data = Criterion(vocabulary='collective.eeafaceted.collectionwidget.collectionvocabulary')
+        data.sortreversed = u'0'
+        widget = Widget(self.folder, request, data=data)
+        self.assertEquals(widget.default_term_value, self.collection1.UID())
+        data.sortreversed = u'1'
+        widget = Widget(self.folder, request, data=data)
+        self.assertEquals(widget.default_term_value, self.collection2.UID())
