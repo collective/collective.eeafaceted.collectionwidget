@@ -26,7 +26,6 @@ class CollectionBaseWidget(RadioWidget):
     )
 
     def __call__(self, **kwargs):
-        self.categories = self._get_categories()
         self.grouped_vocabulary = self._generate_vocabulary()
         return super(CollectionBaseWidget, self).__call__(**kwargs)
 
@@ -91,13 +90,14 @@ class CollectionBaseWidget(RadioWidget):
     def hidealloption(self):
         return bool(int(getattr(self.data, 'hidealloption', u'0') or u'0'))
 
-    def _get_categories(self):
+    @property
+    def categories(self):
         factory = getUtility(IVocabularyFactory, self.category_vocabulary)
         voc = factory(self.context)
         return [(t.value, t.title) for t in voc]
 
     def _get_category_keys(self):
-        return [id for (id, title) in self._get_categories()]
+        return [id for (id, title) in self.categories]
 
     def _generate_vocabulary(self):
         voc = OrderedDict()
@@ -109,12 +109,12 @@ class CollectionBaseWidget(RadioWidget):
 
     def _get_category(self, uid):
         """Return the category for a given uid"""
-        catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog(UID=uid)
-        if brains:
-            brain = brains[0]
-            collection = brain.getObject()
+        collection = api.content.get(UID=uid)
+        if collection is None:
+            return u''
+        else:
             parent_id = aq_parent(collection).getId()
             if parent_id in self._get_category_keys():
                 return parent_id
-        return u''
+            else:
+                return u''
