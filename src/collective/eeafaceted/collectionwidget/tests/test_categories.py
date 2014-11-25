@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
-
-from collective.eeafaceted.collectionwidget.testing import IntegrationTestCase
 from plone import api
+
+from ..testing.testcase import IntegrationTestCase
 
 
 class TestCategories(IntegrationTestCase):
