@@ -5,3 +5,8 @@ omit =
     */test*
     src/collective/__init__.py
     src/collective/eeafaceted/__init__.py
+    src/collective/eeafaceted/collectionwidget/browser/__init__.py
+    src/collective/eeafaceted/collectionwidget/content/__init__.py
+    src/collective/eeafaceted/collectionwidget/widgets/__init__.py
+    src/collective/eeafaceted/collectionwidget/widgets/collectionlink/__init__.py
+    src/collective/eeafaceted/collectionwidget/widgets/collectionradio/__init__.py
