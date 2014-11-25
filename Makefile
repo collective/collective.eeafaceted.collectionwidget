@@ -20,7 +20,7 @@ bin/instance: bin/buildout buildout.cfg
 	bin/buildout -Nvt 5
 	touch $@
 
-test: bin/test buildout.cfg
+test: bin/test
 	rm -fr htmlcov
 	bin/test
 
