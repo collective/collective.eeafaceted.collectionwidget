@@ -16,15 +16,15 @@ bootstrap: bin/buildout
 run: bin/instance 
 	bin/instance fg
 
-bin/instance: bin/buildout
+bin/instance: bin/buildout buildout.cfg
 	bin/buildout -Nvt 5
 	touch $@
 
-test: bin/test
+test: bin/test buildout.cfg
 	rm -fr htmlcov
 	bin/test
 
-bin/test: bin/buildout
+bin/test: bin/buildout buildout.cfg
 	bin/buildout -Nvt 5
 	touch $@
 
