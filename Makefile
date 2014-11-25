@@ -2,6 +2,8 @@
 #
 all: run
 
+BUILDOUT_FILES = bin/buildout buildout.cfg buildout.d/*.cfg
+
 .PHONY: bootstrap buildout run test cleanall
 bin/buildout: bootstrap.py buildout.cfg
 	virtualenv-2.7 .
@@ -16,7 +18,7 @@ bootstrap: bin/buildout
 run: bin/instance 
 	bin/instance fg
 
-bin/instance: bin/buildout buildout.cfg
+bin/instance: $(BUILDOUT_FILES)
 	bin/buildout -Nvt 5
 	touch $@
 
@@ -24,7 +26,7 @@ test: bin/test
 	rm -fr htmlcov
 	bin/test
 
-bin/test: bin/buildout buildout.cfg
+bin/test: $(BUILDOUT_FILES)
 	bin/buildout -Nvt 5
 	touch $@
 
