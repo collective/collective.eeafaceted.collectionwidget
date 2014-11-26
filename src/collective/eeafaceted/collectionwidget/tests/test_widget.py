@@ -175,17 +175,30 @@ class TestWidget(IntegrationTestCase):
         catalog = getToolByName(self.portal, 'portal_catalog')
         brains = catalog(UID=self.collection1.UID())
         count_dico = widget.count(brains)
-        #without vocabulary and sequence
+        # without vocabulary and sequence
         self.assertEquals(count_dico, {})
         data = Criterion(vocabulary='collective.eeafaceted.collectionwidget.collectionvocabulary')
         widget = Widget(self.folder, request, data=data)
         widget._generate_vocabulary()
         count_dico = widget.count(brains)
-        #with vocabulary
+        # with vocabulary
         self.assertEquals(count_dico,
                           {self.collection1.UID(): 5, self.collection2.UID(): 5})
-        #with sequence
+        # with sequence
         sequence = {u'': 1, self.collection1.UID(): 2}
         count_dico = widget.count(brains, sequence=sequence)
         self.assertEquals(count_dico,
                           {u'': 1, self.collection1.UID(): 5})
+
+    def test_query(self):
+        request = self.layer['request']
+        from ..widgets.collectionlink.widget import Widget
+        data = Criterion(vocabulary='collective.eeafaceted.collectionwidget.collectionvocabulary')
+        widget = Widget(self.folder, request, data=data)
+        widget._generate_vocabulary()
+        # no collection_uid
+        query_dico = widget.query(form={data.__name__: ''})
+        self.assertEquals(query_dico, {})
+        # with collection_uid
+        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
+        self.assertEquals(query_dico, {})
