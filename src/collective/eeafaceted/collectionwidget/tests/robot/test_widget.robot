@@ -1,3 +1,6 @@
+*** Variables ***
+${SELENIUM_IMPLICIT_WAIT}  5
+
 *** Settings ***
 Resource  plone/app/robotframework/keywords.robot
 Resource  plone/app/robotframework/selenium.robot
