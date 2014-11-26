@@ -1,6 +1,3 @@
-*** Variables ***
-${SELENIUM_IMPLICIT_WAIT}  5
-
 *** Settings ***
 Resource  plone/app/robotframework/keywords.robot
 Resource  plone/app/robotframework/selenium.robot
@@ -16,12 +13,14 @@ Suite Teardown  Close all browsers
 Widget shows no collections or categories when folder is empty
     Make faceted folder
     Click link  Faceted criteria
+    Page should contain  Basic search
     Page should contain  Base collections
     
 Widget shows categories even when they do not hold collections
     ${folder}=  Make faceted folder
     ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
     Click link  Faceted criteria
+    Page should contain  Basic search
     Page should contain  Base collections
     Element Text Should Be  css=div#c1_widget li.title  News
 
