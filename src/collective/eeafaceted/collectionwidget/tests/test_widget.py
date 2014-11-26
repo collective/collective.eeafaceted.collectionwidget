@@ -165,3 +165,27 @@ class TestWidget(IntegrationTestCase):
         data.sortreversed = u'1'
         widget = Widget(self.folder, request, data=data)
         self.assertEquals(widget.default_term_value, self.collection2.UID())
+
+    def test_count(self):
+        from Products.CMFCore.utils import getToolByName
+        request = self.layer['request']
+        from ..widgets.collectionlink.widget import Widget
+        data = Criterion()
+        widget = Widget(self.folder, request, data=data)
+        catalog = getToolByName(self.portal, 'portal_catalog')
+        brains = catalog(UID=self.collection1.UID())
+        count_dico = widget.count(brains)
+        #without vocabulary and sequence
+        self.assertEquals(count_dico, {})
+        data = Criterion(vocabulary='collective.eeafaceted.collectionwidget.collectionvocabulary')
+        widget = Widget(self.folder, request, data=data)
+        widget._generate_vocabulary()
+        count_dico = widget.count(brains)
+        #with vocabulary
+        self.assertEquals(count_dico,
+                          {self.collection1.UID(): 5, self.collection2.UID(): 5})
+        #with sequence
+        sequence = {u'': 1, self.collection1.UID(): 2}
+        count_dico = widget.count(brains, sequence=sequence)
+        self.assertEquals(count_dico,
+                          {u'': 1, self.collection1.UID(): 5})
