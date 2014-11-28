@@ -1,0 +1,7 @@
+.title {
+   font-weight: bold;
+}
+
+div.faceted-tagscloud-collection-widget a {
+   padding-left: 1em !important;
+}

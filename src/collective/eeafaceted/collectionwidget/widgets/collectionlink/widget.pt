@@ -1,4 +1,4 @@
-<div class="faceted-widget faceted-tagscloud-widget" style="display: none"
+<div class="faceted-widget faceted-tagscloud-widget faceted-tagscloud-collection-widget" style="display: none"
      i18n:domain="eea" tal:define="
   error_view nocall:context/@@faceted.widget.error;
   wid python:view.data.getId();
@@ -6,7 +6,7 @@
   hidezerocount python:view.hidezerocount;
   sortcountable python:view.sortcountable;
   default_value python:view.default or '';
-  css string:faceted-widget ${view/css_class};
+  css string:faceted-widget ${view/css_class} faceted-tagscloud-collection-widget;
   css python:hidden and css + ' faceted-widget-hidden' or css;
   css python:view.countable and css + ' faceted-count' or css;
   css python:hidezerocount and css + ' faceted-zero-count-hidden' or css;
@@ -46,8 +46,9 @@
             class python:term_id == default_value and 'faceted-tag-selected' or '';
             value python:term_id;
             title term_label;
-            id string:${wid}${term_id}"
-            tal:content="wbr_term_label" />
+            id string:${wid}${term_id}">
+               <a tal:content="wbr_term_label" />
+          </li>
         </tal:items>
       </tal:category>
     </tal:categories>
