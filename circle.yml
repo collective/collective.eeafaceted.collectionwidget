@@ -5,6 +5,8 @@ dependencies:
         - mkdir -p buildout-cache/{eggs,downloads}
         - python bootstrap.py -c circle.cfg --setuptools-version=7.0 --version=2.2.5
         - bin/buildout -Nc circle.cfg
+    cache_directories:
+        - eggs
 test:
     override:
         - bin/test
