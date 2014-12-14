@@ -9,5 +9,5 @@ test:
     override:
         - bin/test
     post:
-        - copy parts/test/robot_* $CIRCLE_ARTIFACTS
+        - cp parts/test/robot_* $CIRCLE_ARTIFACTS
 
