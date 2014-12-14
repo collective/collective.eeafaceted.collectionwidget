@@ -5,6 +5,8 @@
 .. image:: https://img.shields.io/coveralls/IMIO/collective.eeafaceted.collectionwidget.svg
   :target: https://coveralls.io/r/IMIO/collective.eeafaceted.collectionwidget?branch=master
 
+.. image:: https://circleci.com/gh/IMIO/collective.eeafaceted.collectionwidget.svg?&style=shield
+  :target: https://circleci.com/gh/IMIO/collective.eeafaceted.collectionwidget
 
 ==========================================================================
 collective.eeafaceted.collectionwidget
