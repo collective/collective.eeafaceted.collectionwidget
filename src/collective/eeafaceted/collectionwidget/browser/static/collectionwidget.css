@@ -5,3 +5,7 @@
 div.faceted-tagscloud-collection-widget a {
    padding-left: 1em !important;
 }
+
+.faceted-tag-selected {
+   font-weight: bold;
+}

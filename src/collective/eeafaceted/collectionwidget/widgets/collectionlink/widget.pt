@@ -48,7 +48,7 @@
             title term_label;
             id string:${wid}${term_id};
             data-kept-criteria python:view.kept_criteria_as_json(term_id);">
-               <a tal:content="wbr_term_label" />
+               <a href="javascript:;" tal:content="wbr_term_label" />
           </li>
         </tal:items>
       </tal:category>
