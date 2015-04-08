@@ -3,10 +3,16 @@ Faceted.TagsCloudWidget.prototype.tag_click =
   function(tag, evt){
     /* Added by collective.eeafaceted.collectionwidget */
     clearAdvancedCriteria(tag);
+
     /* hide the advanced criteria */
     /* Faceted.Sections.advanced.hide("fast"); */
+
     /* Here we could set arbitrarilly criteria, for example : Faceted.Query['c1'] = ["private"]; */
     showRelevantAdvancedCriteria(tag);
+
+    /* Update current page title */
+    updatePageTitle(tag);
+
 
     /* do the query, default in eea.facetednavigation */
     this.do_query(tag);
@@ -50,7 +56,12 @@ Faceted.TagsCloudWidget.prototype.update =
       /* get the tag and proceed */
       var selected = $('li#'+this.wid+parameters[this.wid]);
       showRelevantAdvancedCriteria(selected);
+      updatePageTitle(selected);
     }
+    else {
+      updatePageTitle($('.faceted-tag-selected', tag)[0]);
+    }
+
     /* XXX end addition */
     jQuery('#' + this.wid, this.widget).tagcloud(this.config);
   }
@@ -68,16 +79,21 @@ clearAdvancedCriteria = function(tag) {
 
 /* only show advanced criteria that are not managed by selected collection */
 showRelevantAdvancedCriteria = function(tag) {
-    keptCriteria = jQuery(tag).data()['keptCriteria']
-    advancedCriteria = jQuery(tag).parent().data()['advancedCriteria']
-    /* hide every advanced criteria */
-    $.each(advancedCriteria, function(k, criterion_id) {
-      $('div#'+criterion_id+'_widget').hide();
-    })
-    /* show kept criteria */
-    $.each(keptCriteria, function(k, criterion_id) {
-      $('div#'+criterion_id+'_widget').show();
-    })
+  keptCriteria = jQuery(tag).data()['keptCriteria']
+  advancedCriteria = jQuery(tag).parent().data()['advancedCriteria']
+  /* hide every advanced criteria */
+  $.each(advancedCriteria, function(k, criterion_id) {
+    $('div#'+criterion_id+'_widget').hide();
+  })
+  /* show kept criteria */
+  $.each(keptCriteria, function(k, criterion_id) {
+    $('div#'+criterion_id+'_widget').show();
+  })
+}
+
+updatePageTitle = function(tag) {
+  currentTitleTag = $('#content h1.documentFirstHeading')[0];
+  currentTitleTag.innerHTML = $('a', tag)[0].innerHTML;
 }
 
 /* method for parsing query parameters */
