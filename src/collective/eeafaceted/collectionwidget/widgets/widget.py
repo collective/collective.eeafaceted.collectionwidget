@@ -13,6 +13,7 @@ from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.schema.interfaces import IVocabularyFactory
 
+from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 
 collection_edit_schema = RadioWidget.edit_schema.copy()
@@ -25,6 +26,13 @@ class CollectionBaseWidget(RadioWidget):
     category_vocabulary = (
         'collective.eeafaceted.collectionwidget.collectioncategoryvocabulary'
     )
+
+    def __init__(self, context, request, data=None):
+        super(CollectionBaseWidget, self).__init__(context, request, data)
+        # real context could not be current context but some distant context
+        # look in eea.facetednavigation.criteria.handler.Criteria
+        criteria = ICriteria(self.context)
+        self.context = criteria.context
 
     def __call__(self, **kwargs):
         self.grouped_vocabulary = self._generate_vocabulary()
@@ -40,7 +48,7 @@ class CollectionBaseWidget(RadioWidget):
             catalog = getToolByName(self.context, 'portal_catalog')
             brains = catalog(UID=collection_uid)
             collection = brains[0].getObject()
-            return queryparser.parseFormquery(self.context, collection.query)
+            return queryparser.parseFormquery(collection, collection.query)
         return {}
 
     def count(self, brains, sequence=None):

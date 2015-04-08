@@ -14,5 +14,6 @@ class CategoriesFromFolder(object):
             portal_type='Folder',
             sort_on="getObjPositionInParent"
         )
-        result = [(brain.getId, brain.Title) for brain in brains]
+        result = [('', u''), ]
+        result = result + [(brain.getId, brain.Title) for brain in brains]
         return result

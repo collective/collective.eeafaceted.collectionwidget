@@ -3,7 +3,12 @@
 }
 
 div.faceted-tagscloud-collection-widget a {
-   padding-left: 1em !important;
+   padding-left: 1em;
+}
+
+/* remove padding-left for searches not in a category */
+div.faceted-tagscloud-collection-widget li.no-category-tag a {
+    padding-left: 0em;
 }
 
 .faceted-tag-selected {

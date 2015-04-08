@@ -41,9 +41,10 @@
             term_id python:term[0];
             term_label python:term[1];
             term_label python:view.translate(term_label);
-            wbr_term_label python:view.word_break(term_label);"
+            wbr_term_label python:view.word_break(term_label);
+            default_class python:term_id == default_value and 'faceted-tag-selected' or '';"
             tal:attributes="
-            class python:term_id == default_value and 'faceted-tag-selected' or '';
+            class python: not key and default_class + ' no-category-tag' or default_class;
             value python:term_id;
             title term_label;
             id string:${wid}${term_id};
