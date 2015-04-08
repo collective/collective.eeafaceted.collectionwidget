@@ -13,7 +13,7 @@ class Widget(CollectionBaseWidget):
 
     index = ViewPageTemplateFile('widget.pt')
 
-    view_js = '++resource++eea.facetednavigation.widgets.tagscloud.view.js'
+    view_js = '++resource++collective.eeafaceted.collectionwidget.widgets.collectionlink.view.js'
     edit_js = '++resource++eea.facetednavigation.widgets.tagscloud.edit.js'
     view_css = '++resource++eea.facetednavigation.widgets.tagscloud.view.css'
     edit_css = '++resource++eea.facetednavigation.widgets.tagscloud.edit.css'

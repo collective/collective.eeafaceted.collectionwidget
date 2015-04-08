@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+import json
 from Products.CMFCore.utils import getToolByName
 from collections import OrderedDict
 from collective.eeafaceted.collectionwidget.interfaces import (
@@ -49,13 +50,13 @@ class CollectionBaseWidget(RadioWidget):
         if not sequence:
             sequence = [key for key, value in self.vocabulary()]
 
-        ctool = getToolByName(self.context, 'portal_catalog')
+        catalog = getToolByName(self.context, 'portal_catalog')
         for value in sequence:
             if not value:
                 res[value] = len(brains)
                 continue
             res[value] = len(
-                ctool(self.query(form={self.data.__name__: value})))
+                catalog(self.query(form={self.data.__name__: value})))
         return res
 
     @property
@@ -81,6 +82,37 @@ class CollectionBaseWidget(RadioWidget):
         terms = self.portal_vocabulary()
         if len(terms) > 0:
             return terms[idx][0]
+
+    def kept_criteria_as_json(self, collection_uid):
+        '''Given a p_collectionUID, get indexes managed by the collection,
+           and if it is also in advanced criteria, hide it.'''
+        catalog = getToolByName(self.context, 'portal_catalog')
+        brains = catalog(UID=collection_uid)
+        res = []
+        if brains:
+            collection = brains[0].getObject()
+            collection_criteria = queryparser.parseFormquery(collection, collection.query)
+            advanced_criteria = self.advanced_criteria
+            for k, v in advanced_criteria.items():
+                if not v in collection_criteria:
+                    res.append(k)
+        return json.dumps(list(res))
+
+    @property
+    def advanced_criteria(self):
+        '''Returns a dict containing advanced criteria, the key is the
+           criterion id and the value is the managed index.'''
+        faceted_config = queryMultiAdapter((self.context, self.request),
+                                           name='configure_faceted.html')
+        advanced_criteria = {}
+        for criterion in faceted_config.get_criteria():
+            if criterion.section == u'advanced':
+                advanced_criteria[criterion.getId()] = criterion.index
+        return advanced_criteria
+
+    @property
+    def advanced_criteria_as_json(self):
+        return json.dumps(self.advanced_criteria.keys())
 
     @property
     def sortreversed(self):

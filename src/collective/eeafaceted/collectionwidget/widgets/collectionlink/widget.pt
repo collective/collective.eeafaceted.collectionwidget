@@ -22,7 +22,7 @@
     python:view.translate(title)" i18n:translate="">HTML Widget</legend>
   <form action="." method="get"
   tal:on-error="structure python:error_view(error=error, cid=wid)">
-  <ul>
+  <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">
     <li tal:condition="not:view/data/hidealloption|nothing">
       <tal:term tal:attributes="
        class python:default_value == '' and 'faceted-tag-selected' or '';
@@ -46,7 +46,8 @@
             class python:term_id == default_value and 'faceted-tag-selected' or '';
             value python:term_id;
             title term_label;
-            id string:${wid}${term_id}">
+            id string:${wid}${term_id};
+            data-kept-criteria python:view.kept_criteria_as_json(term_id);">
                <a tal:content="wbr_term_label" />
           </li>
         </tal:items>
