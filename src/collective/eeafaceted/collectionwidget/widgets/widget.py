@@ -104,7 +104,7 @@ class CollectionBaseWidget(RadioWidget):
             collection_criteria = queryparser.parseFormquery(collection, collection.query)
             advanced_criteria = self.advanced_criteria
             for k, v in advanced_criteria.items():
-                if not v in collection_criteria:
+                if v not in collection_criteria:
                     res.append(k)
         return json.dumps(list(res))
 

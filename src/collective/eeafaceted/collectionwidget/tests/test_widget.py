@@ -6,8 +6,8 @@ from zope.interface import Interface
 from plone import api
 from Products.CMFCore.utils import getToolByName
 
-from ..testing.testcase import IntegrationTestCase
-from ..interfaces import IWidgetDefaultValue
+from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
+from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
 from eea.facetednavigation.widgets.storage import Criterion
 
 COLLECTION_VOCABULARY = (
@@ -85,6 +85,7 @@ class BaseWidgetCase(IntegrationTestCase):
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
+        self.request = self.layer['request']
         self.folder = self.portal.folder
         self.category1 = api.content.create(
             id='category1',
@@ -110,15 +111,18 @@ class BaseWidgetCase(IntegrationTestCase):
             title='Collection 2',
             container=self.category2
         )
+        subtyper = getMultiAdapter(
+            (self.folder, self.request), name=u'faceted_subtyper'
+        )
+        subtyper.enable()
 
 
 class TestWidget(BaseWidgetCase):
     """Test widget methods"""
 
     def test_get_category(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
-        widget = Widget(self.folder, request, data={})
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
+        widget = Widget(self.folder, self.request, data={})
         category = widget._get_category('')
         self.assertEquals(category, u'')
         category = widget._get_category(self.collection2.UID())
@@ -134,12 +138,11 @@ class TestWidget(BaseWidgetCase):
         self.assertEquals(category, u'')
 
     def test_generate_vocabulary(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = dict(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         vocabulary = widget._generate_vocabulary()
         self.assertEquals(len(vocabulary), 2)
         self.assertTrue('category1' in vocabulary)
@@ -154,63 +157,57 @@ class TestWidget(BaseWidgetCase):
         )
 
     def test_hidealloption(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = Criterion()
         data.hidealloption = u'0'
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertFalse(widget.hidealloption)
         data.hidealloption = u'1'
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertTrue(widget.hidealloption)
 
     def test_sortreversed(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = Criterion()
         data.sortreversed = u'0'
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertFalse(widget.sortreversed)
         data.sortreversed = u'1'
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertTrue(widget.sortreversed)
 
     def test_default_term_value(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
         data.sortreversed = u'0'
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertEquals(widget.default_term_value, self.collection1.UID())
         data.sortreversed = u'1'
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertEquals(widget.default_term_value, self.collection2.UID())
 
     def test_adapter_default_value(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
-        widget = Widget(self.folder, request, data={})
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
+        widget = Widget(self.folder, self.request, data={})
         self.assertEquals(widget.adapter_default_value, None)
 
     def test_default(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertEquals(widget.default, None)
         data.hidealloption = u'1'
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         self.assertEquals(widget.default, self.collection1.UID())
 
     def test_count(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = Criterion()
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         catalog = getToolByName(self.portal, 'portal_catalog')
         brains = catalog(UID=self.collection1.UID())
         count_dico = widget.count(brains)
@@ -219,7 +216,7 @@ class TestWidget(BaseWidgetCase):
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         widget._generate_vocabulary()
         count_dico = widget.count(brains)
         # with vocabulary
@@ -236,12 +233,11 @@ class TestWidget(BaseWidgetCase):
         )
 
     def test_query(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         widget._generate_vocabulary()
         # no collection_uid
         query_dico = widget.query(form={data.__name__: ''})
@@ -253,16 +249,11 @@ class TestWidget(BaseWidgetCase):
         self.assertEquals(query_dico, {})
 
     def test_call(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
-        subtyper = getMultiAdapter(
-            (self.folder, request), name=u'faceted_subtyper'
-        )
-        subtyper.enable()
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, request, data=data)
+        widget = Widget(self.folder, self.request, data=data)
         html = widget()
         self.assertTrue(self.collection1.Title() in html)
         self.assertTrue(self.collection1.UID() in html)
@@ -276,9 +267,8 @@ class DefaultValue(object):
 class TestWidgetWithDefaultValueAdapter(BaseWidgetCase):
 
     def test_adapter_default_value(self):
-        from ..widgets.collectionlink.widget import Widget
-        request = self.layer['request']
-        widget = Widget(self.folder, request, data={})
+        from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
+        widget = Widget(self.folder, self.request, data={})
         self.assertEquals(widget.adapter_default_value, self.collection1)
 
     def setUp(self):
