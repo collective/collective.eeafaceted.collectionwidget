@@ -13,13 +13,16 @@
   css python:sortcountable and css + ' faceted-sortcountable' or css;
   maxitems python:view.data.get('maxitems', 0) or 0;
   vocabulary view/vocabulary;
-  edit_mode python:request.URL0.endswith('@@faceted_widgets');"
+  edit_mode python:request.URL0.endswith('@@faceted_widgets');
+  display_fieldset view/display_fieldset;"
   tal:condition="python:edit_mode or vocabulary"
   tal:attributes="id string:${wid}_widget; class css">
 
-<fieldset class="widget-fieldset">
-  <legend tal:define="title python:view.data.get('title', '')" tal:content="
-    python:view.translate(title)" i18n:translate="">HTML Widget</legend>
+<fieldset class="widget-fieldset" tal:omit-tag="not:display_fieldset">
+  <legend tal:define="title python:view.data.get('title', '')"
+          tal:omit-tag="not:display_fieldset"
+          tal:content="python:display_fieldset and view.translate(title) or ''"
+          i18n:translate="">HTML Widget</legend>
   <form action="." method="get"
   tal:on-error="structure python:error_view(error=error, cid=wid)">
   <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">

@@ -33,6 +33,8 @@ class CollectionBaseWidget(RadioWidget):
         # look in eea.facetednavigation.criteria.handler.Criteria
         criteria = ICriteria(self.context)
         self.context = criteria.context
+        # display the fieldset around the widget when rendered?
+        self.display_fieldset = True
 
     def __call__(self, **kwargs):
         self.grouped_vocabulary = self._generate_vocabulary()
