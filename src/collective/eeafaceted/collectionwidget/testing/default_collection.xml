@@ -26,5 +26,15 @@
    <property name="sortreversed">0</property>
    <property name="default"></property>
   </criterion>
+  <criterion name="c2">
+   <property name="widget">checkbox</property>
+   <property name="title">Review state</property>
+   <property name="index">review_state</property>
+   <property name="position"></property>
+   <property name="section">advanced</property>
+   <property name="hidden">0</property>
+   <property name="vocabulary"></property>
+   <property name="default"></property>
+  </criterion>
  </criteria>
 </object>
