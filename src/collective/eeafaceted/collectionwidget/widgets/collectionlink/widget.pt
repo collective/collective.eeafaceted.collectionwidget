@@ -38,7 +38,7 @@
       <tal:category define="key python:category[0];
                             title python:category[1];
                             elements python:view.grouped_vocabulary[key];">
-        <span class="title" tal:content="title">Category title</span>
+        <div class="title" tal:content="title">Category title</div>
         <tal:items repeat="term elements">
           <li tal:define="
             term_id python:term[0];
