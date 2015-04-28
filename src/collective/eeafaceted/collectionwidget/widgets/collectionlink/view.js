@@ -2,7 +2,8 @@
 Faceted.TagsCloudWidget.prototype.tag_click =
   function(tag, evt){
     /* Added by collective.eeafaceted.collectionwidget */
-    clearAdvancedCriteria(tag);
+    /* clear every criteria when selecting another collection in the collectionwidget */
+    clearCriteria(tag);
 
     /* hide the advanced criteria */
     /* Faceted.Sections.advanced.hide("fast"); */
@@ -12,7 +13,6 @@ Faceted.TagsCloudWidget.prototype.tag_click =
 
     /* Update current page title */
     updatePageTitle(tag);
-
 
     /* do the query, default in eea.facetednavigation */
     this.do_query(tag);
@@ -75,6 +75,26 @@ clearAdvancedCriteria = function(tag) {
             delete Faceted.Query[k];
             };
          })
+}
+
+/* clear every criteria by removing it from Faceted.Query but keep some elements */
+clearCriteria = function(tag) {
+  /* the criterion type is found by evaluating the class applied on the widget... */
+  var keptCriteriaClasses = ['faceted-resultsperpage-widget', ];
+  $.each(Faceted.Query,
+         function(k, v){
+          found = false;
+          $.each(keptCriteriaClasses,
+                 function(index, css_class) {
+            if (Faceted.Widgets[k] && Faceted.Widgets[k].widget.attr('class').indexOf(css_class) != -1) {
+              found = true;
+            };
+            if (!found) {
+              delete Faceted.Query[k];
+            };
+            found = false;
+        });
+});
 }
 
 /* only show advanced criteria that are not managed by selected collection */
