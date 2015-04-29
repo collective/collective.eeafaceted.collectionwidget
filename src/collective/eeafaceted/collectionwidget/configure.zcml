@@ -9,13 +9,8 @@
 
 
     <five:registerPackage package="." initialize=".initialize" />
-    
+
     <include package="plone.api" />
-    <!-- 
-    TODO remove include of meta.zcml
-    when eea.facetednavigation > 7.2 is released 
-    -->
-    <include package="eea.facetednavigation" file="meta.zcml" />
     <include package="eea.facetednavigation" />
 
     <include package=".browser" />
@@ -38,13 +33,11 @@
     </genericsetup:importStep>
 
     <!-- Vocabularies -->
-
     <utility component=".vocabulary.CollectionVocabularyFactory"
              name="collective.eeafaceted.collectionwidget.collectionvocabulary" />
 
     <utility component=".vocabulary.CollectionCategoryVocabularyFactory"
              name="collective.eeafaceted.collectionwidget.collectioncategoryvocabulary" />
-
 
     <adapter
       for="*"

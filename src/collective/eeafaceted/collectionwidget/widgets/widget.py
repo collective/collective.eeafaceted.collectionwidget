@@ -14,11 +14,11 @@ from zope.component import queryMultiAdapter
 from zope.schema.interfaces import IVocabularyFactory
 
 from eea.facetednavigation.interfaces import ICriteria
-from eea.facetednavigation.widgets.widget import CountableWidget
+from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from eea.facetednavigation.widgets import ViewPageTemplateFile
 
 
-class CollectionWidget(CountableWidget):
+class CollectionWidget(RadioWidget):
     widget_type = 'collection-link'
     widget_label = 'Collection Link'
 
