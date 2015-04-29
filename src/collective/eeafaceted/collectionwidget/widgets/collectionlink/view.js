@@ -83,16 +83,17 @@ clearCriteria = function(tag) {
   var keptCriteriaClasses = ['faceted-resultsperpage-widget', ];
   $.each(Faceted.Query,
          function(k, v){
-          found = false;
+          keepit = false;
           $.each(keptCriteriaClasses,
                  function(index, css_class) {
+            /* if we find a widget using one of the keptCriteriaClasses, we keep it */
             if (Faceted.Widgets[k] && Faceted.Widgets[k].widget.attr('class').indexOf(css_class) != -1) {
-              found = true;
+              keepit = true;
             };
-            if (!found) {
+            if (!keepit) {
               delete Faceted.Query[k];
             };
-            found = false;
+            keepit = false;
         });
 });
 }
