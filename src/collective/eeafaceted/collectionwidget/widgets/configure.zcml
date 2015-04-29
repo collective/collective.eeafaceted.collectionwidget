@@ -1,14 +1,14 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:faceted="http://namespaces.zope.org/faceted"
     i18n_domain="collective.eeafaceted.collectionwidget">
 
-  <include package=".collectionradio" />
-  <include package=".collectionlink" />
-
   <browser:resource
-    name="collective.eeafaceted.collectionwidget.widgets.collectionlink.view.js"
-    file="collectionlink/view.js"
+    name="collective.eeafaceted.collectionwidget.widgets.view.js"
+    file="view.js"
    />
+
+  <faceted:widget factory=".widget.CollectionWidget" />
 
 </configure>

@@ -14,21 +14,28 @@ from zope.component import queryMultiAdapter
 from zope.schema.interfaces import IVocabularyFactory
 
 from eea.facetednavigation.interfaces import ICriteria
-from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
-
-collection_edit_schema = RadioWidget.edit_schema.copy()
-del collection_edit_schema["index"]
-del collection_edit_schema["catalog"]
+from eea.facetednavigation.widgets.widget import CountableWidget
+from eea.facetednavigation.widgets import ViewPageTemplateFile
 
 
-class CollectionBaseWidget(RadioWidget):
-    edit_schema = collection_edit_schema
+class CollectionWidget(CountableWidget):
+    widget_type = 'collection-link'
+    widget_label = 'Collection Link'
+
+    index = ViewPageTemplateFile('widget.pt')
+
+    view_js = '++resource++collective.eeafaceted.collectionwidget.widgets.view.js'
+    edit_js = '++resource++eea.facetednavigation.widgets.tagscloud.edit.js'
+    view_css = '++resource++eea.facetednavigation.widgets.tagscloud.view.css'
+    edit_css = '++resource++eea.facetednavigation.widgets.tagscloud.edit.css'
+    css_class = 'faceted-tagscloud-widget'
+
     category_vocabulary = (
         'collective.eeafaceted.collectionwidget.collectioncategoryvocabulary'
     )
 
     def __init__(self, context, request, data=None):
-        super(CollectionBaseWidget, self).__init__(context, request, data)
+        super(CollectionWidget, self).__init__(context, request, data)
         # real context could not be current context but some distant context
         # look in eea.facetednavigation.criteria.handler.Criteria
         criteria = ICriteria(self.context)
@@ -38,7 +45,7 @@ class CollectionBaseWidget(RadioWidget):
 
     def __call__(self, **kwargs):
         self.grouped_vocabulary = self._generate_vocabulary()
-        return super(CollectionBaseWidget, self).__call__(**kwargs)
+        return super(CollectionWidget, self).__call__(**kwargs)
 
     def query(self, form):
         """ Get value from form and return a catalog dict query """
@@ -72,7 +79,7 @@ class CollectionBaseWidget(RadioWidget):
     @property
     def default(self):
         """Return the default value"""
-        default = super(CollectionBaseWidget, self).default
+        default = super(CollectionWidget, self).default
         if not default:
             default = self.adapter_default_value
         if not default and self.hidealloption is True:

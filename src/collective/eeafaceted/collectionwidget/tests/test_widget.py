@@ -9,7 +9,7 @@ from Products.CMFCore.utils import getToolByName
 
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
 from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
-from collective.eeafaceted.collectionwidget.widgets.collectionlink.widget import Widget
+from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.widgets.storage import Criterion
 
 COLLECTION_VOCABULARY = (
@@ -123,7 +123,7 @@ class TestWidget(BaseWidgetCase):
     """Test widget methods"""
 
     def test_get_category(self):
-        widget = Widget(self.folder, self.request, data={})
+        widget = CollectionWidget(self.folder, self.request, data={})
         category = widget._get_category('')
         self.assertEquals(category, (u'', u''))
         category = widget._get_category(self.collection2.UID())
@@ -142,7 +142,7 @@ class TestWidget(BaseWidgetCase):
         data = dict(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         vocabulary = widget._generate_vocabulary()
         self.assertEquals(len(vocabulary), 2)
         self.assertTrue(('category1', 'Category 1') in vocabulary)
@@ -159,19 +159,19 @@ class TestWidget(BaseWidgetCase):
     def test_hidealloption(self):
         data = Criterion()
         data.hidealloption = u'0'
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertFalse(widget.hidealloption)
         data.hidealloption = u'1'
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertTrue(widget.hidealloption)
 
     def test_sortreversed(self):
         data = Criterion()
         data.sortreversed = u'0'
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertFalse(widget.sortreversed)
         data.sortreversed = u'1'
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertTrue(widget.sortreversed)
 
     def test_default_term_value(self):
@@ -179,20 +179,20 @@ class TestWidget(BaseWidgetCase):
             vocabulary=COLLECTION_VOCABULARY
         )
         data.sortreversed = u'0'
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertEquals(widget.default_term_value, self.collection1.UID())
         data.sortreversed = u'1'
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertEquals(widget.default_term_value, self.collection2.UID())
 
     def test_advanced_criteria(self):
         # we have an advanced criteria 'review_state' with name 'c2'
-        widget = Widget(self.folder, self.request)
+        widget = CollectionWidget(self.folder, self.request)
         self.assertTrue(len(widget.advanced_criteria) == 1)
         self.assertTrue('c2' in widget.advanced_criteria)
 
     def test_kept_criteria_as_json(self):
-        widget = Widget(self.folder, self.request)
+        widget = CollectionWidget(self.folder, self.request)
         # kept criteria are criteria in the 'advanced' section managed by the
         # faceted that are not by a given collection UID
         # by default, advanced widget 'c2' managing review_state is kept
@@ -215,22 +215,22 @@ class TestWidget(BaseWidgetCase):
         self.assertTrue(json._default_decoder.decode(kept_criteria_as_json) == ["c2", ])
 
     def test_adapter_default_value(self):
-        widget = Widget(self.folder, self.request, data={})
+        widget = CollectionWidget(self.folder, self.request, data={})
         self.assertEquals(widget.adapter_default_value, None)
 
     def test_default(self):
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertEquals(widget.default, None)
         data.hidealloption = u'1'
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertEquals(widget.default, self.collection1.UID())
 
     def test_count(self):
         data = Criterion()
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         catalog = getToolByName(self.portal, 'portal_catalog')
         brains = catalog(UID=self.collection1.UID())
         count_dico = widget.count(brains)
@@ -239,7 +239,7 @@ class TestWidget(BaseWidgetCase):
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         widget._generate_vocabulary()
         count_dico = widget.count(brains)
         # with vocabulary
@@ -259,7 +259,7 @@ class TestWidget(BaseWidgetCase):
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         widget._generate_vocabulary()
         # no collection_uid
         query_dico = widget.query(form={data.__name__: ''})
@@ -274,7 +274,7 @@ class TestWidget(BaseWidgetCase):
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
-        widget = Widget(self.folder, self.request, data=data)
+        widget = CollectionWidget(self.folder, self.request, data=data)
         html = widget()
         self.assertTrue(self.collection1.Title() in html)
         self.assertTrue(self.collection1.UID() in html)
@@ -288,7 +288,7 @@ class DefaultValue(object):
 class TestWidgetWithDefaultValueAdapter(BaseWidgetCase):
 
     def test_adapter_default_value(self):
-        widget = Widget(self.folder, self.request, data={})
+        widget = CollectionWidget(self.folder, self.request, data={})
         self.assertEquals(widget.adapter_default_value, self.collection1)
 
     def setUp(self):
