@@ -144,19 +144,24 @@ class CollectionBaseWidget(RadioWidget):
     def _generate_vocabulary(self):
         voc = OrderedDict()
         for key, value in self.categories:
-            voc[key] = []
+            voc[(key, value)] = []
         for key, value in self.vocabulary():
             voc[self._get_category(key)].append((key, value))
-        return voc
+        # remove empty categories
+        res = OrderedDict()
+        for k, v in voc.items():
+            if v:
+                res[k] = v
+        return res
 
     def _get_category(self, uid):
         """Return the category for a given uid"""
         collection = api.content.get(UID=uid)
         if collection is None:
-            return u''
+            return (u'', u'')
         else:
-            parent_id = aq_parent(collection).getId()
-            if parent_id in self._get_category_keys():
-                return parent_id
+            parent = aq_parent(collection)
+            if parent.getId() in self._get_category_keys():
+                return (parent.getId(), parent.Title())
             else:
-                return u''
+                return (u'', u'')

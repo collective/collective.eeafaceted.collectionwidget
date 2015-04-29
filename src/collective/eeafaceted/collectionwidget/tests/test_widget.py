@@ -125,9 +125,9 @@ class TestWidget(BaseWidgetCase):
     def test_get_category(self):
         widget = Widget(self.folder, self.request, data={})
         category = widget._get_category('')
-        self.assertEquals(category, u'')
+        self.assertEquals(category, (u'', u''))
         category = widget._get_category(self.collection2.UID())
-        self.assertEquals(category, 'category2')
+        self.assertEquals(category, ('category2', 'Category 2'))
         # content outside a category folder does not have a category
         collection3 = api.content.create(
             id='collection3',
@@ -136,7 +136,7 @@ class TestWidget(BaseWidgetCase):
             container=self.folder
         )
         category = widget._get_category(collection3.UID())
-        self.assertEquals(category, u'')
+        self.assertEquals(category, (u'', u''))
 
     def test_generate_vocabulary(self):
         data = dict(
@@ -145,14 +145,14 @@ class TestWidget(BaseWidgetCase):
         widget = Widget(self.folder, self.request, data=data)
         vocabulary = widget._generate_vocabulary()
         self.assertEquals(len(vocabulary), 2)
-        self.assertTrue('category1' in vocabulary)
-        self.assertTrue('category2' in vocabulary)
+        self.assertTrue(('category1', 'Category 1') in vocabulary)
+        self.assertTrue(('category2', 'Category 2') in vocabulary)
         self.assertEquals(
-            vocabulary['category1'],
+            vocabulary[('category1', 'Category 1')],
             [(self.collection1.UID(), self.collection1.Title())]
         )
         self.assertEquals(
-            vocabulary['category2'],
+            vocabulary[('category2', 'Category 2')],
             [(self.collection2.UID(), self.collection2.Title())]
         )
 

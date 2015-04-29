@@ -34,11 +34,10 @@
        id string:${wid}all;" i18n:attributes="title"
        i18n:translate="">All</tal:term>
     </li>
-    <tal:categories repeat="category view/categories">
-      <tal:category define="key python:category[0];
-                            title python:category[1];
-                            elements python:view.grouped_vocabulary[key];">
-        <div class="title" tal:content="title">Category title</div>
+    <tal:categories repeat="grouped_element python: view.grouped_vocabulary.items()">
+      <tal:category define="category python:grouped_element[0];
+                            elements python:grouped_element[1];">
+        <div class="title" tal:content="python: category[1]">Category title</div>
         <tal:items repeat="term elements">
           <li tal:define="
             term_id python:term[0];
@@ -47,7 +46,7 @@
             wbr_term_label python:view.word_break(term_label);
             default_class python:term_id == default_value and 'faceted-tag-selected' or '';"
             tal:attributes="
-            class python: not key and default_class + ' no-category-tag' or default_class;
+            class python: not category[0] and default_class + ' no-category-tag' or default_class;
             value python:term_id;
             title term_label;
             id string:${wid}${term_id};

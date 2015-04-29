@@ -16,13 +16,20 @@ Widget shows no collections or categories when folder is empty
     Page should contain  Basic search
     Page should contain  Base collections
 
-Widget shows categories even when they do not hold collections
+Widget does not show empty categories
     ${folder}=  Make faceted folder
     ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
     Click link  Faceted criteria
     Page should contain  Basic search
     Page should contain  Base collections
-    Element Text Should Be  css=div#c1_widget div.title  News
+    # as News is empty, it is not shown
+    Element should not be visible  css=div#c1_widget div.title  News
+    # create a Collection in the 'news' folder so this category is shown
+    ${info}=  Create content  type=Collection  title=Info  id=info  container=${category}
+    Click link  Faceted criteria
+    Element should be visible  css=div#c1_widget div.title  News
+    # the link to the collection is also displayed
+    Element should contain  css=div#c1_widget li  Info
 
 Widget shows collections in categories
     [tags]  current
