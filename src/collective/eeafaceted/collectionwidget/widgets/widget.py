@@ -17,8 +17,14 @@ from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from eea.facetednavigation.widgets import ViewPageTemplateFile
 
+collection_edit_schema = RadioWidget.edit_schema.copy()
+del collection_edit_schema["index"]
+del collection_edit_schema["catalog"]
+
 
 class CollectionWidget(RadioWidget):
+    """A widget listing collections used as base query."""
+
     widget_type = 'collection-link'
     widget_label = 'Collection Link'
 
@@ -29,6 +35,8 @@ class CollectionWidget(RadioWidget):
     view_css = '++resource++eea.facetednavigation.widgets.tagscloud.view.css'
     edit_css = '++resource++eea.facetednavigation.widgets.tagscloud.edit.css'
     css_class = 'faceted-tagscloud-widget'
+
+    edit_schema = collection_edit_schema
 
     category_vocabulary = (
         'collective.eeafaceted.collectionwidget.collectioncategoryvocabulary'
