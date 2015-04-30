@@ -45,4 +45,12 @@
       factory=".categories.CategoriesFromFolder"
       />
 
+    <adapter
+      for="*
+           *
+           *"
+      provides=".interfaces.IWidgetDefaultValue"
+      factory=".adapters.DefaultValue"
+      />
+
 </configure>

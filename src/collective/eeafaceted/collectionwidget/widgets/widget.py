@@ -89,9 +89,11 @@ class CollectionWidget(RadioWidget):
         """Return the default value"""
         default = super(CollectionWidget, self).default
         if not default:
-            default = self.adapter_default_value
-        if not default and self.hidealloption is True:
-            default = self.default_term_value
+            # it is possible to not select a default, it will have
+            # same behaviour as selecting option "All"
+            return default
+        # call an adapter to get the correct value
+        default = self.adapter_default_value
         return default
 
     @property

@@ -214,19 +214,26 @@ class TestWidget(BaseWidgetCase):
         kept_criteria_as_json = widget.kept_criteria_as_json(collection2.UID())
         self.assertTrue(json._default_decoder.decode(kept_criteria_as_json) == ["c2", ])
 
-    def test_adapter_default_value(self):
-        widget = CollectionWidget(self.folder, self.request, data={})
-        self.assertEquals(widget.adapter_default_value, None)
-
     def test_default(self):
-        data = Criterion(
-            vocabulary=COLLECTION_VOCABULARY
-        )
+        # no default value selected
+        data = Criterion(vocabulary=COLLECTION_VOCABULARY)
         widget = CollectionWidget(self.folder, self.request, data=data)
+        widget()
         self.assertEquals(widget.default, None)
-        data.hidealloption = u'1'
-        widget = CollectionWidget(self.folder, self.request, data=data)
-        self.assertEquals(widget.default, self.collection1.UID())
+        # a default value is selected, it will use adapter_default_value
+        collection1UID = self.collection1.UID()
+        widget.data.default = collection1UID
+        widget()
+        self.assertEquals(widget.default, collection1UID)
+        # if the selected value is no more available, it falls back to first available element
+        self.collection1.getParentNode().manage_delObjects(ids=[self.collection1.getId()])
+        widget()
+        self.assertEquals(widget.data.default, collection1UID)
+        self.assertEquals(widget.default, self.collection2.UID())
+        # if no fallback available, it will return None
+        self.collection2.getParentNode().manage_delObjects(ids=[self.collection2.getId()])
+        widget()
+        self.assertEquals(widget.default, None)
 
     def test_count(self):
         data = Criterion()
