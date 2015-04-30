@@ -32,7 +32,8 @@ class CollectionVocabulary(object):
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(
             path=dict(query='/'.join(self.context.getPhysicalPath())),
-            portal_type='Collection'
+            portal_type='Collection',
+            sort_on='getObjPositionInParent'
         )
         return brains
 
