@@ -13,7 +13,7 @@ class CategoriesFromFolder(object):
         result = []
         collections = catalog(
             path=dict(query='/'.join(self.context.getPhysicalPath()), depth=1),
-            portal_type='Collection',
+            object_provides='plone.app.collection.interfaces.ICollection',
             sort_on="getObjPositionInParent"
         )
         if collections:
