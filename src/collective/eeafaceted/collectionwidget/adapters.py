@@ -1,8 +1,9 @@
 class DefaultValue(object):
+    """If we  have a default value, check if it is still available
+       it could have been deleted or used vocabulary could not contain it anymore.
+       If it is the case, we fall back to first available collection."""
     def __init__(self, context, request, widget):
         self.value = widget.data.default
-        # if we  have a default, check if it is still available
-        # it could have been deleted or used vocabulary could not contain it
         existingCollectionUids = []
         for group in widget.grouped_vocabulary.values():
             for collection in group:
