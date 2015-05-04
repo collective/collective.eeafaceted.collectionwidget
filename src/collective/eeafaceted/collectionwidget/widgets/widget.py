@@ -50,7 +50,11 @@ class CollectionWidget(RadioWidget):
         self.context = criteria.context
         # display the fieldset around the widget when rendered?
         self.display_fieldset = True
+
+    def __call__(self, **kwargs):
+        # compute the vocabulary used in the widget
         self.grouped_vocabulary = self._generate_vocabulary()
+        return super(CollectionWidget, self).__call__(**kwargs)
 
     def query(self, form):
         """ Get value from form and return a catalog dict query """
