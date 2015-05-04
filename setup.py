@@ -43,7 +43,6 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'five.grok',
         'plone.api',
         'setuptools',
         'eea.facetednavigation',

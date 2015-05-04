@@ -14,7 +14,6 @@
     <include package="eea.facetednavigation" />
 
     <include package=".browser" />
-    <include package=".content" />
     <include package=".widgets" />
 
     <genericsetup:registerProfile
