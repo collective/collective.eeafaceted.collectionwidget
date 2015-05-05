@@ -28,7 +28,7 @@
   <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">
     <li tal:condition="not:view/data/hidealloption|nothing"
         tal:attributes="
-       class python:default_value == '' and 'faceted-tag-selected' or '';
+       class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
        value string:'';
        data-kept-criteria string:[];
        title string:All;

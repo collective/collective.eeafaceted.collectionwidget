@@ -61,7 +61,7 @@ class CollectionWidget(RadioWidget):
         # we receive the UID of the selected Collection
         # get the collection, compute the query and return it
         collection_uid = form.get(self.data.__name__, '')
-        if collection_uid:
+        if collection_uid and not collection_uid == 'all':
             # get the collection and compute the query
             catalog = getToolByName(self.context, 'portal_catalog')
             brains = catalog(UID=collection_uid)
