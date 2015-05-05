@@ -37,7 +37,7 @@
     <tal:categories repeat="grouped_element python: view.grouped_vocabulary.items()">
       <tal:category define="category python:grouped_element[0];
                             elements python:grouped_element[1];">
-        <div class="title" tal:content="python: category[1]">Category title</div>
+        <div class="title" tal:content="python: category[1]" tal:omit-tag="python: not category[1]">Category title</div>
         <tal:items repeat="term elements">
           <li tal:define="
             term_id python:term[0];
