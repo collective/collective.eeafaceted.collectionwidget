@@ -114,7 +114,10 @@ showRelevantAdvancedCriteria = function(tag) {
 
 updatePageTitle = function(tag) {
   currentTitleTag = $('#content h1.documentFirstHeading')[0];
-  currentTitleTag.innerHTML = $('a', tag)[0].innerHTML;
+  a_tag = $('a', tag);
+  if (a_tag.length) {
+    currentTitleTag.innerHTML = a_tag[0].innerHTML;
+  }
 }
 
 /* method for parsing query parameters */

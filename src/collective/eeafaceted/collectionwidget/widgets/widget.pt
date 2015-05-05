@@ -1,4 +1,4 @@
-<div class="faceted-widget faceted-tagscloud-widget faceted-tagscloud-collection-widget" style="display: none"
+<div class="faceted-widget faceted-tagscloud-widget faceted-tagscloud-collection-widget"
      i18n:domain="eea" tal:define="
   error_view nocall:context/@@faceted.widget.error;
   wid python:view.data.getId();
@@ -26,13 +26,14 @@
   <form action="." method="get"
   tal:on-error="structure python:error_view(error=error, cid=wid)">
   <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">
-    <li tal:condition="not:view/data/hidealloption|nothing">
-      <tal:term tal:attributes="
+    <li tal:condition="not:view/data/hidealloption|nothing"
+        tal:attributes="
        class python:default_value == '' and 'faceted-tag-selected' or '';
-       value string:;
+       value string:'';
+       data-kept-criteria string:[];
        title string:All;
-       id string:${wid}all;" i18n:attributes="title"
-       i18n:translate="">All</tal:term>
+       id string:${wid}all;" i18n:attributes="title">
+                      <a href="javascript:;" tal:content="string:All" i18n:translate="">All</a>
     </li>
     <tal:categories repeat="grouped_element python: view.grouped_vocabulary.items()">
       <tal:category define="category python:grouped_element[0];
