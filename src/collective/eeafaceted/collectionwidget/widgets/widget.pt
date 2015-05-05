@@ -28,12 +28,12 @@
   <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">
     <li tal:condition="not:view/data/hidealloption|nothing"
         tal:attributes="
-       class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
-       value string:'';
-       data-kept-criteria string:[];
-       title string:All;
-       id string:${wid}all;" i18n:attributes="title">
-                      <a href="javascript:;" tal:content="string:All" i18n:translate="">All</a>
+        class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
+        value string:'';
+        data-kept-criteria python:view.kept_criteria_as_json('all');
+        title string:All;
+        id string:${wid}all;" i18n:attributes="title">
+        <a href="javascript:;" tal:content="string:All" i18n:translate="">All</a>
     </li>
     <tal:categories repeat="grouped_element python: view.grouped_vocabulary.items()">
       <tal:category define="category python:grouped_element[0];

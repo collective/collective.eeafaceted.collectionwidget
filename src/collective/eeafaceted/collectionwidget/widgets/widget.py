@@ -114,16 +114,20 @@ class CollectionWidget(RadioWidget):
     def kept_criteria_as_json(self, collection_uid):
         '''Given a p_collectionUID, get indexes managed by the collection,
            and if it is also in advanced criteria, hide it.'''
-        catalog = getToolByName(self.context, 'portal_catalog')
-        brains = catalog(UID=collection_uid)
         res = []
-        if brains:
-            collection = brains[0].getObject()
-            collection_criteria = queryparser.parseFormquery(collection, collection.query)
-            advanced_criteria = self.advanced_criteria
-            for k, v in advanced_criteria.items():
-                if v not in collection_criteria:
-                    res.append(k)
+        # special case for the 'all' option where every criteria are kept
+        if collection_uid == 'all':
+            res = [k for k in self.advanced_criteria]
+        else:
+            catalog = getToolByName(self.context, 'portal_catalog')
+            brains = catalog(UID=collection_uid)
+            if brains:
+                collection = brains[0].getObject()
+                collection_criteria = queryparser.parseFormquery(collection, collection.query)
+                advanced_criteria = self.advanced_criteria
+                for k, v in advanced_criteria.items():
+                    if v not in collection_criteria:
+                        res.append(k)
         return json.dumps(list(res))
 
     @property
