@@ -34,7 +34,7 @@ class CollectionWidget(RadioWidget):
     edit_js = '++resource++eea.facetednavigation.widgets.tagscloud.edit.js'
     view_css = '++resource++eea.facetednavigation.widgets.tagscloud.view.css'
     edit_css = '++resource++eea.facetednavigation.widgets.tagscloud.edit.css'
-    css_class = 'faceted-tagscloud-widget'
+    css_class = 'faceted-tagscloud-collection-widget'
 
     edit_schema = collection_edit_schema
 

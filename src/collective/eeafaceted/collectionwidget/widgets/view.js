@@ -1,5 +1,11 @@
+Faceted.TagsCloudCollectionWidget = function(wid) {
+  Faceted.TagsCloudWidget.call(this, wid);
+}
+Faceted.TagsCloudCollectionWidget.prototype = Object.create( Faceted.TagsCloudWidget.prototype );
+Faceted.TagsCloudCollectionWidget.prototype.constructor = Faceted.TagsCloudCollectionWidget;
+
 /* override the tag_click function to reset every advanced criteria when changing selected collection */
-Faceted.TagsCloudWidget.prototype.tag_click =
+Faceted.TagsCloudCollectionWidget.prototype.tag_click =
   function(tag, evt){
     /* Added by collective.eeafaceted.collectionwidget */
     /* clear every criteria when selecting another collection in the collectionwidget */
@@ -19,11 +25,11 @@ Faceted.TagsCloudWidget.prototype.tag_click =
   }
 
 /* override the count method so it is not applied or it unselect currently selected item??? */
-Faceted.TagsCloudWidget.prototype.count =
+Faceted.TagsCloudCollectionWidget.prototype.count =
   function(tag, evt){ }
 
 /* we should not be able to unselect a selected element, just be able to select another one */
-Faceted.TagsCloudWidget.prototype.do_query =
+Faceted.TagsCloudCollectionWidget.prototype.do_query =
   function(tag, evt){
     var value=jQuery(tag).attr('id').replace(this.wid, '');
     value = value.replace(/_-_/g, ' ');
@@ -45,7 +51,7 @@ Faceted.TagsCloudWidget.prototype.do_query =
   }
 
 /* if user go immediately on a search using saved URL, make sure relevant advanced search criteria are hidden */
-Faceted.TagsCloudWidget.prototype.update =
+Faceted.TagsCloudCollectionWidget.prototype.update =
   function(tag, evt){
     /* XXX begin addition */
     /* get selected collection from url if any because at this stage, it is still the default element that is selected */
@@ -129,4 +135,18 @@ jQuery.extend({
       this
     }.bind({}))[0];
   }
+});
+
+Faceted.initializeTagsCloudCollectionWidget = function(evt){
+  jQuery('div.faceted-tagscloud-collection-widget').each(function(){
+    var wid = jQuery(this).attr('id');
+    wid = wid.split('_')[0];
+    Faceted.Widgets[wid] = new Faceted.TagsCloudCollectionWidget(wid);
+  });
+};
+
+jQuery(document).ready(function(){
+  jQuery(Faceted.Events).bind(
+    Faceted.Events.INITIALIZE,
+    Faceted.initializeTagsCloudCollectionWidget);
 });
