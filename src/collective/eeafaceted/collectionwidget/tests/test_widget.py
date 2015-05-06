@@ -155,6 +155,17 @@ class TestWidget(BaseWidgetCase):
             vocabulary[('category2', 'Category 2')],
             [(self.collection2.UID(), self.collection2.Title())]
         )
+        # if a category is private and not viewable by user
+        # contained collections will not be displayed
+        # make category1 folder not accessible by test_user_1_
+        cat1 = self.portal.folder.category1
+        cat1.manage_permission('View')
+        cat1.reindexObject(idxs=['allowedRolesAndUsers', ])
+        # reindex also collection1 as it does not have a workflow and take permissions from parent
+        cat1.collection1.reindexObject(idxs=['allowedRolesAndUsers', ])
+        self.assertTrue(not self.portal.portal_membership.getAuthenticatedMember().has_permission('View', cat1))
+        vocabulary = widget._generate_vocabulary()
+        self.assertTrue(not ('category1', 'Category 1') in vocabulary)
 
     def test_hidealloption(self):
         data = Criterion()
