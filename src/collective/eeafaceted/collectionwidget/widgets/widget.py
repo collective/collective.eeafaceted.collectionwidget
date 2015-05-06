@@ -168,7 +168,11 @@ class CollectionWidget(RadioWidget):
         for key, value in self.categories:
             voc[(key, value)] = []
         for key, value in self.vocabulary():
-            voc[self._get_category(key)].append((key, value))
+            category = self._get_category(key)
+            # if the category is not in the voc it means that it is not
+            # accessible, we do not keep the collection
+            if category in voc:
+                voc[category].append((key, value))
         # remove empty categories
         res = OrderedDict()
         for k, v in voc.items():
