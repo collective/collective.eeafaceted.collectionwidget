@@ -1,4 +1,4 @@
-<div class="faceted-widget faceted-tagscloud-widget faceted-tagscloud-collection-widget"
+<div class="faceted-widget faceted-tagscloud-collection-widget"
      i18n:domain="eea" tal:define="
   error_view nocall:context/@@faceted.widget.error;
   wid python:view.data.getId();
@@ -6,7 +6,7 @@
   hidezerocount python:view.hidezerocount;
   sortcountable python:view.sortcountable;
   default_value python:view.default or '';
-  css string:faceted-widget ${view/css_class} faceted-tagscloud-collection-widget;
+  css string:faceted-widget ${view/css_class};
   css python:hidden and css + ' faceted-widget-hidden' or css;
   css python:view.countable and css + ' faceted-count' or css;
   css python:hidezerocount and css + ' faceted-zero-count-hidden' or css;
@@ -14,7 +14,8 @@
   maxitems python:view.data.get('maxitems', 0) or 0;
   vocabulary view/vocabulary;
   edit_mode python:request.URL0.endswith('@@faceted_widgets');
-  display_fieldset view/display_fieldset;"
+  display_fieldset view/display_fieldset;
+  grouped_vocabulary view/grouped_vocabulary"
   tal:condition="python:edit_mode or vocabulary"
   tal:attributes="id string:${wid}_widget; class css">
 
@@ -26,16 +27,18 @@
   <form action="." method="get"
   tal:on-error="structure python:error_view(error=error, cid=wid)">
   <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">
-    <li tal:condition="not:view/data/hidealloption|nothing"
-        tal:attributes="
-        class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
-        value string:'';
-        data-kept-criteria python:view.kept_criteria_as_json('all');
-        title string:All;
-        id string:${wid}all;" i18n:attributes="title">
-        <a href="javascript:;" tal:content="string:All" i18n:translate="">All</a>
+    <li tal:condition="python: not view.data.hidealloption or not grouped_vocabulary"
+        tal:attributes="class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
+                        value string:'';
+                        data-kept-criteria python:view.kept_criteria_as_json('all');
+                        title string:All;
+                        id string:${wid}all;"
+        i18n:attributes="title">
+        <a href="javascript:;"
+           tal:content="string:All"
+           i18n:translate="">All</a>
     </li>
-    <tal:categories repeat="grouped_element python: view.grouped_vocabulary.items()">
+    <tal:categories repeat="grouped_element grouped_vocabulary/items">
       <tal:category define="category python:grouped_element[0];
                             elements python:grouped_element[1];">
         <div class="title" tal:content="python: category[1]" tal:omit-tag="python: not category[1]">Category title</div>
