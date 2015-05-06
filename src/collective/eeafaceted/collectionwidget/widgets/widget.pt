@@ -27,7 +27,7 @@
   <form action="." method="get"
   tal:on-error="structure python:error_view(error=error, cid=wid)">
   <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">
-    <li tal:condition="python: not view.data.hidealloption or not grouped_vocabulary"
+    <li tal:condition="python: not view.data.get('hidealloption', False) or not grouped_vocabulary"
         tal:attributes="class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
                         value string:'';
                         data-kept-criteria python:view.kept_criteria_as_json('all');
