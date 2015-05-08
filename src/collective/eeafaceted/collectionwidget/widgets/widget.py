@@ -31,7 +31,7 @@ class CollectionWidget(RadioWidget):
     index = ViewPageTemplateFile('widget.pt')
 
     view_js = '++resource++collective.eeafaceted.collectionwidget.widgets.view.js'
-    edit_js = '++resource++eea.facetednavigation.widgets.tagscloud.edit.js'
+    edit_js = '++resource++collective.eeafaceted.collectionwidget.widgets.edit.js'
     view_css = '++resource++eea.facetednavigation.widgets.tagscloud.view.css'
     edit_css = '++resource++eea.facetednavigation.widgets.tagscloud.edit.css'
     css_class = 'faceted-tagscloud-collection-widget'
