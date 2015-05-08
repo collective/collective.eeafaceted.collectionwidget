@@ -41,22 +41,9 @@
     <tal:categories repeat="grouped_element grouped_vocabulary/items">
       <tal:category define="category python:grouped_element[0];
                             elements python:grouped_element[1];">
-        <div class="title" tal:content="python: category[1]" tal:omit-tag="python: not category[1]">Category title</div>
+        <tal:renderCategory replace="structure python: view.context.restrictedTraverse('@@render_collection_widget_category')(category, widget=view)" />
         <tal:items repeat="term elements">
-          <li tal:define="
-            term_id python:term[0];
-            term_label python:term[1];
-            term_label python:view.translate(term_label);
-            wbr_term_label python:view.word_break(term_label);
-            default_class python:term_id == default_value and 'faceted-tag-selected' or '';"
-            tal:attributes="
-            class python: not category[0] and default_class + ' no-category-tag' or default_class;
-            value python:term_id;
-            title term_label;
-            id string:${wid}${term_id};
-            data-kept-criteria python:view.kept_criteria_as_json(term_id);">
-               <a href="javascript:;" tal:content="wbr_term_label" />
-          </li>
+          <tal:renderTerm replace="structure python: view.context.restrictedTraverse('@@render_collection_widget_term')(term, category, widget=view)" />
         </tal:items>
       </tal:category>
     </tal:categories>
