@@ -10,4 +10,20 @@
       directory="static"
       />
 
+    <browser:page
+        for="*"
+        name="render_collection_widget_category"
+        class=".views.RenderCategoryView"
+        template="templates/category.pt"
+        permission="zope2.View"
+        />
+
+    <browser:page
+        for="*"
+        name="render_collection_widget_term"
+        class=".views.RenderTermView"
+        template="templates/term.pt"
+        permission="zope2.View"
+        />
+
 </configure>
