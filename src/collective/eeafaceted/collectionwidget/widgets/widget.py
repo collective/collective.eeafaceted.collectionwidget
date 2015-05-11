@@ -66,7 +66,12 @@ class CollectionWidget(RadioWidget):
             catalog = getToolByName(self.context, 'portal_catalog')
             brains = catalog(UID=collection_uid)
             collection = brains[0].getObject()
-            return queryparser.parseFormquery(collection, collection.query)
+            query = queryparser.parseFormquery(collection, collection.query)
+            if collection.getSort_on():
+                query['sort_on'] = collection.getSort_on()
+            if collection.getSort_reversed():
+                query['sort_order'] = collection.getSort_reversed() and 'descending' or ''
+            return query
         return {}
 
     def count(self, brains, sequence=None):
