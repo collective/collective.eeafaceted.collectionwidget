@@ -284,10 +284,16 @@ class TestWidget(BaseWidgetCase):
         query_dico = widget.query(form={data.__name__: ''})
         self.assertEquals(query_dico, {})
         # with collection_uid
-        query_dico = widget.query(
-            form={data.__name__: widget.vocabulary()[0][0]}
-        )
-        self.assertEquals(query_dico, {})
+        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
+        # the sort_on paramter of the collection is taken into account
+        self.assertTrue(self.collection1.getSort_on() == 'sortable_title')
+        self.assertTrue(self.collection1.getSort_reversed() is False)
+        self.assertEquals(query_dico, {'sort_on': 'sortable_title'})
+        # if sort_reversed is True, it is kept in the query
+        self.collection1.setSort_reversed(True)
+        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
+        self.assertEquals(query_dico, {'sort_on': 'sortable_title',
+                                       'sort_order': 'descending'})
 
     def test_call(self):
         data = Criterion(
