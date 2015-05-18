@@ -15,6 +15,7 @@ from zope.schema.interfaces import IVocabularyFactory
 
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
+from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
 from eea.facetednavigation.widgets import ViewPageTemplateFile
 
 collection_edit_schema = RadioWidget.edit_schema.copy()
@@ -46,8 +47,8 @@ class CollectionWidget(RadioWidget):
         super(CollectionWidget, self).__init__(context, request, data)
         # real context could not be current context but some distant context
         # look in eea.facetednavigation.criteria.handler.Criteria
-        criteria = ICriteria(self.context)
-        self.context = criteria.context
+        self.criteria = ICriteria(self.context)
+        self.context = self.criteria.context
         # display the fieldset around the widget when rendered?
         self.display_fieldset = True
 
@@ -67,10 +68,21 @@ class CollectionWidget(RadioWidget):
             brains = catalog(UID=collection_uid)
             collection = brains[0].getObject()
             query = queryparser.parseFormquery(collection, collection.query)
-            if collection.getSort_on():
-                query['sort_on'] = collection.getSort_on()
-            if collection.getSort_reversed():
-                query['sort_order'] = collection.getSort_reversed() and 'descending' or ''
+            # use sort_on defined on the collection if it is
+            # not already in the request.form
+            # get the sort_on criterion and look in the request.form if it is used
+            sort_on_is_used = False
+            for criterion_id, criterion in self.criteria.items():
+                if criterion.widget == SortingWidget.widget_type:
+                    # criterion id in the request.form is like c0[]
+                    if "{0}[]".format(criterion_id) in self.request.form:
+                        sort_on_is_used = True
+                    break
+            if not sort_on_is_used:
+                if collection.getSort_on():
+                    query['sort_on'] = collection.getSort_on()
+                if collection.getSort_reversed():
+                    query['sort_order'] = collection.getSort_reversed() and 'descending' or ''
             return query
         return {}
 
