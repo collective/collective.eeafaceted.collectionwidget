@@ -3,9 +3,8 @@
 import json
 from Products.CMFCore.utils import getToolByName
 from collections import OrderedDict
-from collective.eeafaceted.collectionwidget.interfaces import (
-    IWidgetDefaultValue
-)
+from collective.eeafaceted.collectionwidget.interfaces import IKeptCriteria
+from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
 from plone.app.querystring import queryparser
 from plone import api
 from Acquisition import aq_parent
@@ -131,20 +130,9 @@ class CollectionWidget(RadioWidget):
     def kept_criteria_as_json(self, collection_uid):
         '''Given a p_collectionUID, get indexes managed by the collection,
            and if it is also in advanced criteria, hide it.'''
-        res = []
-        # special case for the 'all' option where every criteria are kept
-        if collection_uid == 'all':
-            res = [k for k in self.advanced_criteria]
-        else:
-            catalog = getToolByName(self.context, 'portal_catalog')
-            brains = catalog(UID=collection_uid)
-            if brains:
-                collection = brains[0].getObject()
-                collection_criteria = queryparser.parseFormquery(collection, collection.query)
-                advanced_criteria = self.advanced_criteria
-                for k, v in advanced_criteria.items():
-                    if v not in collection_criteria:
-                        res.append(k)
+        adapter = queryMultiAdapter((self.context, self),
+                                    IKeptCriteria)
+        res = adapter.compute(collection_uid)
         return json.dumps(list(res))
 
     @property

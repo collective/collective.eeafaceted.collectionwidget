@@ -13,9 +13,9 @@ class IWidgetDefaultValue(Interface):
     pass
 
 
-class ICollectionAdvancedFilter(Interface):
+class ICollectionCategories(Interface):
     pass
 
 
-class ICollectionCategories(Interface):
+class IKeptCriteria(Interface):
     pass

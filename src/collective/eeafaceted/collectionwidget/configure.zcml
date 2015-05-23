@@ -39,6 +39,12 @@
              name="collective.eeafaceted.collectionwidget.collectioncategoryvocabulary" />
 
     <adapter
+        for="*
+             eea.facetednavigation.interfaces.IWidget"
+        factory=".adapters.KeptCriteria"
+        provides=".interfaces.IKeptCriteria" />
+
+    <adapter
       for="*"
       provides=".interfaces.ICollectionCategories"
       factory=".categories.CategoriesFromFolder"
