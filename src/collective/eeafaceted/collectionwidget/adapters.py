@@ -12,7 +12,7 @@ class DefaultValue(object):
         for group in widget.grouped_vocabulary.values():
             for collection in group:
                 existingCollectionUids.append(collection[0])
-        if not widget.data.default in existingCollectionUids:
+        if widget.data.default not in existingCollectionUids:
             self.value = existingCollectionUids and existingCollectionUids[0] or None
 
 
@@ -41,6 +41,6 @@ class KeptCriteria(object):
                 collection_criteria = queryparser.parseFormquery(collection, collection.query)
                 advanced_criteria = self.widget.advanced_criteria
                 for k, v in advanced_criteria.items():
-                    if not v in collection_criteria:
+                    if v not in collection_criteria:
                         res.append(k)
         return res
