@@ -12,7 +12,7 @@
 collective.eeafaceted.collectionwidget
 ==========================================================================
 
-Package using a wdget from eea.facetednavigation to view some searches based on collection
+Package adding a widget for eea.facetednavigation that list collections as base searches
 
 * `Source code @ GitHub <https://github.com/IMIO/collective.eeafaceted.collectionwidget>`_
 * `Continuous Integration @ Travis-CI <http://travis-ci.org/IMIO/collective.eeafaceted.collectionwidget>`_
