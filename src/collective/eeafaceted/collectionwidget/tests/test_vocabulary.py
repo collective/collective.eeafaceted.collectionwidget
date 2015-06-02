@@ -60,11 +60,11 @@ class TestVocabulary(IntegrationTestCase):
         self.assertEquals(len(vocabulary), 2)
         self.assertTrue(c1.UID() in vocabulary)
         self.assertEquals(
-            'Collection 1',
+            (u'Collection 1', ''),
             vocabulary.getTerm(c1.UID()).title
         )
         self.assertTrue(c2.UID() in vocabulary)
         self.assertEquals(
-            'Collection 2',
+            (u'Collection 2', ''),
             vocabulary.getTerm(c2.UID()).title
         )
