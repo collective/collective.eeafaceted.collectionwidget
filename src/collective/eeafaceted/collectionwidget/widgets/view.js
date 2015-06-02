@@ -7,6 +7,12 @@ Faceted.TagsCloudCollectionWidget.prototype.constructor = Faceted.TagsCloudColle
 /* override the tag_click function to reset every advanced criteria when changing selected collection */
 Faceted.TagsCloudCollectionWidget.prototype.tag_click =
   function(tag, evt){
+    /* redirect if contained <a> href is not javascript:; */
+    href = $('a', tag)[0].href;
+    if (href != 'javascript:;' ) {
+      window.location.href = href;
+      return
+    }
     /* Added by collective.eeafaceted.collectionwidget */
     /* clear every criteria when selecting another collection in the collectionwidget */
     clearCriteria(tag);

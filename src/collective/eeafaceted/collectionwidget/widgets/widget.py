@@ -13,6 +13,7 @@ from zope.component import queryMultiAdapter
 from zope.schema.interfaces import IVocabularyFactory
 
 from eea.facetednavigation.interfaces import ICriteria
+from eea.facetednavigation.interfaces import IFacetedNavigable
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
 from eea.facetednavigation.widgets import ViewPageTemplateFile
@@ -111,6 +112,20 @@ class CollectionWidget(RadioWidget):
             return default
         # call an adapter to get the correct value
         default = self.adapter_default_value
+
+        # now that we have the default, check if we are on the right context
+        # except if no_default is found in the REQUEST or we are in the configuration
+        if not self.context.REQUEST['HTTP_REFERER'].endswith('configure_faceted.html') and \
+           not self.context.REQUEST.get('no_default', False) and \
+           IFacetedNavigable.providedBy(self.context):
+            catalog = getToolByName(self.context, 'portal_catalog')
+            brains = catalog(UID=default)
+            if brains:
+                collection = brains[0].getObject()
+                container = collection.aq_inner.aq_parent
+                if not container == self.context and \
+                   IFacetedNavigable.providedBy(container):
+                    self.context.REQUEST.RESPONSE.redirect(container.absolute_url())
         return default
 
     @property
