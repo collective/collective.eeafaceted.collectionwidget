@@ -7,6 +7,7 @@ from collective.eeafaceted.collectionwidget.interfaces import IKeptCriteria
 from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
 from plone.app.querystring import queryparser
 from plone import api
+from plone.memoize.view import memoize
 from Acquisition import aq_parent
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
@@ -175,6 +176,7 @@ class CollectionWidget(RadioWidget):
         return bool(int(getattr(self.data, 'hidealloption', u'0') or u'0'))
 
     @property
+    @memoize
     def categories(self):
         factory = getUtility(IVocabularyFactory, self.category_vocabulary)
         voc = factory(self.context)

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
 import json
+from zope.annotation import IAnnotations
 from zope.component import getGlobalSiteManager
 from zope.component import getMultiAdapter
 from zope.interface import Interface
@@ -100,6 +101,9 @@ class TestWidget(BaseWidgetCase):
         member = self.portal.portal_membership.getAuthenticatedMember()
         self.assertTrue(not member.has_permission('View', cat1))
         self.assertTrue(member.has_permission('View', self.collection1))
+        # clean memoize for widget.categories,
+        # it was memoized when calling _generate_vocabulary here above
+        del IAnnotations(self.request)['plone.memoize']
         vocabulary = widget._generate_vocabulary()
         self.assertTrue(not ('category1', 'Category 1') in vocabulary)
 
