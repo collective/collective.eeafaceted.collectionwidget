@@ -20,7 +20,7 @@ class CollectionVocabulary(object):
         self.context = context
 
         items = []
-        for brain in self.brains:
+        for brain in self._brains(context):
             redirect_to = ''
             current_url = context.absolute_url()
             brain_folder_url = '/'.join(brain.getURL().split('/')[:-1])
@@ -34,24 +34,18 @@ class CollectionVocabulary(object):
                     criteria = ICriteria(collection_container).criteria
                     for criterion in criteria:
                         if criterion.widget == CollectionWidget.widget_type:
-                            redirect_to = "{0}#{1}={2}"
-                            # add a 'no_default=1' for links of collections of the root
-                            if not IFacetedNavigable.providedBy(collection_container.aq_inner.aq_parent):
-                                redirect_to = "{0}?no_default=1#{1}={2}"
-                            redirect_to = redirect_to.format(brain_folder_url,
-                                                             criterion.__name__,
-                                                             collection.UID())
+                            redirect_to = self._compute_redirect_to(collection, criterion)
                             break
 
             items.append(SimpleTerm(brain.UID,
                                     brain.UID,
-                                    (safe_unicode(brain.Title), redirect_to)))
+                                    (safe_unicode(brain.Title),
+                                     redirect_to)))
         return SimpleVocabulary(items)
 
-    @property
-    def brains(self):
-        # find root
-        root = self.context
+    def _brains(self, context):
+        """ """
+        root = context
         while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
             root = root.aq_inner.aq_parent
         catalog = api.portal.get_tool('portal_catalog')
@@ -61,6 +55,17 @@ class CollectionVocabulary(object):
             sort_on='getObjPositionInParent'
         )
         return brains
+
+    def _compute_redirect_to(self, collection, criterion):
+        """ """
+        redirect_to = "{0}#{1}={2}"
+        # add a 'no_default=1' for links of collections of the root
+        collection_container = collection.aq_inner.aq_parent
+        if not IFacetedNavigable.providedBy(collection_container.aq_inner.aq_parent):
+            redirect_to = "{0}?no_default=1#{1}={2}"
+        return redirect_to.format(collection_container.absolute_url(),
+                                  criterion.__name__,
+                                  collection.UID())
 
 
 CollectionVocabularyFactory = CollectionVocabulary()

@@ -116,7 +116,7 @@ class CollectionWidget(RadioWidget):
         # now that we have the default, check if we are on the right context
         # except if no_default is found in the REQUEST or we are in the configuration
         if not self.context.REQUEST['HTTP_REFERER'].endswith('configure_faceted.html') and \
-           not self.context.REQUEST.get('no_default', False) and \
+           not self.context.REQUEST.get('no_default', '0') == '1' and \
            IFacetedNavigable.providedBy(self.context):
             catalog = getToolByName(self.context, 'portal_catalog')
             brains = catalog(UID=default)
