@@ -174,15 +174,19 @@ class TestWidget(BaseWidgetCase):
         # a default value is selected, it will use adapter_default_value
         collection1UID = self.collection1.UID()
         widget.data.default = collection1UID
+        # default is memoized, so clean it
+        del IAnnotations(self.request)['plone.memoize']
         widget()
         self.assertEquals(widget.default, collection1UID)
         # if the selected value is no more available, it falls back to first available element
         self.collection1.getParentNode().manage_delObjects(ids=[self.collection1.getId()])
+        del IAnnotations(self.request)['plone.memoize']
         widget()
         self.assertEquals(widget.data.default, collection1UID)
         self.assertEquals(widget.default, self.collection2.UID())
         # if no fallback available, it will return None
         self.collection2.getParentNode().manage_delObjects(ids=[self.collection2.getId()])
+        del IAnnotations(self.request)['plone.memoize']
         widget()
         self.assertEquals(widget.default, None)
 

@@ -104,6 +104,7 @@ class CollectionWidget(RadioWidget):
         return res
 
     @property
+    @memoize
     def default(self):
         """Return the default value"""
         default = super(CollectionWidget, self).default
