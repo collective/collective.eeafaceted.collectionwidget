@@ -12,11 +12,10 @@
   css python:hidezerocount and css + ' faceted-zero-count-hidden' or css;
   css python:sortcountable and css + ' faceted-sortcountable' or css;
   maxitems python:view.data.get('maxitems', 0) or 0;
-  vocabulary view/vocabulary;
   edit_mode python:request.URL0.endswith('@@faceted_widgets');
   display_fieldset view/display_fieldset;
   grouped_vocabulary view/grouped_vocabulary"
-  tal:condition="python:edit_mode or vocabulary"
+  tal:condition="python:edit_mode or grouped_vocabulary"
   tal:attributes="id string:${wid}_widget; class css">
 
 <fieldset class="widget-fieldset" tal:omit-tag="not:display_fieldset">
