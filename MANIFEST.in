@@ -6,6 +6,7 @@ include Makefile
 recursive-include docs *.GPL
 recursive-include docs *.rst
 exclude buildout.d
+exclude buildout.d/*
 exclude .installed.cfg
 exclude .mr.developer.cfg
 exclude *.yml
