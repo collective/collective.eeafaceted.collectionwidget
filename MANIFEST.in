@@ -7,6 +7,6 @@ recursive-include docs *.GPL
 recursive-include docs *.rst
 exclude .installed.cfg
 exclude .mr.developer.cfg
-exclude .travis.yml
+exclude *.yml
 exclude .coveragerc
 global-exclude *.pyc
