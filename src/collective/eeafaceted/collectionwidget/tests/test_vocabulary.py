@@ -87,7 +87,6 @@ class TestVocabulary(IntegrationTestCase):
         )
 
         # create a subfolder, add collections into it
-        # and activate the faceted navigation
         api.content.create(
             id='subfolder',
             type='Folder',

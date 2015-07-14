@@ -190,6 +190,45 @@ class TestWidget(BaseWidgetCase):
         widget()
         self.assertEquals(widget.default, None)
 
+    def test_default_subfaceted(self):
+        """If default is in a subfolder with a faceted defined on it,
+           user will be redirected to this subfolder then the default will be displayed."""
+        data = Criterion(vocabulary=COLLECTION_VOCABULARY)
+        # create a subfolder, add collections into it
+        # and activate the faceted navigation
+        api.content.create(
+            id='subfolder',
+            type='Folder',
+            title='Subfolder',
+            container=self.folder
+        )
+        c3 = api.content.create(
+            id='collection3',
+            type='Collection',
+            title='Collection 3',
+            container=self.folder.subfolder
+        )
+        subtyper = getMultiAdapter((self.folder.subfolder, self.request),
+                                   name=u'faceted_subtyper')
+        subtyper.enable()
+        # enabling a faceted will redirect to it, so, cancel this
+        self.request.RESPONSE.status = 200
+
+        # when default in self.folder, not redirected already at the right place
+        widget = CollectionWidget(self.folder, self.request, data=data)
+        widget.data.default = self.collection1.UID()
+        widget()
+        self.assertEquals(self.request.RESPONSE.status, 200)
+
+        # now set default on a collection of the subfolder
+        widget.data.default = c3.UID()
+        # default is memoized, so clean it
+        del IAnnotations(self.request)['plone.memoize']
+        widget()
+        # we are redirected to the subfolder
+        self.assertEquals(self.request.RESPONSE.status, 302)
+        self.assertEquals(self.request.RESPONSE.getHeader('location'), self.folder.subfolder.absolute_url())
+
     def test_count(self):
         data = Criterion()
         widget = CollectionWidget(self.folder, self.request, data=data)
@@ -218,6 +257,9 @@ class TestWidget(BaseWidgetCase):
         )
 
     def test_query(self):
+        self.collection1.query = [{'i': 'review_state',
+                                   'o': 'plone.app.querystring.operation.selection.is',
+                                   'v': ['private']}]
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
@@ -231,12 +273,20 @@ class TestWidget(BaseWidgetCase):
         # the sort_on paramter of the collection is taken into account
         self.assertTrue(self.collection1.getSort_on() == 'sortable_title')
         self.assertTrue(self.collection1.getSort_reversed() is False)
-        self.assertEquals(query_dico, {'sort_on': 'sortable_title'})
+        self.assertEquals(query_dico, {'review_state': {'query': ['private']},
+                                       'sort_on': 'sortable_title'})
         # if sort_reversed is True, it is kept in the query
         self.collection1.setSort_reversed(True)
         query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
-        self.assertEquals(query_dico, {'sort_on': 'sortable_title',
+        self.assertEquals(query_dico, {'review_state': {'query': ['private']},
+                                       'sort_on': 'sortable_title',
                                        'sort_order': 'descending'})
+        # if we receive a value for a SortingCriterion,
+        # then the sort defined on the collection will not be used
+        # here c0 is a SortingCriterion
+        self.request.form['c0[]'] = 'created'
+        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
+        self.assertEquals(query_dico, {'review_state': {'query': ['private']}})
 
     def test_call(self):
         data = Criterion(
