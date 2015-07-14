@@ -1,3 +1,12 @@
 graft src/collective
 graft docs/
 include *.cfg *.rst *.in
+include *.py
+include Makefile
+recursive-include docs *.GPL
+recursive-include docs *.rst
+exclude .installed.cfg
+exclude .mr.developer.cfg
+exclude .travis.yml
+exclude .coveragerc
+global-exclude *.pyc
