@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
-"""Setup/installation tests for this package."""
-from plone import api
 
-from ..testing.testcase import IntegrationTestCase
+from zope.component import getMultiAdapter
+from plone import api
+from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
+from collective.eeafaceted.collectionwidget.vocabulary import CollectionCategoryVocabularyFactory
+from collective.eeafaceted.collectionwidget.vocabulary import CollectionVocabularyFactory
 
 
 class TestVocabulary(IntegrationTestCase):
@@ -10,13 +12,15 @@ class TestVocabulary(IntegrationTestCase):
 
     def setUp(self):
         """Custom shared utility setup for tests."""
+        self.request = self.layer['request']
         self.portal = self.layer['portal']
         self.folder = self.portal.folder
+        subtyper = getMultiAdapter(
+            (self.folder, self.request), name=u'faceted_subtyper'
+        )
+        subtyper.enable()
 
     def test_categoryvocabulary(self):
-        from collective.eeafaceted.collectionwidget.vocabulary import (
-            CollectionCategoryVocabularyFactory
-        )
         """There should be categories
         """
         api.content.create(
@@ -39,11 +43,7 @@ class TestVocabulary(IntegrationTestCase):
         self.assertEquals('Category 2', vocabulary.getTerm('category2').title)
 
     def test_collectionvocabulary(self):
-        from collective.eeafaceted.collectionwidget.vocabulary import (
-            CollectionVocabularyFactory
-        )
-        """There should be collections
-        """
+        """ """
         c1 = api.content.create(
             id='collection1',
             type='Collection',
@@ -68,3 +68,96 @@ class TestVocabulary(IntegrationTestCase):
             (u'Collection 2', ''),
             vocabulary.getTerm(c2.UID()).title
         )
+
+    def test_with_sub_faceted(self):
+        """Test behaviour of the vocabulary when we have subfolders
+           with activated faceted navigation."""
+        # add collection to self.folder
+        c1 = api.content.create(
+            id='collection1',
+            type='Collection',
+            title='Collection 1',
+            container=self.folder
+        )
+        c2 = api.content.create(
+            id='collection2',
+            type='Collection',
+            title='Collection 2',
+            container=self.folder
+        )
+
+        # create a subfolder, add collections into it
+        # and activate the faceted navigation
+        api.content.create(
+            id='subfolder',
+            type='Folder',
+            title='Subfolder',
+            container=self.folder
+        )
+        c3 = api.content.create(
+            id='collection3',
+            type='Collection',
+            title='Collection 3',
+            container=self.folder.subfolder
+        )
+        c4 = api.content.create(
+            id='collection4',
+            type='Collection',
+            title='Collection 4',
+            container=self.folder.subfolder
+        )
+
+        # for now, faceted navigation is not enabled on subfolder,
+        # it behaves like a normal category
+
+        vocabulary = CollectionVocabularyFactory(self.folder)
+        folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
+        subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
+        self.assertTrue(folderCatVocabulary.by_token.keys() ==
+                        subfolderCatVocabulary.by_token.keys())
+        # redirect_to is not filled
+        self.assertFalse(vocabulary.getTerm(c1.UID()).title[1])
+        self.assertFalse(vocabulary.getTerm(c2.UID()).title[1])
+        self.assertFalse(vocabulary.getTerm(c3.UID()).title[1])
+        self.assertFalse(vocabulary.getTerm(c4.UID()).title[1])
+
+        # now enable faceted navigation for subfolder
+        subtyper = getMultiAdapter((self.folder.subfolder, self.request),
+                                   name=u'faceted_subtyper')
+        subtyper.enable()
+        vocabulary = CollectionVocabularyFactory(self.folder)
+        folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
+        subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
+        self.assertTrue(folderCatVocabulary.by_token.keys() ==
+                        subfolderCatVocabulary.by_token.keys())
+        # as we are getting the vocabulary on self.folder,
+        # redirect_to is filled for collections of subfolder
+        self.assertFalse(vocabulary.getTerm(c1.UID()).title[1])
+        self.assertFalse(vocabulary.getTerm(c2.UID()).title[1])
+        self.assertEquals(vocabulary.getTerm(c3.UID()).title[1],
+                          '{0}#c1={1}'.format(self.folder.subfolder.absolute_url(),
+                                              c3.UID())
+                          )
+        self.assertEquals(vocabulary.getTerm(c4.UID()).title[1],
+                          '{0}#c1={1}'.format(self.folder.subfolder.absolute_url(),
+                                              c4.UID())
+                          )
+
+        # if we get vocabulary from subfolder, it works the other way round
+        # but moreover, we have a no_default=1 that avoid to redirect if we
+        # are sending the user to the root folder of the faceted navigation
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
+        subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
+        self.assertTrue(folderCatVocabulary.by_token.keys() ==
+                        subfolderCatVocabulary.by_token.keys())
+        self.assertEquals(vocabulary.getTerm(c1.UID()).title[1],
+                          '{0}?no_default=1#c1={1}'.format(self.folder.absolute_url(),
+                                                           c1.UID())
+                          )
+        self.assertEquals(vocabulary.getTerm(c2.UID()).title[1],
+                          '{0}?no_default=1#c1={1}'.format(self.folder.absolute_url(),
+                                                           c2.UID())
+                          )
+        self.assertFalse(vocabulary.getTerm(c3.UID()).title[1])
+        self.assertFalse(vocabulary.getTerm(c4.UID()).title[1])
