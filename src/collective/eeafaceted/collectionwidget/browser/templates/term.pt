@@ -6,7 +6,6 @@
             term_id python:term[0];
             term_label python:term[1][0];
             term_label python:widget.translate(term_label);
-            wbr_term_label python:widget.word_break(term_label);
             redirect_to python:term[1][1];
             default_class python:term_id == widget.default and 'faceted-tag-selected' or '';"
             tal:attributes="
@@ -17,6 +16,6 @@
             data-kept-criteria python:widget.kept_criteria_as_json(term_id);">
                <a href="javascript:;"
                   tal:attributes="href python: not redirect_to and 'javascript:;;' or redirect_to"
-                  tal:content="wbr_term_label" />
+                  tal:content="term_label" />
           </li>
 </tal:defines>
