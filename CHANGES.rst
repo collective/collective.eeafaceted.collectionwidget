@@ -12,6 +12,9 @@ Changelog
   anymore to access on the root folder
   [gbastien]
 
+- Added portal_url attribute in RenderCategoryView
+  [sgeulette]
+
 0.1 (2015-07-14)
 ----------------
 
