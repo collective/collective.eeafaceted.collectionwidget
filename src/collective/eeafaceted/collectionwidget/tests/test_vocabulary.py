@@ -5,6 +5,7 @@ from plone import api
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
 from collective.eeafaceted.collectionwidget.vocabulary import CollectionCategoryVocabularyFactory
 from collective.eeafaceted.collectionwidget.vocabulary import CollectionVocabularyFactory
+from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 
 
 class TestVocabulary(IntegrationTestCase):
@@ -124,6 +125,11 @@ class TestVocabulary(IntegrationTestCase):
         subtyper = getMultiAdapter((self.folder.subfolder, self.request),
                                    name=u'faceted_subtyper')
         subtyper.enable()
+        # change the CollectionWidget id to "c44" so we are sure that
+        # the generated link is the one to this widget
+        self.assertEquals(self.folder.subfolder.__annotations__['FacetedCriteria'][1].widget,
+                          CollectionWidget.widget_type)
+        self.folder.subfolder.__annotations__['FacetedCriteria'][1].__name__ = u'c44'
         vocabulary = CollectionVocabularyFactory(self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
@@ -134,12 +140,12 @@ class TestVocabulary(IntegrationTestCase):
         self.assertFalse(vocabulary.getTerm(c1.UID()).title[1])
         self.assertFalse(vocabulary.getTerm(c2.UID()).title[1])
         self.assertEquals(vocabulary.getTerm(c3.UID()).title[1],
-                          '{0}#c1={1}'.format(self.folder.subfolder.absolute_url(),
-                                              c3.UID())
+                          '{0}#c44={1}'.format(self.folder.subfolder.absolute_url(),
+                                               c3.UID())
                           )
         self.assertEquals(vocabulary.getTerm(c4.UID()).title[1],
-                          '{0}#c1={1}'.format(self.folder.subfolder.absolute_url(),
-                                              c4.UID())
+                          '{0}#c44={1}'.format(self.folder.subfolder.absolute_url(),
+                                               c4.UID())
                           )
 
         # if we get vocabulary from subfolder, it works the other way round
