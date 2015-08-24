@@ -2,6 +2,7 @@
 
 from zope.component import getMultiAdapter
 from plone import api
+from eea.facetednavigation.interfaces import ICriteria
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
 from collective.eeafaceted.collectionwidget.vocabulary import CollectionCategoryVocabularyFactory
 from collective.eeafaceted.collectionwidget.vocabulary import CollectionVocabularyFactory
@@ -168,3 +169,11 @@ class TestVocabulary(IntegrationTestCase):
                           )
         self.assertFalse(vocabulary.getTerm(c3.UID()).title[1])
         self.assertFalse(vocabulary.getTerm(c4.UID()).title[1])
+
+        # test the generated link when having a faceted using a reverse sorting index
+        data = {'default': u'effective(reverse)'}
+        ICriteria(self.folder).add('sorting', 'top', **data)
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        self.assertEquals(vocabulary.getTerm(c1.UID()).title[1],
+                          '{0}?no_redirect=1#c1={1}&c3=effective&reversed=on'.format(self.folder.absolute_url(),
+                                                                                     c1.UID()))
