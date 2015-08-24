@@ -65,12 +65,26 @@ class CollectionVocabulary(object):
         criteria = ICriteria(collection_container).criteria
         default_criteria = []
         for criterion in criteria:
-            # keep default of criteria in the "default" section omitting the collection widget
+            # keep default of criteria in the "default"
+            # section omitting the collection widget
             if criterion.section == u'default':
-                if not criterion.widget == CollectionWidget.widget_type and criterion.default:
-                    default_criteria.append('{0}={1}'.format(criterion.__name__, criterion.default))
-                elif criterion.widget == CollectionWidget.widget_type:
-                    default_criteria.append('{0}={1}'.format(criterion.__name__, collection.UID()))
+                if criterion.widget == CollectionWidget.widget_type:
+                    default_criteria.append('{0}={1}'.format(criterion.__name__,
+                                                             collection.UID()))
+                elif criterion.default:
+                    if criterion.widget == u'sorting':
+                        if criterion.default.endswith('(reverse)'):
+                            default_criteria.append('{0}={1}&reversed=on'.format(
+                                criterion.__name__,
+                                criterion.default.replace('(reverse)', '')))
+                        else:
+                            default_criteria.append('{0}={1}'.format(criterion.__name__,
+                                                                     criterion.default))
+                    # manage sort order criterion, received as c0=effective(reverse),
+                    # changed for c0=effective&reversed=on
+                    else:
+                        default_criteria.append('{0}={1}'.format(criterion.__name__,
+                                                                 criterion.default))
         query_url = '&'.join(default_criteria)
         if not IFacetedNavigable.providedBy(collection_container.aq_inner.aq_parent):
             redirect_to = "{0}?no_default=1#{1}"
