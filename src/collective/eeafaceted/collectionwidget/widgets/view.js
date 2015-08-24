@@ -71,6 +71,7 @@ Faceted.TagsCloudCollectionWidget.prototype.update =
       updatePageTitle(selected);
     }
     else {
+      showRelevantAdvancedCriteria(tag);
       updatePageTitle($('.faceted-tag-selected', tag)[0]);
     }
 
