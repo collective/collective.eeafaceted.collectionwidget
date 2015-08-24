@@ -42,6 +42,14 @@ Widget shows collections in categories
     Wait Until Page Contains Element  css=div.eea-preview-items
     element should contain  css=div.eea-preview-items  Faceted folder
 
+Faceted title matches selected collection
+    ${folder}=  Make faceted folder
+    Create content  type=Collection  title=Info  id=info  container=${folder}
+    Click link  Faceted criteria
+    Click Element  css=#c1_widget li
+    Go to  ${PLONE_URL}/faceted
+    Element should contain  css=h1.documentFirstHeading  Info
+
 
 *** Keywords ***
 Suite Setup

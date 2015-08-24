@@ -34,6 +34,10 @@ Faceted.TagsCloudCollectionWidget.prototype.tag_click =
 Faceted.TagsCloudCollectionWidget.prototype.count =
   function(tag, evt){ }
 
+/* override reset method to unselect all tags, and not try to select a 'all'
+ * option that is not visible in our case */
+Faceted.TagsCloudCollectionWidget.prototype.reset = function() { this.unselect(this.tags) }
+
 /* we should not be able to unselect a selected element, just be able to select another one */
 Faceted.TagsCloudCollectionWidget.prototype.do_query =
   function(tag, evt){
@@ -70,10 +74,12 @@ Faceted.TagsCloudCollectionWidget.prototype.update =
       showRelevantAdvancedCriteria(selected);
       updatePageTitle(selected);
     }
-    else {
+    else {  // executed on initialization
       var selected = $('#'+this.wid+'_widget li.faceted-tag-selected');
-      showRelevantAdvancedCriteria(selected);
-      updatePageTitle(selected);
+      if (selected.length) {  // do nothing if there is no default
+        showRelevantAdvancedCriteria(selected);
+        updatePageTitle(selected);
+      }
     }
 
     /* XXX end addition */
