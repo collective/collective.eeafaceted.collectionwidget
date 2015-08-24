@@ -71,8 +71,9 @@ Faceted.TagsCloudCollectionWidget.prototype.update =
       updatePageTitle(selected);
     }
     else {
-      showRelevantAdvancedCriteria(tag);
-      updatePageTitle($('.faceted-tag-selected', tag)[0]);
+      var selected = $('#'+this.wid+'_widget li.faceted-tag-selected');
+      showRelevantAdvancedCriteria(selected);
+      updatePageTitle(selected);
     }
 
     /* XXX end addition */
