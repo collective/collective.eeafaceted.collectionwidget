@@ -137,19 +137,21 @@ class TestVocabulary(IntegrationTestCase):
                         subfolderCatVocabulary.by_token.keys())
         # as we are getting the vocabulary on self.folder,
         # redirect_to is filled for collections of subfolder
+        # while generating links to specific sub faceted, a 'no_redirect' is added
+        # so the user is not redirected to the faceted using the default
         self.assertFalse(vocabulary.getTerm(c1.UID()).title[1])
         self.assertFalse(vocabulary.getTerm(c2.UID()).title[1])
         self.assertEquals(vocabulary.getTerm(c3.UID()).title[1],
-                          '{0}#c44={1}'.format(self.folder.subfolder.absolute_url(),
-                                               c3.UID())
+                          '{0}?no_redirect=1#c44={1}'.format(self.folder.subfolder.absolute_url(),
+                                                             c3.UID())
                           )
         self.assertEquals(vocabulary.getTerm(c4.UID()).title[1],
-                          '{0}#c44={1}'.format(self.folder.subfolder.absolute_url(),
-                                               c4.UID())
+                          '{0}?no_redirect=1#c44={1}'.format(self.folder.subfolder.absolute_url(),
+                                                             c4.UID())
                           )
 
         # if we get vocabulary from subfolder, it works the other way round
-        # but moreover, we have a no_default=1 that avoid to redirect if we
+        # but moreover, we have a no_redirect=1 that avoid to redirect if we
         # are sending the user to the root folder of the faceted navigation
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
@@ -157,12 +159,12 @@ class TestVocabulary(IntegrationTestCase):
         self.assertTrue(folderCatVocabulary.by_token.keys() ==
                         subfolderCatVocabulary.by_token.keys())
         self.assertEquals(vocabulary.getTerm(c1.UID()).title[1],
-                          '{0}?no_default=1#c1={1}'.format(self.folder.absolute_url(),
-                                                           c1.UID())
+                          '{0}?no_redirect=1#c1={1}'.format(self.folder.absolute_url(),
+                                                            c1.UID())
                           )
         self.assertEquals(vocabulary.getTerm(c2.UID()).title[1],
-                          '{0}?no_default=1#c1={1}'.format(self.folder.absolute_url(),
-                                                           c2.UID())
+                          '{0}?no_redirect=1#c1={1}'.format(self.folder.absolute_url(),
+                                                            c2.UID())
                           )
         self.assertFalse(vocabulary.getTerm(c3.UID()).title[1])
         self.assertFalse(vocabulary.getTerm(c4.UID()).title[1])

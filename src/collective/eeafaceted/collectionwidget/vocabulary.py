@@ -58,8 +58,8 @@ class CollectionVocabulary(object):
 
     def _compute_redirect_to(self, collection, criterion):
         """ """
-        redirect_to = "{0}#{1}"
-        # add a 'no_default=1' for links of collections of the root
+        redirect_to = "{0}?no_redirect=1#{1}"
+        # add a 'no_redirect=1' for links to collections
         collection_container = collection.aq_inner.aq_parent
         # build a base_query_url representing defaut paramters values
         criteria = ICriteria(collection_container).criteria
@@ -86,8 +86,6 @@ class CollectionVocabulary(object):
                         default_criteria.append('{0}={1}'.format(criterion.__name__,
                                                                  criterion.default))
         query_url = '&'.join(default_criteria)
-        if not IFacetedNavigable.providedBy(collection_container.aq_inner.aq_parent):
-            redirect_to = "{0}?no_default=1#{1}"
         return redirect_to.format(collection_container.absolute_url(),
                                   query_url)
 
