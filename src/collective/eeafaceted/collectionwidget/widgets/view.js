@@ -122,14 +122,29 @@ clearCriteria = function(tag) {
 showRelevantAdvancedCriteria = function(tag) {
   keptCriteria = jQuery(tag).data()['keptCriteria']
   advancedCriteria = jQuery(tag).parent().data()['advancedCriteria']
-  /* hide every advanced criteria */
-  $.each(advancedCriteria, function(k, criterion_id) {
-    $('div#'+criterion_id+'_widget').hide();
-  })
-  /* show kept criteria */
-  $.each(keptCriteria, function(k, criterion_id) {
-    $('div#'+criterion_id+'_widget').show();
-  })
+  /* disable checkboxes base on kept criteria */
+  $.each(keptCriteria, function(criterion_id, enabled_checkboxes) {
+    var available_checkboxes = $('#'+criterion_id+'_widget input');
+    // set selected items for the criterion
+    Faceted.Query[criterion_id] = enabled_checkboxes;
+    available_checkboxes.each(function(idx, checkbox) {
+        var $checkbox = $(checkbox);
+        if ($.inArray($checkbox.attr('value'), enabled_checkboxes) > -1) {
+            $checkbox.prop('checked', true);
+            $checkbox.prop('disabled', false);
+        } else {
+            // only disable if enabled_checkboxes is not empty
+            if (enabled_checkboxes.length) {
+              $checkbox.prop('disabled', true);
+            } else {
+              $checkbox.prop('disabled', false);
+            }
+        }
+    });
+  });
+  // recalculate hash from Faceted.Query
+  Faceted.URLHandler.set();
+  // Faceted will rerender the criterion with the checkboxes checked after that
 }
 
 updatePageTitle = function(tag) {

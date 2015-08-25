@@ -13,6 +13,8 @@ from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.testing import z2
 
+from eea.facetednavigation.interfaces import ICriteria
+from zope.component import queryAdapter
 
 import collective.eeafaceted.collectionwidget
 
@@ -39,7 +41,32 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
         setRoles(portal, TEST_USER_ID, ['Manager'])
         login(portal, TEST_USER_NAME)
         folder_id = portal.invokeFactory('Folder', 'folder')
-        portal[folder_id].reindexObject()
+        folder = portal[folder_id]
+        folder.reindexObject()
+
+        folder2_id = portal.invokeFactory('Folder', 'folder2')
+        folder2 = portal[folder2_id]
+        folder2.reindexObject()
+        folder2.unrestrictedTraverse('@@faceted_subtyper').enable()
+        collection = portal.portal_types.Collection._constructInstance(
+                           folder2,
+                           id='collection_review_state', title=u"Review state",
+                           query=[{'i': 'review_state',
+                                   'o': 'plone.app.querystring.operation.selection.is',
+                                   'v': ['published']}],
+                           )
+        collection_uid = collection.UID()
+        criteria = queryAdapter(folder2, ICriteria)
+        # edit collection-link criteria
+        criteria.edit('c1', default=collection_uid)
+        # create a second collection without review_state criterion
+        portal.portal_types.Collection._constructInstance(
+                           folder2,
+                           id='collection_wo_review_state', title=u"Creator",
+                           query=[{'i': 'Creator',
+                                   'o': 'plone.app.querystring.operation.selection.is',
+                                   'v': ['_test_user_1']}],
+                           )
 
         # Commit so that the test browser sees these objects
         import transaction

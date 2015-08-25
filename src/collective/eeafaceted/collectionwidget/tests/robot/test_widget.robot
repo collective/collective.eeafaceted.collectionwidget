@@ -50,6 +50,17 @@ Faceted title matches selected collection
     Go to  ${PLONE_URL}/faceted
     Element should contain  css=h1.documentFirstHeading  Info
 
+Advanced criterion are disabled based on selected collection
+    Go to  ${PLONE_URL}/folder2
+    Click link  More filters
+    Element should be visible  css=div#c2_widget
+    # for the Review state criterion, 6 checkbox are disabled and 1 checked
+    ${disabledCount} =  Get Matching Xpath Count  xpath=//*[@id='c2_widget']//input[@disabled]
+    Should Be Equal  ${disabledCount}  6
+    Click link  Creator
+    # all checkboxes for the review state criterion should be available again
+    ${disabledCount} =  Get Matching Xpath Count  xpath=//*[@id='c2_widget']//input[@disabled]
+    Should Be Equal  ${disabledCount}  0
 
 *** Keywords ***
 Suite Setup

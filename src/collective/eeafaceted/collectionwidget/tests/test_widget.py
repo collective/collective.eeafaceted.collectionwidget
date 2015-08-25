@@ -139,8 +139,8 @@ class TestWidget(BaseWidgetCase):
     def test_advanced_criteria(self):
         # we have an advanced criteria 'review_state' with name 'c2'
         widget = CollectionWidget(self.folder, self.request)
-        self.assertTrue(len(widget.advanced_criteria) == 1)
-        self.assertTrue('c2' in widget.advanced_criteria)
+        self.assertEquals(len(widget.advanced_criteria), 2)
+        self.assertEquals(widget.advanced_criteria, {u'c3': u'Creator', u'c2': u'review_state'})
 
     def test_kept_criteria_as_json(self):
         widget = CollectionWidget(self.folder, self.request)
@@ -152,18 +152,21 @@ class TestWidget(BaseWidgetCase):
         # response is in JSON format
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         # response is valid JSON
-        self.assertTrue(json._default_decoder.decode(kept_criteria_as_json) == ["c2", ])
+        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+                          {u'c3': [], u'c2': []})
         # ok, now update collection1 so it manage 'review_state'
         collection1.query = [{'i': 'review_state',
                               'o': 'plone.app.querystring.operation.selection.is',
                               'v': ['private']}]
         # now 'c2' will be hidden
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
-        self.assertTrue(not json._default_decoder.decode(kept_criteria_as_json))
+        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+                          {u'c3': [], u'c2': [u'private']})
         # but it is still kept when using collection2
         collection2 = self.folder.category2.collection2
         kept_criteria_as_json = widget.kept_criteria_as_json(collection2.UID())
-        self.assertTrue(json._default_decoder.decode(kept_criteria_as_json) == ["c2", ])
+        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+                          {u'c3': [], u'c2': []})
 
     def test_default(self):
         # no default value selected
@@ -264,14 +267,14 @@ class TestWidget(BaseWidgetCase):
         # with vocabulary
         self.assertEquals(
             count_dico,
-            {self.collection1.UID(): 5, self.collection2.UID(): 5}
+            {self.collection1.UID(): 8, self.collection2.UID(): 8}
         )
         # with sequence
         sequence = {u'': 1, self.collection1.UID(): 2}
         count_dico = widget.count(brains, sequence=sequence)
         self.assertEquals(
             count_dico,
-            {u'': 1, self.collection1.UID(): 5}
+            {u'': 1, self.collection1.UID(): 8}
         )
 
     def test_query(self):

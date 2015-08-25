@@ -29,10 +29,10 @@ class KeptCriteria(object):
 
     def compute(self, collection_uid):
         """ """
-        res = []
+        res = {}
         # special case for the 'all' option where every criteria are kept
         if collection_uid == 'all':
-            res = [k for k in self.widget.advanced_criteria]
+            res = dict([(k, []) for k in self.widget.advanced_criteria])
         else:
             catalog = getToolByName(self.context, 'portal_catalog')
             brains = catalog(UID=collection_uid)
@@ -40,7 +40,15 @@ class KeptCriteria(object):
                 collection = brains[0].getObject()
                 collection_criteria = queryparser.parseFormquery(collection, collection.query)
                 advanced_criteria = self.widget.advanced_criteria
-                for k, v in advanced_criteria.items():
-                    if v not in collection_criteria:
-                        res.append(k)
+                for wid, index in advanced_criteria.items():
+                    if index not in collection_criteria:
+                        res[wid] = []
+                    else:
+                        # (Pdb) collection_criteria.items()
+                        # [('review_state', {'query': ['published']})]
+                        enabled_checkboxes = collection_criteria[index].get('query', [])
+                        if not isinstance(enabled_checkboxes, list):
+                            enabled_checkboxes = [enabled_checkboxes]
+
+                        res[wid] = enabled_checkboxes
         return res

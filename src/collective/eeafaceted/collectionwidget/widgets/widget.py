@@ -145,12 +145,11 @@ class CollectionWidget(RadioWidget):
             return terms[idx][0]
 
     def kept_criteria_as_json(self, collection_uid):
-        '''Given a p_collectionUID, get indexes managed by the collection,
-           and if it is also in advanced criteria, hide it.'''
+        '''Given a p_collectionUID, get indexes managed by the collection.'''
         adapter = queryMultiAdapter((self.context, self),
                                     IKeptCriteria)
         res = adapter.compute(collection_uid)
-        return json.dumps(list(res))
+        return json.dumps(res)
 
     @property
     def advanced_criteria(self):

@@ -175,5 +175,5 @@ class TestVocabulary(IntegrationTestCase):
         ICriteria(self.folder).add('sorting', 'top', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         self.assertEquals(vocabulary.getTerm(c1.UID()).title[1],
-                          '{0}?no_redirect=1#c1={1}&c3=effective&reversed=on'.format(self.folder.absolute_url(),
+                          '{0}?no_redirect=1#c1={1}&c4=effective&reversed=on'.format(self.folder.absolute_url(),
                                                                                      c1.UID()))
