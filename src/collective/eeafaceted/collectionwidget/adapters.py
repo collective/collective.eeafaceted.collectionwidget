@@ -46,7 +46,12 @@ class KeptCriteria(object):
                     else:
                         # (Pdb) collection_criteria.items()
                         # [('review_state', {'query': ['published']})]
-                        enabled_checkboxes = collection_criteria[index].get('query', [])
+                        # or something like this:
+                        # {'treating_groups': [], 'portal_type': {'query': ['dmsincomingmail']}}
+                        if isinstance(collection_criteria[index], list):
+                            enabled_checkboxes = collection_criteria[index]
+                        else:
+                            enabled_checkboxes = collection_criteria[index].get('query', [])
                         if not isinstance(enabled_checkboxes, list):
                             enabled_checkboxes = [enabled_checkboxes]
 
