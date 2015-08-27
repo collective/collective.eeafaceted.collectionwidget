@@ -142,8 +142,6 @@ showRelevantAdvancedCriteria = function(tag) {
         }
     });
   });
-  // recalculate hash from Faceted.Query
-  Faceted.URLHandler.set();
   // Faceted will rerender the criterion with the checkboxes checked after that
 }
 
