@@ -53,7 +53,7 @@ class KeptCriteria(object):
                         else:
                             enabled_checkboxes = collection_criteria[index]
 
-                        if not isinstance(enabled_checkboxes, list):
+                        if isinstance(enabled_checkboxes, basestring):
                             enabled_checkboxes = [enabled_checkboxes]
 
                         res[wid] = enabled_checkboxes
