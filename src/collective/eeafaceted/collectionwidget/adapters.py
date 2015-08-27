@@ -44,14 +44,15 @@ class KeptCriteria(object):
                     if index not in collection_criteria:
                         res[wid] = []
                     else:
-                        # (Pdb) collection_criteria.items()
-                        # [('review_state', {'query': ['published']})]
-                        # or something like this:
-                        # {'treating_groups': [], 'portal_type': {'query': ['dmsincomingmail']}}
-                        if isinstance(collection_criteria[index], list):
-                            enabled_checkboxes = collection_criteria[index]
-                        else:
+                        # collection_criteria.items() could be something like :
+                        # {'treating_groups': [],
+                        #  'myCustomIndex: 'my_str_value,
+                        #  'portal_type': {'query': ['my_portal_type']}}
+                        if isinstance(collection_criteria[index], dict):
                             enabled_checkboxes = collection_criteria[index].get('query', [])
+                        else:
+                            enabled_checkboxes = collection_criteria[index]
+
                         if not isinstance(enabled_checkboxes, list):
                             enabled_checkboxes = [enabled_checkboxes]
 
