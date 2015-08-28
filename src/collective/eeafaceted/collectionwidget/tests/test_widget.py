@@ -172,6 +172,14 @@ class TestWidget(BaseWidgetCase):
         self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
                           {u'c3': [], u'c2': []})
 
+        # test case where value is a string, not a list
+        collection1.query = [{'i': 'Creator',
+                              'o': 'plone.app.querystring.operation.string.currentUser'
+                              }]
+        kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
+        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+                {u'c3': [u'test-user'], u'c2': []})
+
     def test_default(self):
         # no default value selected
         data = Criterion(vocabulary=COLLECTION_VOCABULARY)
