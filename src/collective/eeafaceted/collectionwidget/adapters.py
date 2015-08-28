@@ -10,8 +10,8 @@ class DefaultValue(object):
         self.value = widget.data.default
         existingCollectionUids = []
         for group in widget.grouped_vocabulary.values():
-            for collection in group:
-                existingCollectionUids.append(collection[0])
+            for collection_term in group['collections']:
+                existingCollectionUids.append(collection_term.token)
         if widget.data.default not in existingCollectionUids:
             self.value = existingCollectionUids and existingCollectionUids[0] or None
 

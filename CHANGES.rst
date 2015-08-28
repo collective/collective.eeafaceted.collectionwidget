@@ -5,6 +5,11 @@ Changelog
 0.2 (unreleased)
 ----------------
 
+- The context for @@render_collection_widget_category is now the category
+  (folder) and the context for @@render_collection_widget_term is the
+  collection. (closes #11677)
+  [vincentfretin]
+
 - When generating link to sub faceted, make sure every default values are
   correctly initialized, especially value of the Collection widget for which
   the id could be different than current faceted Collection widget id

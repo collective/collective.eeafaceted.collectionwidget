@@ -43,8 +43,8 @@ class TestCategories(IntegrationTestCase):
         )
         categories = CategoriesFromFolder(self.folder).values
         self.assertEquals(len(categories), 2)
-        self.assertTrue(('category1', 'Category 1') in categories)
-        self.assertTrue(('category2', 'Category 2') in categories)
+        self.assertEquals(['Category 1', 'Category 2'],
+                          [c[1].Title() for c in categories])
 
     def test_categories_only_from_folder(self):
         from collective.eeafaceted.collectionwidget.categories import (
@@ -89,12 +89,12 @@ class TestCategories(IntegrationTestCase):
             container=self.folder
         )
         categories = CategoriesFromFolder(self.folder).values
-        self.assertEquals(('category1', 'Category 1'), categories[0])
-        self.assertEquals(('category2', 'Category 2'), categories[1])
+        self.assertEquals('Category 1', categories[0][1].Title())
+        self.assertEquals('Category 2', categories[1][1].Title())
         self.folder.moveObjectsUp(['category2'])
         categories = CategoriesFromFolder(self.folder).values
-        self.assertEquals(('category2', 'Category 2'), categories[0])
-        self.assertEquals(('category1', 'Category 1'), categories[1])
+        self.assertEquals('Category 2', categories[0][1].Title())
+        self.assertEquals('Category 1', categories[1][1].Title())
 
     def test_no_subCategorie(self):
         from collective.eeafaceted.collectionwidget.categories import (

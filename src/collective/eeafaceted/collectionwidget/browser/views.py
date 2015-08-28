@@ -11,8 +11,7 @@ class RenderCategoryView(BrowserView):
         BrowserView.__init__(self, context, request)
         self.portal_url = getToolByName(self.context, 'portal_url').getPortalObject().absolute_url()
 
-    def __call__(self, category, widget):
-        self.category = category
+    def __call__(self, widget):
         self.widget = widget
         return self.index()
 

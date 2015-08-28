@@ -39,10 +39,8 @@ class TestVocabulary(IntegrationTestCase):
         )
         vocabulary = CollectionCategoryVocabularyFactory(self.folder)
         self.assertEquals(len(vocabulary), 2)
-        self.assertTrue('category1' in vocabulary)
-        self.assertEquals('Category 1', vocabulary.getTerm('category1').title)
-        self.assertTrue('category2' in vocabulary)
-        self.assertEquals('Category 2', vocabulary.getTerm('category2').title)
+        self.assertEquals('Category 1', vocabulary.getTermByToken(self.folder.category1.UID()).title)
+        self.assertEquals('Category 2', vocabulary.getTermByToken(self.folder.category2.UID()).title)
 
     def test_collectionvocabulary(self):
         """ """
@@ -60,16 +58,11 @@ class TestVocabulary(IntegrationTestCase):
         )
         vocabulary = CollectionVocabularyFactory(self.folder)
         self.assertEquals(len(vocabulary), 2)
-        self.assertTrue(c1.UID() in vocabulary)
-        self.assertEquals(
-            (u'Collection 1', ''),
-            vocabulary.getTerm(c1.UID()).title
-        )
-        self.assertTrue(c2.UID() in vocabulary)
-        self.assertEquals(
-            (u'Collection 2', ''),
-            vocabulary.getTerm(c2.UID()).title
-        )
+
+        self.assertTrue(c1.UID() in [term.token for term in vocabulary])
+        self.assertTrue(c2.UID() in [term.token for term in vocabulary])
+        self.assertEquals([(u'Collection 1', ''), (u'Collection 2', '')],
+                          [term.title for term in vocabulary])
 
     def test_with_sub_faceted(self):
         """Test behaviour of the vocabulary when we have subfolders
@@ -117,10 +110,10 @@ class TestVocabulary(IntegrationTestCase):
         self.assertTrue(folderCatVocabulary.by_token.keys() ==
                         subfolderCatVocabulary.by_token.keys())
         # redirect_to is not filled
-        self.assertFalse(vocabulary.getTerm(c1.UID()).title[1])
-        self.assertFalse(vocabulary.getTerm(c2.UID()).title[1])
-        self.assertFalse(vocabulary.getTerm(c3.UID()).title[1])
-        self.assertFalse(vocabulary.getTerm(c4.UID()).title[1])
+        self.assertFalse(vocabulary.getTermByToken(c1.UID()).title[1])
+        self.assertFalse(vocabulary.getTermByToken(c2.UID()).title[1])
+        self.assertFalse(vocabulary.getTermByToken(c3.UID()).title[1])
+        self.assertFalse(vocabulary.getTermByToken(c4.UID()).title[1])
 
         # now enable faceted navigation for subfolder
         subtyper = getMultiAdapter((self.folder.subfolder, self.request),
@@ -140,13 +133,13 @@ class TestVocabulary(IntegrationTestCase):
         # redirect_to is filled for collections of subfolder
         # while generating links to specific sub faceted, a 'no_redirect' is added
         # so the user is not redirected to the faceted using the default
-        self.assertFalse(vocabulary.getTerm(c1.UID()).title[1])
-        self.assertFalse(vocabulary.getTerm(c2.UID()).title[1])
-        self.assertEquals(vocabulary.getTerm(c3.UID()).title[1],
+        self.assertFalse(vocabulary.getTermByToken(c1.UID()).title[1])
+        self.assertFalse(vocabulary.getTermByToken(c2.UID()).title[1])
+        self.assertEquals(vocabulary.getTermByToken(c3.UID()).title[1],
                           '{0}?no_redirect=1#c44={1}'.format(self.folder.subfolder.absolute_url(),
                                                              c3.UID())
                           )
-        self.assertEquals(vocabulary.getTerm(c4.UID()).title[1],
+        self.assertEquals(vocabulary.getTermByToken(c4.UID()).title[1],
                           '{0}?no_redirect=1#c44={1}'.format(self.folder.subfolder.absolute_url(),
                                                              c4.UID())
                           )
@@ -159,21 +152,21 @@ class TestVocabulary(IntegrationTestCase):
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
         self.assertTrue(folderCatVocabulary.by_token.keys() ==
                         subfolderCatVocabulary.by_token.keys())
-        self.assertEquals(vocabulary.getTerm(c1.UID()).title[1],
+        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}'.format(self.folder.absolute_url(),
                                                             c1.UID())
                           )
-        self.assertEquals(vocabulary.getTerm(c2.UID()).title[1],
+        self.assertEquals(vocabulary.getTermByToken(c2.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}'.format(self.folder.absolute_url(),
                                                             c2.UID())
                           )
-        self.assertFalse(vocabulary.getTerm(c3.UID()).title[1])
-        self.assertFalse(vocabulary.getTerm(c4.UID()).title[1])
+        self.assertFalse(vocabulary.getTermByToken(c3.UID()).title[1])
+        self.assertFalse(vocabulary.getTermByToken(c4.UID()).title[1])
 
         # test the generated link when having a faceted using a reverse sorting index
         data = {'default': u'effective(reverse)'}
         ICriteria(self.folder).add('sorting', 'top', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
-        self.assertEquals(vocabulary.getTerm(c1.UID()).title[1],
+        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c4=effective&reversed=on'.format(self.folder.absolute_url(),
                                                                                      c1.UID()))

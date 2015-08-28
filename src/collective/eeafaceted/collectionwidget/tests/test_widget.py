@@ -59,20 +59,21 @@ class TestWidget(BaseWidgetCase):
     """Test widget methods"""
 
     def test_get_category(self):
-        widget = CollectionWidget(self.folder, self.request, data={})
-        category = widget._get_category('')
-        self.assertEquals(category, (u'', u''))
-        category = widget._get_category(self.collection2.UID())
-        self.assertEquals(category, ('category2', 'Category 2'))
-        # content outside a category folder does not have a category
+        data = dict(
+            vocabulary=COLLECTION_VOCABULARY
+        )
+        widget = CollectionWidget(self.folder, self.request, data=data)
+        # collection outside a category folder does not have a category
         collection3 = api.content.create(
             id='collection3',
             type='Collection',
             title='Collection 3',
             container=self.folder
         )
-        category = widget._get_category(collection3.UID())
-        self.assertEquals(category, (u'', u''))
+        vocabulary = widget._generate_vocabulary()
+        self.assertEquals(len(vocabulary), 3)  # 3 categories including '' (no category)
+        self.assertEquals(len(vocabulary['']['collections']), 1)
+        self.assertEquals(vocabulary['']['collections'][0].token, collection3.UID())
 
     def test_generate_vocabulary(self):
         data = dict(
@@ -81,22 +82,25 @@ class TestWidget(BaseWidgetCase):
         widget = CollectionWidget(self.folder, self.request, data=data)
         vocabulary = widget._generate_vocabulary()
         self.assertEquals(len(vocabulary), 2)
-        self.assertTrue(('category1', 'Category 1') in vocabulary)
-        self.assertTrue(('category2', 'Category 2') in vocabulary)
+        first_category, second_category = vocabulary.values()
+        self.assertEquals(u'Category 1', first_category['term'].title)
+        self.assertEquals(u'Category 2', second_category['term'].title)
+        self.assertEquals(len(first_category['collections']), 1)
+        self.assertEquals(len(second_category['collections']), 1)
         self.assertEquals(
-            vocabulary[('category1', 'Category 1')],
-            [(self.collection1.UID(), (self.collection1.Title(), ''))]
+            (first_category['collections'][0].token, first_category['collections'][0].title),
+            (self.collection1.UID(), (self.collection1.Title(), ''))
         )
         self.assertEquals(
-            vocabulary[('category2', 'Category 2')],
-            [(self.collection2.UID(), (self.collection2.Title(), ''))]
+            (second_category['collections'][0].token, second_category['collections'][0].title),
+            (self.collection2.UID(), (self.collection2.Title(), ''))
         )
         # if a category is private and not viewable by user
         # contained collections will not be displayed
         # make category1 folder not accessible by test_user_1_
         cat1 = self.portal.folder.category1
         cat1.manage_permission('View')
-        cat1.reindexObject(idxs=['allowedRolesAndUsers', ])
+        cat1.reindexObjectSecurity()
         self.collection1.manage_permission('View', ('Authenticated', ))
         member = self.portal.portal_membership.getAuthenticatedMember()
         self.assertTrue(not member.has_permission('View', cat1))
@@ -105,7 +109,7 @@ class TestWidget(BaseWidgetCase):
         # it was memoized when calling _generate_vocabulary here above
         del IAnnotations(self.request)['plone.memoize']
         vocabulary = widget._generate_vocabulary()
-        self.assertTrue(not ('category1', 'Category 1') in vocabulary)
+        self.assertNotIn(u'Category 1', [c['term'].title for c in vocabulary.values()])
 
     def test_hidealloption(self):
         data = Criterion()
@@ -131,10 +135,10 @@ class TestWidget(BaseWidgetCase):
         )
         data.sortreversed = u'0'
         widget = CollectionWidget(self.folder, self.request, data=data)
-        self.assertEquals(widget.default_term_value, self.collection1.UID())
+        self.assertEquals(widget.default_term_value, self.collection1)
         data.sortreversed = u'1'
         widget = CollectionWidget(self.folder, self.request, data=data)
-        self.assertEquals(widget.default_term_value, self.collection2.UID())
+        self.assertEquals(widget.default_term_value, self.collection2)
 
     def test_advanced_criteria(self):
         # we have an advanced criteria 'review_state' with name 'c2'
@@ -290,7 +294,7 @@ class TestWidget(BaseWidgetCase):
         query_dico = widget.query(form={data.__name__: ''})
         self.assertEquals(query_dico, {})
         # with collection_uid
-        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
+        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
         # the sort_on paramter of the collection is taken into account
         self.assertTrue(self.collection1.getSort_on() == 'sortable_title')
         self.assertTrue(self.collection1.getSort_reversed() is False)
@@ -298,7 +302,7 @@ class TestWidget(BaseWidgetCase):
                                        'sort_on': 'sortable_title'})
         # if sort_reversed is True, it is kept in the query
         self.collection1.setSort_reversed(True)
-        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
+        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
         self.assertEquals(query_dico, {'review_state': {'query': ['private']},
                                        'sort_on': 'sortable_title',
                                        'sort_order': 'descending'})
@@ -306,7 +310,7 @@ class TestWidget(BaseWidgetCase):
         # then the sort defined on the collection will not be used
         # here c0 is a SortingCriterion
         self.request.form['c0[]'] = 'created'
-        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0][0]})
+        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
         self.assertEquals(query_dico, {'review_state': {'query': ['private']}})
 
     def test_call(self):

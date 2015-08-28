@@ -6,11 +6,11 @@ from collections import OrderedDict
 from collective.eeafaceted.collectionwidget.interfaces import IKeptCriteria
 from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
 from plone.app.querystring import queryparser
-from plone import api
 from plone.memoize.view import memoize
 from Acquisition import aq_parent
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
+from zope.component import queryUtility
 from zope.schema.interfaces import IVocabularyFactory
 
 from eea.facetednavigation.interfaces import ICriteria
@@ -92,7 +92,7 @@ class CollectionWidget(RadioWidget):
         """
         res = {}
         if not sequence:
-            sequence = [key for key, value in self.vocabulary()]
+            sequence = [term.token for term in self.vocabulary()]
 
         catalog = getToolByName(self.context, 'portal_catalog')
         for value in sequence:
@@ -180,36 +180,37 @@ class CollectionWidget(RadioWidget):
     def categories(self):
         factory = getUtility(IVocabularyFactory, self.category_vocabulary)
         voc = factory(self.context)
-        return [(t.value, t.title) for t in voc]
+        return voc
 
-    def _get_category_keys(self):
-        return [id for (id, title) in self.categories]
+    def vocabulary(self):
+        voc_id = self.data.get('vocabulary', None)
+        voc = queryUtility(IVocabularyFactory, voc_id, None)
+        if voc is None:
+            return []
+
+        return list(voc(self.context))
 
     def _generate_vocabulary(self):
         voc = OrderedDict()
-        for key, value in self.categories:
-            voc[(key, value)] = []
-        for key, value in self.vocabulary():
-            category = self._get_category(key)
-            # if the category is not in the voc it means that it is not
-            # accessible, we do not keep the collection
-            if category in voc:
-                voc[category].append((key, value))
+        # empty category
+        voc[''] = {'collections': []}
+        for term in self.categories:
+            voc[term.token] = {'term': term, 'collections': []}
+
+        categories_token = [term.token for term in self.categories]
+        for term in self.vocabulary():
+            parent = aq_parent(term.value)
+            if parent.UID() not in categories_token:
+                category = ''
+            else:
+                category = parent.UID()
+
+            voc[category]['collections'].append(term)
+
         # remove empty categories
         res = OrderedDict()
         for k, v in voc.items():
-            if v:
+            if v['collections']:
                 res[k] = v
-        return res
 
-    def _get_category(self, uid):
-        """Return the category for a given uid"""
-        collection = api.content.get(UID=uid)
-        if collection is None:
-            return (u'', u'')
-        else:
-            parent = aq_parent(collection)
-            if parent.getId() in self._get_category_keys():
-                return (parent.getId(), parent.Title())
-            else:
-                return (u'', u'')
+        return res
