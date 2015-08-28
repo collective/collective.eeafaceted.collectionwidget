@@ -14,3 +14,8 @@ div.faceted-tagscloud-collection-widget li.no-category-tag a {
 .faceted-tag-selected {
    font-weight: bold;
 }
+
+/* grey tint label of a disabled input */
+input:disabled+label {
+   color: grey;
+}
