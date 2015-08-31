@@ -178,7 +178,7 @@ class TestWidget(BaseWidgetCase):
                               }]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
-                {u'c3': [u'test-user'], u'c2': []})
+                          {u'c3': [u'test-user'], u'c2': []})
 
     def test_default(self):
         # no default value selected
