@@ -44,15 +44,7 @@ class KeptCriteria(object):
                     if index not in collection_criteria:
                         res[wid] = []
                     else:
-                        # collection_criteria.items() could be something like :
-                        # {'treating_groups': [],
-                        #  'myCustomIndex: 'my_str_value',
-                        #  'Creator': {'query': 'test-user'},
-                        #  'portal_type': {'query': ['my_portal_type']}}
-                        if isinstance(collection_criteria[index], dict):
-                            enabled_checkboxes = collection_criteria[index].get('query', [])
-                        else:
-                            enabled_checkboxes = collection_criteria[index]
+                        enabled_checkboxes = collection_criteria[index].get('query', [])
 
                         if isinstance(enabled_checkboxes, basestring):
                             # the case {'Creator': {'query': 'test-user'}} go here
