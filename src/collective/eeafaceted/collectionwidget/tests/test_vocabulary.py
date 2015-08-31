@@ -163,10 +163,24 @@ class TestVocabulary(IntegrationTestCase):
         self.assertFalse(vocabulary.getTermByToken(c3.UID()).title[1])
         self.assertFalse(vocabulary.getTermByToken(c4.UID()).title[1])
 
-        # test the generated link when having a faceted using a reverse sorting index
+        # test the generated link when having a faceted using a sorting index reversed or not
         data = {'default': u'effective(reverse)'}
-        ICriteria(self.folder).add('sorting', 'top', **data)
+        sortingCriterionId = ICriteria(self.folder).add('sorting', 'top', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c4=effective&reversed=on'.format(self.folder.absolute_url(),
                                                                                      c1.UID()))
+        data = {'default': u'effective'}
+        ICriteria(self.folder).edit(sortingCriterionId, **data)
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
+                          '{0}?no_redirect=1#c1={1}&c4=effective'.format(self.folder.absolute_url(),
+                                                                         c1.UID()))
+
+        # test that other default values are kept also, add a 'resultsperpage' widget
+        data = {'default': u'20'}
+        ICriteria(self.folder).add('resultsperpage', 'top', **data)
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
+                          '{0}?no_redirect=1#c1={1}&c4=effective&c5=20'.format(self.folder.absolute_url(),
+                                                                               c1.UID()))

@@ -73,6 +73,8 @@ class CollectionVocabulary(object):
                                                              collection.UID()))
                 elif criterion.default:
                     if criterion.widget == u'sorting':
+                        # manage sort order criterion, received as c0=effective(reverse),
+                        # changed for c0=effective&reversed=on
                         if criterion.default.endswith('(reverse)'):
                             default_criteria.append('{0}={1}&reversed=on'.format(
                                 criterion.__name__,
@@ -80,8 +82,6 @@ class CollectionVocabulary(object):
                         else:
                             default_criteria.append('{0}={1}'.format(criterion.__name__,
                                                                      criterion.default))
-                    # manage sort order criterion, received as c0=effective(reverse),
-                    # changed for c0=effective&reversed=on
                     else:
                         default_criteria.append('{0}={1}'.format(criterion.__name__,
                                                                  criterion.default))
