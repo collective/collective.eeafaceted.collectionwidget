@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.2 (unreleased)
+0.2 (2015-09-03)
 ----------------
 
 - The context for @@render_collection_widget_category is now the category
