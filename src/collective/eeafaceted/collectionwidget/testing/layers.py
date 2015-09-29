@@ -49,24 +49,24 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
         folder2.reindexObject()
         folder2.unrestrictedTraverse('@@faceted_subtyper').enable()
         collection = portal.portal_types.Collection._constructInstance(
-                           folder2,
-                           id='collection_review_state', title=u"Review state",
-                           query=[{'i': 'review_state',
-                                   'o': 'plone.app.querystring.operation.selection.is',
-                                   'v': ['published']}],
-                           )
+            folder2,
+            id='collection_review_state', title=u"Review state",
+            query=[{'i': 'review_state',
+                    'o': 'plone.app.querystring.operation.selection.is',
+                    'v': ['published']}],
+        )
         collection_uid = collection.UID()
         criteria = queryAdapter(folder2, ICriteria)
         # edit collection-link criteria
         criteria.edit('c1', default=collection_uid)
         # create a second collection without review_state criterion
         portal.portal_types.Collection._constructInstance(
-                           folder2,
-                           id='collection_wo_review_state', title=u"Creator",
-                           query=[{'i': 'Creator',
-                                   'o': 'plone.app.querystring.operation.selection.is',
-                                   'v': ['_test_user_1']}],
-                           )
+            folder2,
+            id='collection_wo_review_state', title=u"Creator",
+            query=[{'i': 'Creator',
+                    'o': 'plone.app.querystring.operation.selection.is',
+                    'v': ['_test_user_1']}],
+        )
 
         # Commit so that the test browser sees these objects
         import transaction
@@ -79,20 +79,17 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
 
 
 FIXTURE = CollectiveEeafacetedCollectionwidgetLayer(
-    name="FIXTURE"
-    )
+    name="FIXTURE")
 
 
 INTEGRATION = IntegrationTesting(
     bases=(FIXTURE,),
-    name="INTEGRATION"
-    )
+    name="INTEGRATION")
 
 
 FUNCTIONAL = FunctionalTesting(
     bases=(FIXTURE,),
-    name="FUNCTIONAL"
-    )
+    name="FUNCTIONAL")
 
 
 ACCEPTANCE = FunctionalTesting(bases=(FIXTURE,
