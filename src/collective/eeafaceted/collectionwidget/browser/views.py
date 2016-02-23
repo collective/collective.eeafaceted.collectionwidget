@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from plone import api
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 
@@ -17,6 +17,15 @@ class RenderCategoryView(BrowserView):
 
 
 class RenderTermView(BrowserView):
+
+    def display_number_of_items(self):
+        """If true, display the number of items in the collection."""
+        return True
+
+    def number_of_items(self):
+        """Return the number of items in the collection."""
+        catalog = api.portal.get_tool('portal_catalog')
+        return self.context.results().sequence_length
 
     def __call__(self, term, category, widget):
         self.term = term
