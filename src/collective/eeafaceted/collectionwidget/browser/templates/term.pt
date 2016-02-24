@@ -18,7 +18,7 @@
                   tal:attributes="href python: not redirect_to and 'javascript:;;' or redirect_to">
                   <span tal:replace="term_label" />
                   <span tal:condition="view/display_number_of_items">
-                     [<span tal:replace="view/number_of_items" />]
+                     [<span class="count" tal:content="view/number_of_items" />]
                   </span>
               </a>
           </li>
