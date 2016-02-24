@@ -24,8 +24,7 @@ class RenderTermView(BrowserView):
 
     def number_of_items(self):
         """Return the number of items in the collection."""
-        catalog = api.portal.get_tool('portal_catalog')
-        return self.context.results().sequence_length
+        return len(self.context.results())
 
     def __call__(self, term, category, widget):
         self.term = term
