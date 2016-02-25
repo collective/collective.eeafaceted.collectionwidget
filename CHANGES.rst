@@ -5,7 +5,9 @@ Changelog
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Display number of collection items in the term view. Override
+  display_number_of_items method if you want to alter this behaviour.
+  [cedricmessiant]
 
 
 0.2 (2015-09-03)
