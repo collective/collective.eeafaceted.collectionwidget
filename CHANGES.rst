@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.3 (unreleased)
+0.3 (2016-03-03)
 ----------------
 
 - Display number of collection items in the term view. Override
