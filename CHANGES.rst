@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.4 (unreleased)
+0.4 (2016-03-29)
 ----------------
 
 - Adapted tests for eea.facetednavigation 8.8, moved to the collective,
