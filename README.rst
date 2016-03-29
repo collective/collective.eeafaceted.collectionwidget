@@ -6,9 +6,6 @@
 .. image:: https://coveralls.io/repos/IMIO/collective.eeafaceted.collectionwidget/badge.svg?branch=master&service=github
   :target: https://coveralls.io/github/IMIO/collective.eeafaceted.collectionwidget?branch=master
 
-.. image:: https://circleci.com/gh/IMIO/collective.eeafaceted.collectionwidget.svg?&style=shield
-  :target: https://circleci.com/gh/IMIO/collective.eeafaceted.collectionwidget
-
 ==========================================================================
 collective.eeafaceted.collectionwidget
 ==========================================================================
