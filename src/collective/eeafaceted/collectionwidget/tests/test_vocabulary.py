@@ -121,9 +121,10 @@ class TestVocabulary(IntegrationTestCase):
         subtyper.enable()
         # change the CollectionWidget id to "c44" so we are sure that
         # the generated link is the one to this widget
-        self.assertEquals(self.folder.subfolder.__annotations__['FacetedCriteria'][1].widget,
+        collection_widget = ICriteria(self.folder.subfolder).get('c1')
+        self.assertEquals(collection_widget.widget,
                           CollectionWidget.widget_type)
-        self.folder.subfolder.__annotations__['FacetedCriteria'][1].__name__ = u'c44'
+        collection_widget.__name__ = u'c44'
         vocabulary = CollectionVocabularyFactory(self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
@@ -165,7 +166,7 @@ class TestVocabulary(IntegrationTestCase):
 
         # test the generated link when having a faceted using a sorting index reversed or not
         data = {'default': u'effective(reverse)'}
-        sortingCriterionId = ICriteria(self.folder).add('sorting', 'top', **data)
+        sortingCriterionId = ICriteria(self.folder).add('sorting', 'bottom', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c4=effective&reversed=on'.format(self.folder.absolute_url(),
@@ -179,7 +180,7 @@ class TestVocabulary(IntegrationTestCase):
 
         # test that other default values are kept also, add a 'resultsperpage' widget
         data = {'default': u'20'}
-        ICriteria(self.folder).add('resultsperpage', 'top', **data)
+        ICriteria(self.folder).add('resultsperpage', 'bottom', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c4=effective&c5=20'.format(self.folder.absolute_url(),

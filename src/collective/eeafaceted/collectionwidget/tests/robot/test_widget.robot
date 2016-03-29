@@ -12,15 +12,15 @@ Suite Teardown  Close all browsers
 
 Widget shows no collections or categories when folder is empty
     Make faceted folder
-    Click link  Faceted criteria
-    Page should contain  Basic search
+    Go to  ${PLONE_URL}/faceted/configure_faceted.html
+    Wait Until Page Contains  Basic search
     Page should contain  Base collections
 
 Widget does not show empty categories
     ${folder}=  Make faceted folder
     ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
-    Click link  Faceted criteria
-    Page should contain  Basic search
+    Go to  ${PLONE_URL}/faceted/configure_faceted.html
+    Wait Until Page Contains  Basic search
     Page should contain  Base collections
     # as News is empty, it is not shown
     Element should not be visible  css=div#c1_widget div.title  News
@@ -45,19 +45,21 @@ Widget shows collections in categories
 Faceted title matches selected collection
     ${folder}=  Make faceted folder
     Create content  type=Collection  title=Info  id=info  container=${folder}
-    Click link  Faceted criteria
+    Go to  ${PLONE_URL}/faceted/configure_faceted.html
+    Wait Until Page Contains  Basic search
     Click Element  css=#c1_widget li
     Go to  ${PLONE_URL}/faceted
     Element should contain  css=h1.documentFirstHeading  Info
 
 Advanced criterion are disabled based on selected collection
     Go to  ${PLONE_URL}/folder2
-    Click link  More filters
-    Element should be visible  css=div#c2_widget
+    Wait Until Element Is Not Visible  css=.faceted-lock-overlay
+    Click Element  css=.faceted-sections-buttons-more
+    Wait Until Element Is Visible  css=div#c2_widget
     # for the Review state criterion, 6 checkbox are disabled and 1 checked
     ${disabledCount} =  Get Matching Xpath Count  xpath=//*[@id='c2_widget']//input[@disabled]
     Should Be Equal  ${disabledCount}  6
-    Click link  Creator
+    Click Element  css=li[title="Creator"]
     # all checkboxes for the review state criterion should be available again
     ${disabledCount} =  Get Matching Xpath Count  xpath=//*[@id='c2_widget']//input[@disabled]
     Should Be Equal  ${disabledCount}  0
