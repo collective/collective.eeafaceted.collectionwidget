@@ -5,7 +5,9 @@ Changelog
 0.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Adapted tests for eea.facetednavigation 8.8, moved to the collective,
+  prepare for release on pypi.python.org.
+  [gbastien]
 
 
 0.3 (2016-03-03)
