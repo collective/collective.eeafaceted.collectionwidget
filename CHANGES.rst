@@ -5,7 +5,9 @@ Changelog
 0.5 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Added plone.app.collection as a real dependency, this way it is present
+  and we make sure that the profile is installed.
+  [gbastien]
 
 
 0.4 (2016-03-29)
