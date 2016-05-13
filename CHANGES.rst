@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.5 (unreleased)
+0.5 (2016-05-13)
 ----------------
 
 - Added plone.app.collection as a real dependency, this way it is present
