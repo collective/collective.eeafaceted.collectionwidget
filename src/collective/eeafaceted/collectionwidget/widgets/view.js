@@ -149,7 +149,12 @@ updatePageTitle = function(tag) {
   var currentTitleTag = $('#content h1.documentFirstHeading')[0];
   var label = $('a .term-label', tag);
   if (label.length) {
-    currentTitleTag.innerHTML = label[0].innerHTML;
+    var categoryTitle = $(tag).closest('.category').find('.title').text();
+    if (categoryTitle.length) {
+      currentTitleTag.innerHTML = categoryTitle + ': ' + label[0].innerHTML;
+    } else {
+      currentTitleTag.innerHTML = label[0].innerHTML;
+    }
   }
 }
 
