@@ -143,8 +143,10 @@ class TestWidget(BaseWidgetCase):
     def test_advanced_criteria(self):
         # we have an advanced criteria 'review_state' with name 'c2'
         widget = CollectionWidget(self.folder, self.request)
-        self.assertEquals(len(widget.advanced_criteria), 2)
-        self.assertEquals(widget.advanced_criteria, {u'c3': u'Creator', u'c2': u'review_state'})
+        self.assertEquals(len(widget.advanced_criteria), 3)
+        self.assertEquals(widget.advanced_criteria, {
+            u'c3': u'Creator', u'c2': u'review_state', u'c4': 'created'
+        })
 
     def test_kept_criteria_as_json(self):
         widget = CollectionWidget(self.folder, self.request)
@@ -157,7 +159,7 @@ class TestWidget(BaseWidgetCase):
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         # response is valid JSON
         self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
-                          {u'c3': [], u'c2': []})
+                          {u'c3': [], u'c2': [], u'c4': []})
         # ok, now update collection1 so it manage 'review_state'
         collection1.query = [{'i': 'review_state',
                               'o': 'plone.app.querystring.operation.selection.is',
@@ -165,12 +167,12 @@ class TestWidget(BaseWidgetCase):
         # now 'c2' will be hidden
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
-                          {u'c3': [], u'c2': [u'private']})
+                          {u'c3': [], u'c2': [u'private'], u'c4': []})
         # but it is still kept when using collection2
         collection2 = self.folder.category2.collection2
         kept_criteria_as_json = widget.kept_criteria_as_json(collection2.UID())
         self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
-                          {u'c3': [], u'c2': []})
+                          {u'c3': [], u'c2': [], u'c4': []})
 
         # test case where value is a string, not a list
         collection1.query = [{'i': 'Creator',
@@ -178,7 +180,17 @@ class TestWidget(BaseWidgetCase):
                               }]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
-                          {u'c3': [u'test-user'], u'c2': []})
+                          {u'c3': [u'test-user'], u'c2': [], u'c4': []})
+
+        # test case where value is a DateTime
+        collection1.query = [
+            {'i': 'created', 'o': 'plone.app.querystring.operation.date.lessThan', 'v': '01/01/2000'},
+        ]
+        kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
+        self.assertEquals(
+            json._default_decoder.decode(kept_criteria_as_json)['c4'],
+            [u'01/01/2000']
+        )
 
     def test_default(self):
         # no default value selected

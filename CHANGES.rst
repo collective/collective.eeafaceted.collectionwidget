@@ -5,7 +5,8 @@ Changelog
 0.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fix bug with DateTime in kept_criteria_as_json.
+  [cedricmessiant]
 
 
 0.5 (2016-05-13)
