@@ -6,6 +6,7 @@ from zope.component import getGlobalSiteManager
 from zope.component import getMultiAdapter
 from zope.interface import Interface
 from plone import api
+from DateTime import DateTime
 from Products.CMFCore.utils import getToolByName
 
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
@@ -184,12 +185,12 @@ class TestWidget(BaseWidgetCase):
 
         # test case where value is a DateTime
         collection1.query = [
-            {'i': 'created', 'o': 'plone.app.querystring.operation.date.lessThan', 'v': '01/01/2000'},
+            {'i': 'created', 'o': 'plone.app.querystring.operation.date.lessThan', 'v': DateTime(2000, 1, 1)},
         ]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEquals(
             json._default_decoder.decode(kept_criteria_as_json)['c4'],
-            [u'01/01/2000']
+            u'2000-01-01T00:00:00+01:00'
         )
 
     def test_default(self):
