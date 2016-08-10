@@ -189,8 +189,8 @@ class TestWidget(BaseWidgetCase):
         ]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEquals(
-            json._default_decoder.decode(kept_criteria_as_json)['c4'],
-            u'2000-01-01T00:00:00+01:00'
+            json._default_decoder.decode(kept_criteria_as_json)['c4'][:10],
+            u'2000-01-01'
         )
 
     def test_default(self):
