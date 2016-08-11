@@ -5,6 +5,9 @@ Changelog
 0.6 (unreleased)
 ----------------
 
+- Don't modify the title of the page if the h1 has class dontupdate.
+  [vincentfretin]
+
 - Fix collection links when the context is different from the url.
   [vincentfretin]
 

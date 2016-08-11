@@ -146,7 +146,10 @@ showRelevantAdvancedCriteria = function(tag) {
 }
 
 updatePageTitle = function(tag) {
-  var currentTitleTag = $('#content h1.documentFirstHeading')[0];
+  var currentTitleTag = $('#content h1.documentFirstHeading');
+  if (currentTitleTag.hasClass('dontupdate')) {
+      return;
+  }
   var label = $('a .term-label', tag);
   if (label.length) {
     var newPageTitle = label[0].innerHTML;
@@ -157,7 +160,7 @@ updatePageTitle = function(tag) {
       }
     }
 
-    currentTitleTag.innerHTML = newPageTitle;
+    currentTitleTag.text(newPageTitle);
   }
 }
 
