@@ -169,13 +169,13 @@ class TestVocabulary(IntegrationTestCase):
         sortingCriterionId = ICriteria(self.folder).add('sorting', 'bottom', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
-                          '{0}?no_redirect=1#c1={1}&c4=effective&reversed=on'.format(self.folder.absolute_url(),
+                          '{0}?no_redirect=1#c1={1}&c5=effective&reversed=on'.format(self.folder.absolute_url(),
                                                                                      c1.UID()))
         data = {'default': u'effective'}
         ICriteria(self.folder).edit(sortingCriterionId, **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
-                          '{0}?no_redirect=1#c1={1}&c4=effective'.format(self.folder.absolute_url(),
+                          '{0}?no_redirect=1#c1={1}&c5=effective'.format(self.folder.absolute_url(),
                                                                          c1.UID()))
 
         # test that other default values are kept also, add a 'resultsperpage' widget
@@ -183,5 +183,5 @@ class TestVocabulary(IntegrationTestCase):
         ICriteria(self.folder).add('resultsperpage', 'bottom', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
-                          '{0}?no_redirect=1#c1={1}&c4=effective&c5=20'.format(self.folder.absolute_url(),
+                          '{0}?no_redirect=1#c1={1}&c5=effective&c6=20'.format(self.folder.absolute_url(),
                                                                                c1.UID()))

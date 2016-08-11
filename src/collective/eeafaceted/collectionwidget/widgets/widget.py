@@ -8,6 +8,7 @@ from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValu
 from plone.app.querystring import queryparser
 from plone.memoize.view import memoize
 from Acquisition import aq_parent
+from DateTime import DateTime
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
@@ -149,6 +150,11 @@ class CollectionWidget(RadioWidget):
         adapter = queryMultiAdapter((self.context, self),
                                     IKeptCriteria)
         res = adapter.compute(collection_uid)
+        # DateTime are not json serializable, we convert them before
+        for k, v in res.iteritems():
+            if isinstance(v, DateTime):
+                res[k] = v.ISO()
+
         return json.dumps(res)
 
     @property

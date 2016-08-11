@@ -120,8 +120,8 @@ clearCriteria = function(tag) {
 
 /* only show advanced criteria that are not managed by selected collection */
 showRelevantAdvancedCriteria = function(tag) {
-  keptCriteria = jQuery(tag).data()['keptCriteria']
-  advancedCriteria = jQuery(tag).parent().data()['advancedCriteria']
+  keptCriteria = jQuery(tag).data('kept-criteria');
+  advancedCriteria = jQuery(tag).parent().data('advanced-criteria')
   /* disable checkboxes base on kept criteria */
   $.each(keptCriteria, function(criterion_id, enabled_checkboxes) {
     var available_checkboxes = $('#'+criterion_id+'_widget input');
