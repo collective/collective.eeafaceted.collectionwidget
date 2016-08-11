@@ -5,6 +5,9 @@ Changelog
 0.6 (unreleased)
 ----------------
 
+- Fix collection links when the context is different from the url.
+  [vincentfretin]
+
 - Fix bug with DateTime in kept_criteria_as_json.
   [cedricmessiant]
 

@@ -8,6 +8,7 @@ from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidg
 from plone import api
 from zope.component import getAdapter
 from zope.interface import implements
+from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -18,15 +19,14 @@ class CollectionVocabulary(object):
 
     def __call__(self, context, query=None):
         self.context = context
-
         items = []
+        current_url = getRequest().URL1
         for brain in self._brains(context):
             redirect_to = ''
-            current_url = context.absolute_url()
             brain_folder_url = '/'.join(brain.getURL().split('/')[:-1])
             # if not in same folder and collection container is a faceted
             # we will redirect to this faceted to use criteria defined there
-            if not brain_folder_url == current_url:
+            if brain_folder_url != current_url:
                 collection = brain.getObject()
                 collection_container = collection.aq_inner.aq_parent
                 if IFacetedNavigable.providedBy(collection_container):
@@ -61,7 +61,7 @@ class CollectionVocabulary(object):
         redirect_to = "{0}?no_redirect=1#{1}"
         # add a 'no_redirect=1' for links to collections
         collection_container = collection.aq_inner.aq_parent
-        # build a base_query_url representing defaut paramters values
+        # build a base_query_url representing default parameters values
         criteria = ICriteria(collection_container).criteria
         default_criteria = []
         for criterion in criteria:
