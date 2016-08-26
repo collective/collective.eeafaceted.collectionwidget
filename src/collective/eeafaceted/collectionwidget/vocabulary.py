@@ -8,7 +8,6 @@ from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidg
 from plone import api
 from zope.component import getAdapter
 from zope.interface import implements
-from zope.globalrequest import getRequest
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
@@ -20,7 +19,7 @@ class CollectionVocabulary(object):
     def __call__(self, context, query=None):
         self.context = context
         items = []
-        current_url = getRequest().URL1
+        current_url = context.absolute_url()
         for brain in self._brains(context):
             redirect_to = ''
             brain_folder_url = '/'.join(brain.getURL().split('/')[:-1])

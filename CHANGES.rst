@@ -8,9 +8,6 @@ Changelog
 - Don't modify the title of the page if the h1 has class dontupdate.
   [vincentfretin]
 
-- Fix collection links when the context is different from the url.
-  [vincentfretin]
-
 - Fix bug with DateTime in kept_criteria_as_json.
   [cedricmessiant]
 
