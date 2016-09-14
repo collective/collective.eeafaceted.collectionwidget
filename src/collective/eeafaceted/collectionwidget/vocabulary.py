@@ -12,6 +12,15 @@ from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
+import pkg_resources
+
+try:
+    pkg_resources.get_distribution('plone.dexterity')
+except pkg_resources.DistributionNotFound:
+    HAS_DEXTERITY = False
+else:
+    HAS_DEXTERITY = True
+
 
 class CollectionVocabulary(object):
     implements(IVocabularyFactory)
@@ -33,7 +42,8 @@ class CollectionVocabulary(object):
                     criteria = ICriteria(collection_container).criteria
                     for criterion in criteria:
                         if criterion.widget == CollectionWidget.widget_type:
-                            redirect_to = self._compute_redirect_to(collection, criterion)
+                            redirect_to = self._compute_redirect_to(
+                                collection, criterion)
                             break
 
             items.append(SimpleTerm(brain.getObject(),
@@ -48,9 +58,16 @@ class CollectionVocabulary(object):
         while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
             root = root.aq_inner.aq_parent
         catalog = api.portal.get_tool('portal_catalog')
+        is_dx = False
+        object_provides = 'plone.app.collection.interfaces.ICollection'
+        if HAS_DEXTERITY:
+            from plone.dexterity.interfaces import IDexterityContent
+            is_dx = IDexterityContent.providedBy(context)
+        if is_dx:
+            object_provides = 'plone.app.contenttypes.interfaces.ICollection'
         brains = catalog(
             path=dict(query='/'.join(root.getPhysicalPath())),
-            object_provides='plone.app.collection.interfaces.ICollection',
+            object_provides=object_provides,
             sort_on='getObjPositionInParent'
         )
         return brains
@@ -101,7 +118,8 @@ class CollectionCategoryVocabulary(object):
         while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
             root = root.aq_inner.aq_parent
         adapter = getAdapter(root, ICollectionCategories)
-        items = [SimpleTerm(value, token, safe_unicode(value.Title())) for token, value in adapter.values]
+        items = [SimpleTerm(value, token, safe_unicode(value.Title()))
+                 for token, value in adapter.values]
         return SimpleVocabulary(items)
 
 

@@ -5,6 +5,9 @@ Changelog
 0.6 (unreleased)
 ----------------
 
+- Add plone.app.contenttypes support.
+  [bsuttor]
+
 - Don't modify the title of the page if the h1 has class dontupdate.
   [vincentfretin]
 
