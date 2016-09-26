@@ -11,6 +11,7 @@ from zope.interface import implements
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
+from zope.globalrequest import getRequest
 
 
 class CollectionVocabulary(object):
@@ -25,7 +26,7 @@ class CollectionVocabulary(object):
             brain_folder_url = '/'.join(brain.getURL().split('/')[:-1])
             # if not in same folder and collection container is a faceted
             # we will redirect to this faceted to use criteria defined there
-            if brain_folder_url != current_url:
+            if brain_folder_url != current_url or getRequest().get('force_redirect_to', False):
                 collection = brain.getObject()
                 collection_container = collection.aq_inner.aq_parent
                 if IFacetedNavigable.providedBy(collection_container):

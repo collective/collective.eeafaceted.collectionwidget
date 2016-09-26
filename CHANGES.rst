@@ -5,6 +5,10 @@ Changelog
 0.6 (unreleased)
 ----------------
 
+- Add an option force_redirect_to in CollectionVocabulary to force generating
+  no_redirect=1 urls for all collections.
+  [vincentfretin]
+
 - Don't modify the title of the page if the h1 has class dontupdate.
   [vincentfretin]
 
