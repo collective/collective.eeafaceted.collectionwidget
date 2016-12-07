@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.6 (unreleased)
+0.6 (2016-12-07)
 ----------------
 
 - Add an option force_redirect_to in CollectionVocabulary to force generating
