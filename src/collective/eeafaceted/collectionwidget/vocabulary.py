@@ -17,7 +17,7 @@ from zope.globalrequest import getRequest
 class CollectionVocabulary(object):
     implements(IVocabularyFactory)
 
-    def __call__(self, context, query=None):
+    def __call__(self, context):
         self.context = context
         items = []
         current_url = context.absolute_url()

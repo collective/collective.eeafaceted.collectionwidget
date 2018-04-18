@@ -5,7 +5,8 @@ Changelog
 0.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Removed useless parameter `query` from `CollectionVocabulary.__call__`.
+  [gbastien]
 
 
 0.6 (2016-12-07)
