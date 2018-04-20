@@ -96,7 +96,7 @@ CollectionVocabularyFactory = CollectionVocabulary()
 class CollectionCategoryVocabulary(object):
     implements(IVocabularyFactory)
 
-    def __call__(self, context, query=None):
+    def __call__(self, context):
         # find root
         root = context
         while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
