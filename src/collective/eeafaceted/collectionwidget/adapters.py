@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+from zope.globalrequest import getRequest
 from Products.CMFCore.utils import getToolByName
 from plone.app.querystring import queryparser
 
@@ -25,7 +28,7 @@ class KeptCriteria(object):
     def __init__(self, context, widget):
         self.context = context
         self.widget = widget
-        self.request = self.context.REQUEST
+        self.request = getRequest()
 
     def compute(self, collection_uid):
         """ """

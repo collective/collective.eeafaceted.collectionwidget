@@ -7,7 +7,9 @@ Changelog
 
 - Removed useless parameter `query` from `CollectionVocabulary.__call__`.
   [gbastien]
-
+- Use `zope.globalrequest.getRequest` and not `context.REQUEST`
+  to get the REQUEST.
+  [gbastien]
 
 0.6 (2016-12-07)
 ----------------

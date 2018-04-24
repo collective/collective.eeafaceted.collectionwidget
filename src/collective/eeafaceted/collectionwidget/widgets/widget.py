@@ -128,7 +128,7 @@ class CollectionWidget(RadioWidget):
                 container = collection.aq_inner.aq_parent
                 if not container == self.context and \
                    IFacetedNavigable.providedBy(container):
-                    self.context.REQUEST.RESPONSE.redirect(container.absolute_url())
+                    self.request.RESPONSE.redirect(container.absolute_url())
         return default
 
     @property
