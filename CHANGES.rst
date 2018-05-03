@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.8 (unreleased)
+0.8 (2018-05-03)
 ----------------
 
 - Fix wrong release version 0.7.
