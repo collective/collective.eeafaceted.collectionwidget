@@ -5,8 +5,8 @@ Changelog
 0.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Fix wrong release version 0.7.
+  [gbastien]
 
 0.7 (2018-05-03)
 ----------------
