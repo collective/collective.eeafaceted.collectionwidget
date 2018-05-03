@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.7 (unreleased)
+0.7 (2018-05-03)
 ----------------
 
 - Removed useless parameter `query` from `CollectionVocabulary.__call__`.
