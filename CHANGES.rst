@@ -5,8 +5,8 @@ Changelog
 0.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added portal attribute on category view.
+  [sgeulette]
 
 0.8 (2018-05-03)
 ----------------
