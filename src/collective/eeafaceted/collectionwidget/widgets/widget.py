@@ -114,22 +114,7 @@ class CollectionWidget(RadioWidget):
             # same behaviour as selecting option "All"
             return default
         # call an adapter to get the correct value
-        default = self.adapter_default_value
-        # now that we have the default, check if we are on the right context
-        # except if "no_redirect" is found in the REQUEST or we are in the configuration or using folder_contents
-        if not self.request['HTTP_REFERER'].endswith('configure_faceted.html') and \
-           not self.request['URL'].endswith('folder_contents') and \
-           not self.request.get('no_redirect', '0') == '1' and \
-           IFacetedNavigable.providedBy(self.context):
-            catalog = getToolByName(self.context, 'portal_catalog')
-            brains = catalog(UID=default)
-            if brains:
-                collection = brains[0].getObject()
-                container = collection.aq_inner.aq_parent
-                if not container == self.context and \
-                   IFacetedNavigable.providedBy(container):
-                    self.request.RESPONSE.redirect(container.absolute_url())
-        return default
+        return self.adapter_default_value
 
     @property
     def adapter_default_value(self):

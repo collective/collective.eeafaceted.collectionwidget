@@ -41,7 +41,7 @@ class TestUtils(BaseWidgetCase):
 
     def test_getCurrentCollection(self):
         """Returns the Collection currently used by the CollectionWidget in a faceted."""
-        dashcoll = self.folder['category1']['collection1']
+        dashcoll = self.collection1
 
         # current collection is get with collectionLink id in the REQUEST, not set for now
         criterion = getCollectionLinkCriterion(self.folder)

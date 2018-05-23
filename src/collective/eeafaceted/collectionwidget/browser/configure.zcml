@@ -26,4 +26,15 @@
         permission="zope2.View"
         />
 
+    <configure package="eea.facetednavigation">
+        <browser:page
+            for="eea.facetednavigation.interfaces.IFacetedNavigable"
+            name="facetednavigation_view"
+            template="browser/template/view.pt"
+            class="collective.eeafaceted.collectionwidget.browser.views.FacetedDashboardView"
+            permission="zope2.View"
+            layer="collective.eeafaceted.collectionwidget.interfaces.ICollectiveEeafacetedCollectionwidgetLayer"
+        />
+    </configure>
+
 </configure>

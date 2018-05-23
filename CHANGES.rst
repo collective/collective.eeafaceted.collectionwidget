@@ -8,7 +8,8 @@ Changelog
 - Moved here some methods from imio.dashboard:
   _get_criterion, getCollectionLinkCriterion, getCurrentCollection
   [sgeulette]
-
+- facetednavigation_view override to manage default collection widget redirection
+  [sgeulette]
 - Added portal attribute on category view.
   [sgeulette]
 
