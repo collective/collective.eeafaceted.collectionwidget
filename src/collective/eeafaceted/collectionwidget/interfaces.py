@@ -19,3 +19,15 @@ class ICollectionCategories(Interface):
 
 class IKeptCriteria(Interface):
     pass
+
+
+class NotDashboardContextException(Exception):
+    """ To be raised when a context has no faceted view defined on it. """
+
+
+class NoFacetedViewDefinedException(NotDashboardContextException):
+    """ To be raised when a context has no faceted view defined on it. """
+
+
+class NoCollectionWidgetDefinedException(NotDashboardContextException):
+    """ To be raised when a context has no collection widget defined on it. """

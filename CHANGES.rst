@@ -5,6 +5,10 @@ Changelog
 0.9 (unreleased)
 ----------------
 
+- Moved here some methods from imio.dashboard:
+  _get_criterion, getCollectionLinkCriterion, getCurrentCollection
+  [sgeulette]
+
 - Added portal attribute on category view.
   [sgeulette]
 
