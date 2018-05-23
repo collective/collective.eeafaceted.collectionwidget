@@ -51,7 +51,7 @@ class FacetedDashboardView(FacetedContainerView):
         # if we have the collection UID in the REQUEST, return self.index()
         # so we avoid the portal_catalog search for collection
         collectionUID = self.context.REQUEST.form.get('{0}[]'.format(criterion.__name__))
-        if collectionUID or self.context.REQUEST.form.get('facetedQuery', '') or not criterion.default:
+        if collectionUID or not criterion.default:
             return self.index()
         if not self.request['HTTP_REFERER'].endswith('configure_faceted.html') and \
            not self.request['URL'].endswith('folder_contents') and \
