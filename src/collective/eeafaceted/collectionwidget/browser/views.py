@@ -39,8 +39,17 @@ class RenderTermView(BrowserView):
 class FacetedDashboardView(FacetedContainerView):
     """ Facetednavigation view, managing default collection widget redirection """
 
+    @property
+    def _criteriaHolder(self):
+        """Return the criteria holder, the container where the criteria are stored,
+           as criteria is get thru an adapter, it could be stored elsewhere
+           than on the context."""
+        return self.context
+
     def __call__(self):
         criterion = getCollectionLinkCriterion(self.context)
+        # if we have the collection UID in the REQUEST, return self.index()
+        # so we avoid the portal_catalog search for collection
         collectionUID = self.context.REQUEST.form.get('{0}[]'.format(criterion.__name__))
         if collectionUID or self.context.REQUEST.form.get('facetedQuery', '') or not criterion.default:
             return self.index()
@@ -52,7 +61,7 @@ class FacetedDashboardView(FacetedContainerView):
             if brains:
                 collection = brains[0].getObject()
                 container = collection.aq_inner.aq_parent
-                if not container == self.context and \
+                if not container == self._criteriaHolder and \
                    IFacetedNavigable.providedBy(container):
                     self.request.RESPONSE.redirect(container.absolute_url())
                     return ''
