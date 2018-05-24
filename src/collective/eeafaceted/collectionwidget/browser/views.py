@@ -47,7 +47,8 @@ class FacetedDashboardView(FacetedContainerView):
         return self.context
 
     def __call__(self):
-        criterion = getCollectionLinkCriterion(self.context)
+        criteria_holder = self._criteriaHolder
+        criterion = getCollectionLinkCriterion(criteria_holder)
         # if we have the collection UID in the REQUEST, return self.index()
         # so we avoid the portal_catalog search for collection
         collectionUID = self.context.REQUEST.form.get('{0}[]'.format(criterion.__name__))
@@ -61,7 +62,7 @@ class FacetedDashboardView(FacetedContainerView):
             if brains:
                 collection = brains[0].getObject()
                 container = collection.aq_inner.aq_parent
-                if not container == self._criteriaHolder and \
+                if not container == criteria_holder and \
                    IFacetedNavigable.providedBy(container):
                     self.request.RESPONSE.redirect(container.absolute_url())
                     return ''
