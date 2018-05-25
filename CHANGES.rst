@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-0.9 (unreleased)
+0.9 (2018-05-25)
 ----------------
 
 - Moved here some methods from imio.dashboard:
