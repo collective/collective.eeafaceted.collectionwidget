@@ -6,13 +6,12 @@
 
   <browser:resource
     name="collective.eeafaceted.collectionwidget.widgets.view.js"
-    file="view.js"
-   />
+    file="view.js" />
   <browser:resource
     name="collective.eeafaceted.collectionwidget.widgets.edit.js"
-    file="edit.js"
-   />
+    file="edit.js" />
 
-  <faceted:widget factory=".widget.CollectionWidget" />
+  <faceted:widget factory=".widget.CollectionWidget"
+                  schema=".widget.ICollectionSchema" />
 
 </configure>

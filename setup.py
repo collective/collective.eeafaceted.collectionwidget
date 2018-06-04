@@ -6,20 +6,15 @@ from setuptools import setup
 
 
 long_description = (
-    open('README.rst').read()
-    + '\n' +
-    'Contributors\n'
-    '============\n'
-    + '\n' +
-    open('CONTRIBUTORS.rst').read()
-    + '\n\n' +
-    open('CHANGES.rst').read()
-    + '\n')
+    open('README.rst').read() +
+    '\nContributors\n============\n\n' +
+    open('CONTRIBUTORS.rst').read() + '\n\n' +
+    open('CHANGES.rst').read() + '\n')
 
 
 setup(
     name='collective.eeafaceted.collectionwidget',
-    version='0.10.dev0',
+    version='1.0.dev0',
     description=(
         "eea.facetednavigation widget that enables selecting "
         "a collection (among several) as base filter"),
