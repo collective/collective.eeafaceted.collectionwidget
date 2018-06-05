@@ -35,5 +35,5 @@ All that is necessary when adding this kind of widget in a faceted navigation is
 eea.facetednavigation version
 =============================
 
-From version 1.0, the widget requires at least `eea.facetednavigation` 10.0 where widget build using `z3c.form`.
-If using `eea.facetednavigation` < 10.0, you need to use a version of `collective.eeafaceted.collectionwidget` < 10.0.
+From version 1.0, the widget requires at least `eea.facetednavigation` 10.0 where widget is built using `z3c.form`.
+If you are using `eea.facetednavigation` < 10.0, you need to use a version of `collective.eeafaceted.collectionwidget` < 1.0.
