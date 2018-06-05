@@ -198,7 +198,7 @@ class TestWidget(BaseWidgetCase):
         data = Criterion(vocabulary=COLLECTION_VOCABULARY)
         widget = CollectionWidget(self.folder, self.request, data=data)
         widget()
-        self.assertEquals(widget.default, None)
+        self.assertEquals(widget.default, '')
         # a default value is selected, it will use adapter_default_value
         collection1UID = self.collection1.UID()
         widget.data.default = collection1UID
@@ -216,7 +216,7 @@ class TestWidget(BaseWidgetCase):
         self.collection2.getParentNode().manage_delObjects(ids=[self.collection2.getId()])
         del IAnnotations(self.request)['plone.memoize']
         widget()
-        self.assertEquals(widget.default, None)
+        self.assertEquals(widget.default, '')
 
     def test_count(self):
         data = Criterion()

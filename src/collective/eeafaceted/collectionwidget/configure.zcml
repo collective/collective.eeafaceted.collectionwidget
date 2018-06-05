@@ -11,24 +11,10 @@
 
     <include package="plone.api" />
     <include package="eea.facetednavigation" />
+    <include file="profiles.zcml" />
 
     <include package=".browser" />
     <include package=".widgets" />
-
-    <genericsetup:registerProfile
-        name="default"
-        title="collective.eeafaceted.collectionwidget"
-        directory="profiles/default"
-        description="Installs the collective.eeafaceted.collectionwidget add-on."
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
-
-    <genericsetup:importStep
-        name="collective.eeafaceted.collectionwidget-postInstall"
-        title="collective.eeafaceted.collectionwidget post_install import step"
-        description="Post install import step from collective.eeafaceted.collectionwidget"
-        handler=".setuphandlers.post_install">
-    </genericsetup:importStep>
 
     <!-- Vocabularies -->
     <utility component=".vocabulary.CollectionVocabularyFactory"

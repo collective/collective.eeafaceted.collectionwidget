@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <metadata>
-  <version>1</version>
+  <version>2</version>
   <dependencies>
     <dependency>profile-eea.facetednavigation:default</dependency>
     <dependency>profile-plone.app.collection:default</dependency>
+    <dependency>profile-collective.eeafaceted.collectionwidget:universal</dependency>
   </dependencies>
 </metadata>

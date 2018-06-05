@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<registry>
+
+  <!-- collection widget -->
+  <records prefix="plone.resources/faceted-widgets-collection-view"
+           interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+    <value key="css">
+      <element>++resource++collective.eeafaceted.collectionwidget.view.css</element>
+    </value>
+    <value key="js">++resource++collective.eeafaceted.collectionwidget.widgets.view.js</value>
+  </records>
+
+  <records prefix="plone.resources/faceted-widgets-collection-edit"
+           interface='Products.CMFPlone.interfaces.IResourceRegistry'>
+    <value key="css">
+      <element>++resource++collective.eeafaceted.collectionwidget.edit.css</element>
+    </value>
+    <value key="js">++resource++collective.eeafaceted.collectionwidget.widgets.edit.js</value>
+  </records>
+
+  <records prefix="plone.bundles/faceted-view"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="resources">
+      <element>faceted-navigation-view</element>
+      <element>faceted-navigation-expand</element>
+      <element>faceted-navigation-independent</element>
+      <element>faceted-widgets-alphabets-view</element>
+      <element>faceted-widgets-autocomplete-view</element>
+      <element>faceted-widgets-checkbox-view</element>
+      <element>faceted-widgets-collection-view</element>
+      <element>faceted-widgets-criteria-view</element>
+      <element>faceted-widgets-date-view</element>
+      <element>faceted-widgets-daterange-view</element>
+      <element>faceted-widgets-debug-view</element>
+      <element>faceted-widgets-etag-view</element>
+      <element>faceted-widgets-path-tree</element>
+      <element>faceted-widgets-path-view</element>
+      <element>faceted-widgets-portlet-view</element>
+      <element>faceted-widgets-radio-view</element>
+      <element>faceted-widgets-range-view</element>
+      <element>faceted-widgets-resultsfilter-view</element>
+      <element>faceted-widgets-resultsperpage-view</element>
+      <element>faceted-widgets-select-view</element>
+      <element>faceted-widgets-sorting-view</element>
+      <element>faceted-widgets-tagscloud-view</element>
+      <element>faceted-widgets-tal-view</element>
+      <element>faceted-widgets-text-view</element>
+    </value>
+    <value key="depends">faceted-jquery</value>
+    <value key="csscompilation">++plone++static/faceted-view.min.css</value>
+    <value key="jscompilation">++plone++static/faceted-view.min.js</value>
+    <value key="compile">False</value>
+    <value key="enabled">True</value>
+  </records>
+
+  <records prefix="plone.bundles/faceted-edit"
+           interface='Products.CMFPlone.interfaces.IBundleRegistry'>
+    <value key="resources">
+      <element>faceted-navigation-edit</element>
+      <element>faceted-navigation-expand</element>
+      <element>faceted-widgets-alphabets-edit</element>
+      <element>faceted-widgets-autocomplete-edit</element>
+      <element>faceted-widgets-checkbox-edit</element>
+      <element>faceted-widgets-collection-edit</element>
+      <element>faceted-widgets-criteria-edit</element>
+      <element>faceted-widgets-date-edit</element>
+      <element>faceted-widgets-daterange-edit</element>
+      <element>faceted-widgets-debug-edit</element>
+      <element>faceted-widgets-etag-edit</element>
+      <element>faceted-widgets-path-tree</element>
+      <element>faceted-widgets-path-edit</element>
+      <element>faceted-widgets-portlet-edit</element>
+      <element>faceted-widgets-radio-edit</element>
+      <element>faceted-widgets-range-edit</element>
+      <element>faceted-widgets-resultsfilter-edit</element>
+      <element>faceted-widgets-resultsperpage-edit</element>
+      <element>faceted-widgets-select-edit</element>
+      <element>faceted-widgets-sorting-edit</element>
+      <element>faceted-widgets-tagscloud-edit</element>
+      <element>faceted-widgets-tal-edit</element>
+      <element>faceted-widgets-text-edit</element>
+    </value>
+    <value key="depends">faceted-jquery</value>
+    <value key="csscompilation">++plone++static/faceted-edit.min.css</value>
+    <value key="jscompilation">++plone++static/faceted-edit.min.js</value>
+    <value key="compile">False</value>
+    <value key="enabled">True</value>
+    <value key="expression">python:'configure_faceted.html' in request.URL0</value>
+  </records>
+
+</registry>
