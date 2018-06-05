@@ -11,7 +11,6 @@ long_description = (
     open('CONTRIBUTORS.rst').read() + '\n\n' +
     open('CHANGES.rst').read() + '\n')
 
-
 setup(
     name='collective.eeafaceted.collectionwidget',
     version='1.0.dev0',
@@ -40,7 +39,7 @@ setup(
     install_requires=[
         'plone.api',
         'setuptools',
-        'eea.facetednavigation',
+        'eea.facetednavigation >= 10.0',
         'plone.app.collection',
     ],
     extras_require={
