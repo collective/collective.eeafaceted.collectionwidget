@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<metadata>
+  <version>1</version>
+  <dependencies>
+    <dependency>profile-eea.facetednavigation:default</dependency>
+    <dependency>profile-plone.app.collection:default</dependency>
+  </dependencies>
+</metadata>

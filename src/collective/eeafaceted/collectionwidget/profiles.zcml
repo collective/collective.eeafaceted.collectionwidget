@@ -1,0 +1,32 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    xmlns:five="http://namespaces.zope.org/five"
+    i18n_domain="collective.eeafaceted.collectionwidget">
+
+  <genericsetup:registerProfile
+      zcml:condition="have plone-5"
+      name="default"
+      directory="profiles/plone5"
+      title="collective.eeafaceted.collectionwidget"
+      description="Extension profile for collective.eeafaceted.collectionwidget."
+      provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+  <genericsetup:registerProfile
+      zcml:condition="not-have plone-5"
+      name="default"
+      directory="profiles/plone4"
+      title="collective.eeafaceted.collectionwidget"
+      description="Extension profile for collective.eeafaceted.collectionwidget."
+      provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+  <genericsetup:registerProfile
+      name="universal"
+      directory="profiles/common"
+      title="collective.eeafaceted.collectionwidget Common Configuration"
+      description="Extension profile for collective.eeafaceted.collectionwidget
+                   settings that aren't version dependent."
+      provides="Products.GenericSetup.interfaces.EXTENSION" />
+
+</configure>
