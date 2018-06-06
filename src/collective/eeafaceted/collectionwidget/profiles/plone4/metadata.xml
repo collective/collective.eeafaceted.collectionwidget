@@ -2,8 +2,6 @@
 <metadata>
   <version>2</version>
   <dependencies>
-    <dependency>profile-eea.facetednavigation:default</dependency>
-    <dependency>profile-plone.app.contenttypes:default</dependency>
     <dependency>profile-collective.eeafaceted.collectionwidget:universal</dependency>
   </dependencies>
 </metadata>

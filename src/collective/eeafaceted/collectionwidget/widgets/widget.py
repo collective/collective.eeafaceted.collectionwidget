@@ -198,10 +198,14 @@ class CollectionWidget(RadioWidget):
         categories_token = [term.token for term in self.categories]
         for term in self.vocabulary():
             parent = aq_parent(term.value)
-            if parent.UID() not in categories_token:
+            # collections directly added to context, no intermediate category
+            if parent == self.context:
                 category = ''
-            else:
+            elif parent.UID() in categories_token:
                 category = parent.UID()
+            else:
+                # parent is not visible, a subfolder private for current user
+                continue
 
             voc[category]['collections'].append(term)
 

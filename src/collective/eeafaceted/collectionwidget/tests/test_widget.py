@@ -109,13 +109,18 @@ class TestWidget(BaseWidgetCase):
         cat1.manage_permission('View')
         cat1.reindexObjectSecurity()
         self.collection1.manage_permission('View', ('Authenticated', ))
-        member = self.portal.portal_membership.getAuthenticatedMember()
+        self.collection1.reindexObjectSecurity()
+        member = api.user.get_current()
         self.assertTrue(not member.has_permission('View', cat1))
         self.assertTrue(member.has_permission('View', self.collection1))
         # clean memoize for widget.categories,
         # it was memoized when calling _generate_vocabulary here above
         del IAnnotations(self.request)['plone.memoize']
         vocabulary = widget._generate_vocabulary()
+        # both collections appear in widget.vocabulary()
+        self.assertEqual(
+            [elt.token for elt in widget.vocabulary()],
+            [self.collection1.UID(), self.collection2.UID()])
         self.assertNotIn(u'Category 1', [c['term'].title for c in vocabulary.values()])
 
     def test_hidealloption(self):
