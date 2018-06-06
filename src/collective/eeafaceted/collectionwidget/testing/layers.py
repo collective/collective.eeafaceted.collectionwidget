@@ -22,7 +22,8 @@ import collective.eeafaceted.collectionwidget
 class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
 
     defaultBases = (PLONE_FIXTURE,)
-    products = ('collective.eeafaceted.collectionwidget',)
+    products = ('collective.eeafaceted.collectionwidget',
+                'Products.DateRecurringIndex')
 
     def setUpZope(self, app, configurationContext):
         """Set up Zope."""

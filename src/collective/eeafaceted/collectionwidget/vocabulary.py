@@ -51,7 +51,7 @@ class CollectionVocabulary(object):
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(
             path=dict(query='/'.join(root.getPhysicalPath())),
-            object_provides='plone.app.collection.interfaces.ICollection',
+            object_provides='plone.app.contenttypes.interfaces.ICollection',
             sort_on='getObjPositionInParent'
         )
         return brains

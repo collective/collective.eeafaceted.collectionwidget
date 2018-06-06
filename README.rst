@@ -18,7 +18,7 @@ Package adding a widget for eea.facetednavigation that list collections as base 
 How it works
 ============
 
-Once installed, a new widget `Collection Link` is available while configuring the faceted navigation.  It will display a list of Collections (plone.app.collection) that will be used as base searches.
+Once installed, a new widget `Collection Link` is available while configuring the faceted navigation.  It will display a list of Collections (from plone.app.contenttypes) that will be used as base searches.
 
 Installation
 ============

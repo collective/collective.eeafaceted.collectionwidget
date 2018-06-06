@@ -8,6 +8,10 @@ Changelog
 - Make widget compatible with `eea.facetednavigation >= 10.0`.
   This makes it no more compatible with older version.
   [gbastien]
+- Make package installable on both Plone4 and Plone5.
+  [gbastien]
+- Rely on `plone.app.contenttypes` instead `plone.app.collection`.
+  [gbastien]
 
 0.9 (2018-05-25)
 ----------------
