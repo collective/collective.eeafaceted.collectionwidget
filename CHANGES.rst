@@ -10,6 +10,8 @@ Changelog
   [gbastien]
 - Make package installable on both Plone4 and Plone5.
   [gbastien]
+- Rely on `plone.app.contenttypes` instead `plone.app.collection`.
+  [gbastien]
 
 0.9 (2018-05-25)
 ----------------

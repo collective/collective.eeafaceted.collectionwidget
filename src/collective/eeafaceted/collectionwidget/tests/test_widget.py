@@ -42,12 +42,18 @@ class BaseWidgetCase(IntegrationTestCase):
             id='collection1',
             type='Collection',
             title='Collection 1',
+            query=[],
+            sort_on='sortable_title',
+            sort_reversed=False,
             container=self.category1
         )
         self.collection2 = api.content.create(
             id='collection2',
             type='Collection',
             title='Collection 2',
+            query=[],
+            sort_on='sortable_title',
+            sort_reversed=False,
             container=self.category2
         )
         subtyper = getMultiAdapter(
@@ -260,8 +266,8 @@ class TestWidget(BaseWidgetCase):
         # with collection_uid
         query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
         # the sort_on paramter of the collection is taken into account
-        self.assertTrue(self.collection1.getSort_on() == 'sortable_title')
-        self.assertTrue(self.collection1.getSort_reversed() is False)
+        self.assertTrue(self.collection1.sort_on == 'sortable_title')
+        self.assertTrue(self.collection1.sort_reversed is False)
         self.assertEquals(query_dico, {'review_state': {'query': ['private']},
                                        'sort_on': 'sortable_title'})
         # if sort_reversed is True, it is kept in the query

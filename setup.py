@@ -42,7 +42,7 @@ setup(
         'plone.api',
         'setuptools',
         'eea.facetednavigation >= 10.0',
-        'plone.app.collection',
+        'plone.app.contenttypes',
     ],
     extras_require={
         'test': [

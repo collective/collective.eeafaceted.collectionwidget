@@ -88,10 +88,10 @@ class CollectionWidget(RadioWidget):
                         sort_on_is_used = True
                     break
             if not sort_on_is_used:
-                if collection.getSort_on():
-                    query['sort_on'] = collection.getSort_on()
-                if collection.getSort_reversed():
-                    query['sort_order'] = collection.getSort_reversed() and 'descending' or ''
+                if collection.sort_on:
+                    query['sort_on'] = collection.sort_on
+                if collection.sort_reversed:
+                    query['sort_order'] = collection.sort_reversed and 'descending' or ''
             return query
         return {}
 
