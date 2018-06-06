@@ -12,6 +12,10 @@ Changelog
   [gbastien]
 - Rely on `plone.app.contenttypes` instead `plone.app.collection`.
   [gbastien]
+- Do not break to display the facetednavigation_view if no collection widget
+  defined, it is the case when just enabling the faceted navigation on a new
+  folder.
+  [gbastien]
 
 0.9 (2018-05-25)
 ----------------
