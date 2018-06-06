@@ -8,7 +8,7 @@ install:
   - easy_install --version
   - pip install setuptools==7.0
   - mkdir -p buildout-cache/{eggs,downloads}
-  - python bootstrap.py -c travis.cfg --setuptools-version=33.1.1 --version=2.5.0
+  - python bootstrap.py -c travis.cfg --setuptools-version=33.1.1 --version=2.10.0
   - bin/buildout -Nc travis.cfg
 script:
   - bin/test 
