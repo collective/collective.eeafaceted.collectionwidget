@@ -6,7 +6,7 @@ before_install:
   - "sh -e /etc/init.d/xvfb start"
 install:
   - easy_install --version
-  - pip install setuptools==7.0
+  - pip install setuptools==33.1.1
   - mkdir -p buildout-cache/{eggs,downloads}
   - python bootstrap.py -c travis.cfg --setuptools-version=33.1.1 --version=2.10.0
   - bin/buildout -Nc travis.cfg
