@@ -14,6 +14,7 @@ script:
   - bin/test 
   - bin/createcoverage
 after_success:
+  - bin/coverage run bin/test
   - pip install coveralls==0.5
   - coveralls
 
