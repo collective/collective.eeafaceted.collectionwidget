@@ -199,7 +199,7 @@ class CollectionWidget(RadioWidget):
         for term in self.vocabulary():
             parent = aq_parent(term.value)
             # collections directly added to context, no intermediate category
-            if parent == self.context:
+            if parent == self.context and parent.UID() not in categories_token:
                 category = ''
             elif parent.UID() in categories_token:
                 category = parent.UID()
