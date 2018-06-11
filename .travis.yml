@@ -32,7 +32,6 @@ before_script:
 
 script:
   - bin/test 
-  - bin/createcoverage
 
 after_success:
   - bin/coverage run bin/test
