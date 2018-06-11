@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:monkey="http://namespaces.plone.org/monkey"
+    xmlns:five="http://namespaces.zope.org/five"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.eeafaceted.collectionwidget">
+
+    <permission
+      id="collective.eeafaceted.collectionwidget.addDashboardCollection"
+      title="collective.eeafaceted.collectionwidget: Add DashboardCollection" />
+
+</configure>
