@@ -1,4 +1,4 @@
-import unittest2 as unittest
+import unittest
 
 from .layers import INTEGRATION
 from .layers import FUNCTIONAL
