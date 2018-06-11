@@ -25,30 +25,32 @@ Widget does not show empty categories
     # as News is empty, it is not shown
     Element should not be visible  css=div#c1_widget div.title  News
     # create a Collection in the 'news' folder so this category is shown
-    ${info}=  Create content  type=Collection  title=Info  id=info  container=${category}
-    Click link  Faceted criteria
+    ${info}=  Create content  type=DashboardCollection  title=Info  id=info  showNumberOfItems=True  query=  sort_on=  sort_reversed=  container=${category}
+    Go to  ${PLONE_URL}/faceted/configure_faceted.html
     Element should be visible  css=div#c1_widget div.title  News
     # the link to the collection is also displayed
-    Element should contain  css=div#c1_widget li  Info
+    Element should contain  css=div#c1_widget div.category li  Info
 
 Widget shows collections in categories
     [tags]  current
     ${folder}=  Make faceted folder
     ${category}=  Create content  type=Folder  title=News  id=news  container=${folder}
-    Create content  type=Collection  title=Info  id=info  container=${category}
+    Create content  type=DashboardCollection  title=Info  id=info  showNumberOfItems=True  query=  sort_on=  sort_reversed=  container=${category}
     Go to  ${PLONE_URL}/faceted
     Page Should Contain  Info
+    Wait Until Page Contains Element  css=div.eea-preview-items
     Click Element  css=li[title="Info"]
     Wait Until Page Contains Element  css=div.eea-preview-items
     element should contain  css=div.eea-preview-items  Faceted folder
 
 Faceted title matches selected collection
     ${folder}=  Make faceted folder
-    Create content  type=Collection  title=Info  id=info  container=${folder}
+    Create content  type=DashboardCollection  title=Info  id=info  showNumberOfItems=True  query=  sort_on=  sort_reversed=  container=${folder}
     Go to  ${PLONE_URL}/faceted/configure_faceted.html
     Wait Until Page Contains  Basic search
-    Click Element  css=#c1_widget li
+    Click Element  css=li[title="Info"]
     Go to  ${PLONE_URL}/faceted
+    Wait Until Page Contains Element  css=div.eea-preview-items
     Element should contain  css=h1.documentFirstHeading  Info
 
 Advanced criterion are disabled based on selected collection
@@ -71,7 +73,5 @@ Suite Setup
 
 Make faceted folder
     ${folder}=  Create content  type=Folder  title=Faceted folder  id=faceted
-    Go to  ${PLONE_URL}/faceted
-    Click element  css=#plone-contentmenu-actions a
-    Click element  plone-contentmenu-actions-faceted.enable
+    Go to  ${PLONE_URL}/faceted/@@faceted_subtyper/enable
     [Return]  ${folder}

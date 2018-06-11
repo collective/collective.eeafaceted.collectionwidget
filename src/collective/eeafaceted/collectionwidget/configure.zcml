@@ -10,6 +10,7 @@
     <five:registerPackage package="." initialize=".initialize" />
 
     <include package="plone.api" />
+    <include package="collective.behavior.talcondition"/>
     <include package="eea.facetednavigation" />
     <include file="permissions.zcml" />
     <include file="profiles.zcml" />

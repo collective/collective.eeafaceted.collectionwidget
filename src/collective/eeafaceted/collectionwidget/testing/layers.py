@@ -55,6 +55,9 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
             query=[{'i': 'review_state',
                     'o': 'plone.app.querystring.operation.selection.is',
                     'v': ['published']}],
+            showNumberOfItems=True,
+            sort_on='',
+            sort_reversed=False,
         )
         collection_uid = collection.UID()
         criteria = queryAdapter(folder2, ICriteria)
@@ -67,6 +70,9 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
             query=[{'i': 'Creator',
                     'o': 'plone.app.querystring.operation.selection.is',
                     'v': ['_test_user_1']}],
+            showNumberOfItems=True,
+            sort_on='',
+            sort_reversed=False,
         )
 
         # Commit so that the test browser sees these objects
