@@ -40,8 +40,9 @@ class BaseWidgetCase(IntegrationTestCase):
         )
         self.collection1 = api.content.create(
             id='collection1',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 1',
+            showNumberOfItems=True,
             query=[],
             sort_on='sortable_title',
             sort_reversed=False,
@@ -49,8 +50,9 @@ class BaseWidgetCase(IntegrationTestCase):
         )
         self.collection2 = api.content.create(
             id='collection2',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 2',
+            showNumberOfItems=True,
             query=[],
             sort_on='sortable_title',
             sort_reversed=False,
@@ -73,8 +75,9 @@ class TestWidget(BaseWidgetCase):
         # collection outside a category folder does not have a category
         collection3 = api.content.create(
             id='collection3',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 3',
+            showNumberOfItems=True,
             container=self.folder
         )
         vocabulary = widget._generate_vocabulary()

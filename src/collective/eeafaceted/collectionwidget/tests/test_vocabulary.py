@@ -46,13 +46,13 @@ class TestVocabulary(IntegrationTestCase):
         """ """
         c1 = api.content.create(
             id='collection1',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 1',
             container=self.folder
         )
         c2 = api.content.create(
             id='collection2',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 2',
             container=self.folder
         )
@@ -70,13 +70,13 @@ class TestVocabulary(IntegrationTestCase):
         # add collection to self.folder
         c1 = api.content.create(
             id='collection1',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 1',
             container=self.folder
         )
         c2 = api.content.create(
             id='collection2',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 2',
             container=self.folder
         )
@@ -90,13 +90,13 @@ class TestVocabulary(IntegrationTestCase):
         )
         c3 = api.content.create(
             id='collection3',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 3',
             container=self.folder.subfolder
         )
         c4 = api.content.create(
             id='collection4',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 4',
             container=self.folder.subfolder
         )

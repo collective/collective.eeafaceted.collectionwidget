@@ -49,7 +49,7 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
         folder2 = portal[folder2_id]
         folder2.reindexObject()
         folder2.unrestrictedTraverse('@@faceted_subtyper').enable()
-        collection = portal.portal_types.Collection._constructInstance(
+        collection = portal.portal_types.DashboardCollection._constructInstance(
             folder2,
             id='collection_review_state', title=u"Review state",
             query=[{'i': 'review_state',
@@ -61,7 +61,7 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
         # edit collection-link criteria
         criteria.edit('c1', default=collection_uid)
         # create a second collection without review_state criterion
-        portal.portal_types.Collection._constructInstance(
+        portal.portal_types.DashboardCollection._constructInstance(
             folder2,
             id='collection_wo_review_state', title=u"Creator",
             query=[{'i': 'Creator',
