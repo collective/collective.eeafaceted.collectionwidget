@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Module where all interfaces, events and exceptions live."""
 
+from plone.app.contenttypes.interfaces import ICollection
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
@@ -31,3 +32,7 @@ class NoFacetedViewDefinedException(NotDashboardContextException):
 
 class NoCollectionWidgetDefinedException(NotDashboardContextException):
     """ To be raised when a context has no collection widget defined on it. """
+
+
+class IDashboardCollection(ICollection):
+    """ """

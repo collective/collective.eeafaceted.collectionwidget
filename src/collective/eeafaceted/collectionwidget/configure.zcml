@@ -11,9 +11,12 @@
 
     <include package="plone.api" />
     <include package="eea.facetednavigation" />
+    <include file="permissions.zcml" />
     <include file="profiles.zcml" />
 
+    <include package=".behaviors" />
     <include package=".browser" />
+    <include package=".content" />
     <include package=".widgets" />
 
     <!-- Vocabularies -->

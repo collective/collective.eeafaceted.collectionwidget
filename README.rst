@@ -18,7 +18,15 @@ Package adding a widget for eea.facetednavigation that list collections as base 
 How it works
 ============
 
-Once installed, a new widget `Collection Link` is available while configuring the faceted navigation.  It will display a list of Collections (from plone.app.contenttypes) that will be used as base searches.
+Once installed, a new widget `Collection Link` is available while configuring the faceted navigation.
+If you add Collections to a folder on which faceted navigation is enabled, the widget will display
+the found Collections and use it as base searches.
+A special content DashboardCollection is also provided, it is based on the Collection but use additional
+behaviors :
+- The 'DashboardCollection' behavior that provides an extra field showNumberOfItems, making it possible
+  to display the counter on a per DashboardCollection basis;
+- The 'TAL condition' behavior that adds a field into which defining a TAL expression that will make it
+  possible to hide or show a Collection in the widget.
 
 Installation
 ============

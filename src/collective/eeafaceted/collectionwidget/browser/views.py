@@ -3,6 +3,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from eea.facetednavigation.browser.app.view import FacetedContainerView
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
+from collective.eeafaceted.collectionwidget.interfaces import IDashboardCollection
 from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidgetDefinedException
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
 
@@ -23,8 +24,10 @@ class RenderCategoryView(BrowserView):
 class RenderTermView(BrowserView):
 
     def display_number_of_items(self):
-        """If true, display the number of items in the collection."""
-        return True
+        """Display number of items in the collection."""
+        if not IDashboardCollection.providedBy(self.context):
+            return True
+        return self.context.showNumberOfItems
 
     def number_of_items(self):
         """Return the number of items in the collection."""

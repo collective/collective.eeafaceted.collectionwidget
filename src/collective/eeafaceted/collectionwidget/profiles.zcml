@@ -36,11 +36,23 @@
         handler=".setuphandlers.post_install">
     </genericsetup:importStep>
 
-    <genericsetup:upgradeDepends
-        source="1"
-        destination="2"
-        profile="collective.eeafaceted.collectionwidget:default"
-        title="Reapply entire profile for collective.eeafaceted.collectionwidget"
-        import_profile="collective.eeafaceted.collectionwidget:default" />
+    <genericsetup:upgradeSteps
+      source="1"
+      destination="2"
+      profile="collective.eeafaceted.collectionwidget:default">
+      <genericsetup:upgradeDepends
+          title="Register portal_types"
+          description=""
+          import_steps="typeinfo"
+          import_profile="collective.eeafaceted.collectionwidget:universal" />
+      <genericsetup:upgradeDepends
+          title="Register JS resources"
+          description=""
+          import_steps="jsregistry" />
+      <genericsetup:upgradeDepends
+          title="Register CSS resources"
+          description=""
+          import_steps="cssregistry" />
+    </genericsetup:upgradeSteps>
   
 </configure>
