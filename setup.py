@@ -41,6 +41,7 @@ setup(
     install_requires=[
         'plone.api',
         'setuptools',
+        'collective.behavior.talcondition',
         'eea.facetednavigation >= 10.0',
         'plone.app.contenttypes',
     ],
