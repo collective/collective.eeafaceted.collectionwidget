@@ -2,6 +2,6 @@
 <metadata>
   <version>2</version>
   <dependencies>
-    <dependency>profile-eea.facetednavigation:default</dependency>
+     <dependency>profile-eea.facetednavigation:default</dependency>
   </dependencies>
 </metadata>

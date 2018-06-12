@@ -8,6 +8,8 @@
   <property name="title" i18n:translate="">DashboardCollection</property>
   <property name="description"
     i18n:translate="">DashboardCollection</property>
+  <property name="icon_expr">string:${portal_url}/++resource++collective.eeafaceted.collectionwidget/dashboardcollection.png</property>
+  <property name="factory">DashboardCollection</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">False</property>
   <property name="allowed_content_types" />
