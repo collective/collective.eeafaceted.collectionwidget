@@ -1,12 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from zope.component import getMultiAdapter
-from plone import api
-from eea.facetednavigation.interfaces import ICriteria
+from collective.behavior.talcondition.interfaces import ITALConditionable
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
 from collective.eeafaceted.collectionwidget.vocabulary import CollectionCategoryVocabularyFactory
 from collective.eeafaceted.collectionwidget.vocabulary import CollectionVocabularyFactory
 from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
+from eea.facetednavigation.interfaces import ICriteria
+from plone import api
+from plone.app.testing import login
+from plone.app.testing import TEST_USER_NAME
+from zope.component import getMultiAdapter
+from zope.component import queryUtility
+from zope.event import notify
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema.interfaces import IVocabularyFactory
 
 
 class TestVocabulary(IntegrationTestCase):
@@ -48,13 +55,17 @@ class TestVocabulary(IntegrationTestCase):
             id='collection1',
             type='DashboardCollection',
             title='Collection 1',
-            container=self.folder
+            container=self.folder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
         c2 = api.content.create(
             id='collection2',
             type='DashboardCollection',
             title='Collection 2',
-            container=self.folder
+            container=self.folder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
         vocabulary = CollectionVocabularyFactory(self.folder)
         self.assertEquals(len(vocabulary), 2)
@@ -72,13 +83,17 @@ class TestVocabulary(IntegrationTestCase):
             id='collection1',
             type='DashboardCollection',
             title='Collection 1',
-            container=self.folder
+            container=self.folder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
         c2 = api.content.create(
             id='collection2',
             type='DashboardCollection',
             title='Collection 2',
-            container=self.folder
+            container=self.folder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
 
         # create a subfolder, add collections into it
@@ -92,13 +107,17 @@ class TestVocabulary(IntegrationTestCase):
             id='collection3',
             type='DashboardCollection',
             title='Collection 3',
-            container=self.folder.subfolder
+            container=self.folder.subfolder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
         c4 = api.content.create(
             id='collection4',
             type='DashboardCollection',
             title='Collection 4',
-            container=self.folder.subfolder
+            container=self.folder.subfolder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
 
         # for now, faceted navigation is not enabled on subfolder,
@@ -185,3 +204,51 @@ class TestVocabulary(IntegrationTestCase):
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c5=effective&c6=20'.format(self.folder.absolute_url(),
                                                                                c1.UID()))
+
+    def test_conditionawarecollectionvocabulary(self):
+        """This vocabulary is condition aware, it means
+           that it will take into account condition defined in the
+           'tal_condition' field added by ITALConditionable."""
+        self.dashboardcollection = api.content.create(
+            id='dc1',
+            type='DashboardCollection',
+            title='Dashboard collection 1',
+            container=self.folder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
+        )
+        # add on non Manager user
+        api.user.create(
+            username='user_not_manager',
+            password='user_not_manager',
+            email="imio@dashboard.org",
+            roles=['Member'])
+        self.assertTrue(ITALConditionable.providedBy(self.dashboardcollection))
+        factory = queryUtility(IVocabularyFactory, u'collective.eeafaceted.collectionwidget.collectionvocabulary')
+        # for now, no condition defined on the collection so it is in the vocabulary
+        self.assertEqual(self.dashboardcollection.tal_condition, u'')
+        vocab = factory(self.portal)
+        self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
+        # now define a condition and by pass for Manager
+        self.dashboardcollection.tal_condition = u'python:False'
+        self.dashboardcollection.roles_bypassing_talcondition = [u"Manager"]
+        notify(ObjectModifiedEvent(self.dashboardcollection))
+        # No more listed except for Manager
+        vocab = factory(self.portal)
+        self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
+        login(self.portal, 'user_not_manager')
+        # cache is user aware
+        vocab = factory(self.portal)
+        self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
+        # Now, desactivate bypass for manager
+        login(self.portal, TEST_USER_NAME)
+        self.dashboardcollection.roles_bypassing_talcondition = []
+        # ObjectModified event on DashboardCollection invalidate the vocabulary caching
+        notify(ObjectModifiedEvent(self.dashboardcollection))
+        vocab = factory(self.portal)
+        self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
+        # If condition is True, it is listed
+        self.dashboardcollection.tal_condition = u'python:True'
+        notify(ObjectModifiedEvent(self.dashboardcollection))
+        vocab = factory(self.portal)
+        self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)

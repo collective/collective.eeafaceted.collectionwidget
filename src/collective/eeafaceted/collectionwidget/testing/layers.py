@@ -58,6 +58,8 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
             showNumberOfItems=True,
             sort_on='',
             sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
         collection_uid = collection.UID()
         criteria = queryAdapter(folder2, ICriteria)
@@ -73,6 +75,8 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
             showNumberOfItems=True,
             sort_on='',
             sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
 
         # Commit so that the test browser sees these objects

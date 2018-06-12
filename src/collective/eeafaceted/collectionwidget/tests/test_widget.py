@@ -46,6 +46,8 @@ class BaseWidgetCase(IntegrationTestCase):
             query=[],
             sort_on='sortable_title',
             sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
             container=self.category1
         )
         self.collection2 = api.content.create(
@@ -56,6 +58,8 @@ class BaseWidgetCase(IntegrationTestCase):
             query=[],
             sort_on='sortable_title',
             sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
             container=self.category2
         )
         subtyper = getMultiAdapter(
@@ -78,6 +82,8 @@ class TestWidget(BaseWidgetCase):
             type='DashboardCollection',
             title='Collection 3',
             showNumberOfItems=True,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
             container=self.folder
         )
         vocabulary = widget._generate_vocabulary()
