@@ -46,3 +46,16 @@ def getCurrentCollection(faceted_context):
     if collectionUID:
         catalog = api.portal.get_tool('portal_catalog')
         return catalog(UID=collectionUID)[0].getObject()
+
+
+def _updateDefaultCollectionFor(folderObj, default_uid):
+    """Use p_default_uid as the default collection selected
+       for the CollectionWidget used on p_folderObj."""
+    # folder should be a facetednav
+    if not IFacetedNavigable.providedBy(folderObj):
+        raise NoFacetedViewDefinedException(NO_FACETED_EXCEPTION_MSG)
+
+    criterion = getCollectionLinkCriterion(folderObj)
+    criterion.default = default_uid
+    # make change persist!
+    ICriteria(folderObj).criteria._p_changed = True

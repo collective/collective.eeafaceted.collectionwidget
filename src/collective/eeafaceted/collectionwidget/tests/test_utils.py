@@ -5,6 +5,7 @@ from collective.eeafaceted.collectionwidget.tests.test_widget import BaseWidgetC
 from collective.eeafaceted.collectionwidget.utils import _get_criterion
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
 from collective.eeafaceted.collectionwidget.utils import getCurrentCollection
+from collective.eeafaceted.collectionwidget.utils import _updateDefaultCollectionFor
 from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
@@ -61,3 +62,22 @@ class TestUtils(BaseWidgetCase):
         request.form['facetedQuery'] = '{{"c3":["20"],"b_start":["0"],"{0}":["{1}"]}}'.format(
             criterion.__name__, dashcoll.UID())
         self.assertEquals(getCurrentCollection(self.folder), dashcoll)
+
+    def test_updateDefaultCollectionFor(self):
+        """This method will define the default collection used by the collection-link
+           widget defined in a faceted enabled folder."""
+        # get the collection-link and check that it has no default
+        criterion = getCollectionLinkCriterion(self.folder)
+        self.assertFalse(criterion.default)
+        # right, do things correctly, add a DashboardCollection and use it as default
+        dashcoll_id = self.folder.invokeFactory('DashboardCollection', 'dashcoll', title='Dashboard Collection')
+        dashcoll = getattr(self.folder, dashcoll_id)
+        dashcoll.reindexObject()
+        _updateDefaultCollectionFor(self.folder, dashcoll.UID())
+        self.assertEquals(criterion.default, dashcoll.UID())
+
+        # calling it on a non faceted enabled folder will raise a NoFacetedViewDefinedException
+        nonfacetedfolder_id = self.portal.invokeFactory('Folder', 'notnacetedfolder', title='Non Faceted Folder')
+        nonfacetedfolder = getattr(self.portal, nonfacetedfolder_id)
+        nonfacetedfolder.reindexObject()
+        self.assertRaises(NoFacetedViewDefinedException, _updateDefaultCollectionFor, nonfacetedfolder, 'anUID')
