@@ -36,6 +36,16 @@ class IDashboardCollection(ICollection):
 class DashboardCollection(Collection):
     """A Collection used in our dashboards"""
 
+    # Getters and setters for our fields.
+
+    def _set_showNumberOfItems(self, value):
+        self.context.showNumberOfItems = value
+
+    def _get_showNumberOfItems(self):
+        return getattr(self.context, 'showNumberOfItems', False)
+
+    showNumberOfItems = property(_get_showNumberOfItems, _set_showNumberOfItems)
+
     def displayCatalogQuery(self):
         """
           Return the stored query as a readable catalog query."""
