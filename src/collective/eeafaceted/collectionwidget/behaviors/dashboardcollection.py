@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from plone.app.contenttypes.behaviors.collection import Collection
-from plone.app.contenttypes.behaviors.collection import ICollection
+from plone.app.contenttypes.behaviors.collection import ICollection as pac_ICollection
 from plone.autoform import directives as form
 from zope.component import adapter
 from zope.interface import implementer
@@ -17,8 +17,12 @@ from plone.dexterity.interfaces import IDexterityContent
 from collective.eeafaceted.collectionwidget import FacetedCollectionMessageFactory as _
 
 
+# !!! it is important that the interface of the behavior is named ICollection
+# because some javascript looks for ICollection-sort_on/ICollection-sort_reversed
+# fields and it only works when behavior interface has the correct name
+
 @provider(IFormFieldProvider, ISyndicatable)
-class IDashboardCollection(ICollection):
+class ICollection(pac_ICollection):
     """ """
 
     form.widget('showNumberOfItems', RadioFieldWidget)
@@ -31,7 +35,7 @@ class IDashboardCollection(ICollection):
     form.omitted('item_count')
 
 
-@implementer(IDashboardCollection)
+@implementer(ICollection)
 @adapter(IDexterityContent)
 class DashboardCollection(Collection):
     """A Collection used in our dashboards"""

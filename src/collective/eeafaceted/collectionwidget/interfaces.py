@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """Module where all interfaces, events and exceptions live."""
 
+from collective.eeafaceted.collectionwidget import FacetedCollectionMessageFactory as _
 from plone.app.contenttypes.interfaces import ICollection
+from plone.autoform import directives as form
+from z3c.form.browser.radio import RadioFieldWidget
+from zope import schema
 from zope.interface import Interface
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 

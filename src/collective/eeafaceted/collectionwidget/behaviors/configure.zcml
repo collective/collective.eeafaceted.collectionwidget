@@ -6,7 +6,7 @@
     <plone:behavior
       title="DashboardCollection"
       description="Adds dashboard collection behavior"
-      provides=".dashboardcollection.IDashboardCollection"
+      provides=".dashboardcollection.ICollection"
       factory=".dashboardcollection.DashboardCollection"
       for="plone.dexterity.interfaces.IDexterityContent" />
 

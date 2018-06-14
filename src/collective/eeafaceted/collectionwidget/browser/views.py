@@ -3,7 +3,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
 from eea.facetednavigation.browser.app.view import FacetedContainerView
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
-from collective.eeafaceted.collectionwidget.interfaces import IDashboardCollection
+from collective.eeafaceted.collectionwidget.content.dashboardcollection import IDashboardCollection
 from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidgetDefinedException
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
 
