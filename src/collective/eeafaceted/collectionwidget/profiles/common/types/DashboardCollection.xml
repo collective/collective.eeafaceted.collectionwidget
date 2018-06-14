@@ -21,7 +21,7 @@
   <property name="model_file" />
   <property name="behaviors" purge="false">
     <element value="plone.app.content.interfaces.INameFromTitle"/>
-    <element value="collective.eeafaceted.collectionwidget.behaviors.dashboardcollection.ICollection"/>
+    <element value="plone.app.contenttypes.behaviors.collection.ICollection"/>
     <element value="collective.behavior.talcondition.behavior.ITALCondition"/>
     <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>
     <element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/>

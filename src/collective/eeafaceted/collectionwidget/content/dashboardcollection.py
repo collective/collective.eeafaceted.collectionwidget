@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from collective.eeafaceted.collectionwidget.interfaces import IDashboardCollection
 from plone.app.contenttypes.content import Collection
 from plone.app.querystring.queryparser import parseFormquery

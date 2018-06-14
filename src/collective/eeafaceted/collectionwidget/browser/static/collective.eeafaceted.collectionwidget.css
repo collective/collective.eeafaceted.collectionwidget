@@ -1,0 +1,5 @@
+/* hide default ICollection.limit and ICollection.item_count fields */
+body.portaltype-dashboardcollection div#formfield-form-widgets-ICollection-limit,
+body.portaltype-dashboardcollection div#formfield-form-widgets-ICollection-item_count {
+   display: none;
+}

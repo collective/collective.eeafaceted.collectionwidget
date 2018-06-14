@@ -3,7 +3,6 @@
 
 from plone import api
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
-from collective.eeafaceted.collectionwidget.behaviors.dashboardcollection import IDashboardCollection
 
 
 class TestDashboardCollection(IntegrationTestCase):
@@ -30,5 +29,5 @@ class TestDashboardCollection(IntegrationTestCase):
         self.dashboardcollection.query = [
             {'i': 'portal_type', 'o': 'plone.app.querystring.operation.selection.is', 'v': ['Folder', ]},
         ]
-        self.assertEquals(IDashboardCollection(self.dashboardcollection).displayCatalogQuery(),
+        self.assertEquals(self.dashboardcollection.displayCatalogQuery(),
                           {'portal_type': {'query': ['Folder']}})

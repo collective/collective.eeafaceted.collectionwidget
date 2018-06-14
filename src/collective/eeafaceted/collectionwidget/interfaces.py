@@ -40,3 +40,8 @@ class NoCollectionWidgetDefinedException(NotDashboardContextException):
 
 class IDashboardCollection(ICollection):
     """ """
+    form.widget('showNumberOfItems', RadioFieldWidget)
+    showNumberOfItems = schema.Bool(
+        title=_(u'Show number of items in filter'),
+        default=False,
+        required=False,)

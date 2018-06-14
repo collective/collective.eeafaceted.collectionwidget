@@ -15,7 +15,6 @@
     <include file="permissions.zcml" />
     <include file="profiles.zcml" />
 
-    <include package=".behaviors" />
     <include package=".browser" />
     <include package=".content" />
     <include package=".widgets" />
