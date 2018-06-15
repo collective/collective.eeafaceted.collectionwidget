@@ -1,0 +1,3 @@
+# Manual msgids
+msgid ""
+msgstr ""
