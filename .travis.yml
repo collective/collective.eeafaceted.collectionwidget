@@ -35,7 +35,9 @@ script:
 
 after_success:
   - bin/coverage run bin/test
-  - pip install coveralls==0.5
+  - pip install coverage
+  - python -m coverage.pickle2json
+  - pip install coveralls
   - coveralls
 
 notifications:
