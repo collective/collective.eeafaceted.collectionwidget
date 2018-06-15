@@ -60,7 +60,8 @@ class CollectionVocabulary(object):
         brains = catalog(
             path=dict(query='/'.join(root.getPhysicalPath())),
             object_provides='plone.app.contenttypes.interfaces.ICollection',
-            sort_on='getObjPositionInParent'
+            enabled=True,
+            sort_on='getObjPositionInParent',
         )
         return brains
 

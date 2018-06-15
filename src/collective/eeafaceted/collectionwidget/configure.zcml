@@ -46,4 +46,10 @@
       factory=".adapters.DefaultValue"
       />
 
+    <!-- indexes -->
+    <adapter
+      name="enabled"
+      factory=".indexes.enabled"
+      />
+
 </configure>

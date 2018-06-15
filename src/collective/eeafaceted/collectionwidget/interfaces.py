@@ -40,8 +40,19 @@ class NoCollectionWidgetDefinedException(NotDashboardContextException):
 
 class IDashboardCollection(ICollection):
     """ """
+
     form.widget('showNumberOfItems', RadioFieldWidget)
     showNumberOfItems = schema.Bool(
         title=_(u'Show number of items in filter'),
+        description=_(u'This will display the number of elements this search '
+                      u'return in the widget (or portlet) collection. Take '
+                      u'care that this is doing the search to display the result '
+                      u'so enable it only if necessary.'),
         default=False,
+        required=False,)
+
+    form.widget('enabled', RadioFieldWidget)
+    enabled = schema.Bool(
+        title=_(u'Enabled?'),
+        default=True,
         required=False,)

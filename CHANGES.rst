@@ -16,6 +16,10 @@ Changelog
   defined, it is the case when just enabling the faceted navigation on a new
   folder.
   [gbastien]
+- Added field `enabled` (default=True) on a DashboardCollection make it possible
+  to disable it so it is no more displayed in the collection widget (portlet).
+  We specifically do not use a workflow for DashboardCollection.
+  [gbastien]
 
 0.9 (2018-05-25)
 ----------------

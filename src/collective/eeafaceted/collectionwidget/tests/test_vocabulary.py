@@ -75,6 +75,13 @@ class TestVocabulary(IntegrationTestCase):
         self.assertEquals([(u'Collection 1', ''), (u'Collection 2', '')],
                           [term.title for term in vocabulary])
 
+        # disabled DashboardCollection are not returned
+        c2.enabled = False
+        c2.reindexObject(idxs=['enabled'])
+        vocabulary = CollectionVocabularyFactory(self.folder)
+        self.assertEquals([(u'Collection 1', '')],
+                          [term.title for term in vocabulary])
+
     def test_with_sub_faceted(self):
         """Test behaviour of the vocabulary when we have subfolders
            with activated faceted navigation."""
