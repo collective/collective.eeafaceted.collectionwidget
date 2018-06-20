@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<object name="portal_javascripts" meta_type="JavaScripts Registry">
+
+  <!-- Faceted View -->
+  <javascript id="++resource++collective.eeafaceted.collectionwidget.widgets.view.js"
+              insert-after="++resource++eea.faceted-navigation-expand.js"
+              bundle="faceted-view" />
+
+  <!-- Faceted Edit -->
+  <javascript id="++resource++collective.eeafaceted.collectionwidget.widgets.edit.js"
+              expression="python:'configure_faceted.html' in request.URL0"
+              insert-after="++resource++eea.facetednavigation.widgets.alphabets.edit.js"
+              bundle="faceted-edit" />
+
+</object>

@@ -2,11 +2,24 @@ Changelog
 =========
 
 
-0.10 (unreleased)
------------------
+1.0 (unreleased)
+----------------
 
-- Nothing changed yet.
-
+- Make widget compatible with `eea.facetednavigation >= 10.0`.
+  This makes it no more compatible with older version.
+  [gbastien]
+- Make package installable on both Plone4 and Plone5.
+  [gbastien]
+- Rely on `plone.app.contenttypes` instead `plone.app.collection`.
+  [gbastien]
+- Do not break to display the facetednavigation_view if no collection widget
+  defined, it is the case when just enabling the faceted navigation on a new
+  folder.
+  [gbastien]
+- Added field `enabled` (default=True) on a DashboardCollection make it possible
+  to disable it so it is no more displayed in the collection widget (portlet).
+  We specifically do not use a workflow for DashboardCollection.
+  [gbastien]
 
 0.9 (2018-05-25)
 ----------------

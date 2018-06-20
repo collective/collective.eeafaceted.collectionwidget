@@ -40,14 +40,26 @@ class BaseWidgetCase(IntegrationTestCase):
         )
         self.collection1 = api.content.create(
             id='collection1',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 1',
+            showNumberOfItems=True,
+            query=[],
+            sort_on='sortable_title',
+            sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
             container=self.category1
         )
         self.collection2 = api.content.create(
             id='collection2',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 2',
+            showNumberOfItems=True,
+            query=[],
+            sort_on='sortable_title',
+            sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
             container=self.category2
         )
         subtyper = getMultiAdapter(
@@ -67,8 +79,11 @@ class TestWidget(BaseWidgetCase):
         # collection outside a category folder does not have a category
         collection3 = api.content.create(
             id='collection3',
-            type='Collection',
+            type='DashboardCollection',
             title='Collection 3',
+            showNumberOfItems=True,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
             container=self.folder
         )
         vocabulary = widget._generate_vocabulary()
@@ -103,13 +118,18 @@ class TestWidget(BaseWidgetCase):
         cat1.manage_permission('View')
         cat1.reindexObjectSecurity()
         self.collection1.manage_permission('View', ('Authenticated', ))
-        member = self.portal.portal_membership.getAuthenticatedMember()
+        self.collection1.reindexObjectSecurity()
+        member = api.user.get_current()
         self.assertTrue(not member.has_permission('View', cat1))
         self.assertTrue(member.has_permission('View', self.collection1))
         # clean memoize for widget.categories,
         # it was memoized when calling _generate_vocabulary here above
         del IAnnotations(self.request)['plone.memoize']
         vocabulary = widget._generate_vocabulary()
+        # both collections appear in widget.vocabulary()
+        self.assertEqual(
+            [elt.token for elt in widget.vocabulary()],
+            [self.collection1.UID(), self.collection2.UID()])
         self.assertNotIn(u'Category 1', [c['term'].title for c in vocabulary.values()])
 
     def test_hidealloption(self):
@@ -198,7 +218,7 @@ class TestWidget(BaseWidgetCase):
         data = Criterion(vocabulary=COLLECTION_VOCABULARY)
         widget = CollectionWidget(self.folder, self.request, data=data)
         widget()
-        self.assertEquals(widget.default, None)
+        self.assertEquals(widget.default, '')
         # a default value is selected, it will use adapter_default_value
         collection1UID = self.collection1.UID()
         widget.data.default = collection1UID
@@ -216,7 +236,7 @@ class TestWidget(BaseWidgetCase):
         self.collection2.getParentNode().manage_delObjects(ids=[self.collection2.getId()])
         del IAnnotations(self.request)['plone.memoize']
         widget()
-        self.assertEquals(widget.default, None)
+        self.assertEquals(widget.default, '')
 
     def test_count(self):
         data = Criterion()
@@ -260,8 +280,8 @@ class TestWidget(BaseWidgetCase):
         # with collection_uid
         query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
         # the sort_on paramter of the collection is taken into account
-        self.assertTrue(self.collection1.getSort_on() == 'sortable_title')
-        self.assertTrue(self.collection1.getSort_reversed() is False)
+        self.assertTrue(self.collection1.sort_on == 'sortable_title')
+        self.assertTrue(self.collection1.sort_reversed is False)
         self.assertEquals(query_dico, {'review_state': {'query': ['private']},
                                        'sort_on': 'sortable_title'})
         # if sort_reversed is True, it is kept in the query

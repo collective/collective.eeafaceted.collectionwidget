@@ -15,14 +15,14 @@ from zope.component import queryUtility
 from zope.schema.interfaces import IVocabularyFactory
 
 from eea.facetednavigation.interfaces import ICriteria
-from eea.facetednavigation.interfaces import IFacetedNavigable
+from eea.facetednavigation.widgets import ViewPageTemplateFile
+from eea.facetednavigation.widgets.radio.interfaces import IRadioSchema
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
-from eea.facetednavigation.widgets import ViewPageTemplateFile
 
-collection_edit_schema = RadioWidget.edit_schema.copy()
-del collection_edit_schema["index"]
-del collection_edit_schema["catalog"]
+
+class ICollectionSchema(IRadioSchema):
+    """ """
 
 
 class CollectionWidget(RadioWidget):
@@ -33,13 +33,7 @@ class CollectionWidget(RadioWidget):
 
     index = ViewPageTemplateFile('widget.pt')
 
-    view_js = '++resource++collective.eeafaceted.collectionwidget.widgets.view.js'
-    edit_js = '++resource++collective.eeafaceted.collectionwidget.widgets.edit.js'
-    view_css = '++resource++eea.facetednavigation.widgets.tagscloud.view.css'
-    edit_css = '++resource++eea.facetednavigation.widgets.tagscloud.edit.css'
     css_class = 'faceted-tagscloud-collection-widget'
-
-    edit_schema = collection_edit_schema
 
     category_vocabulary = (
         'collective.eeafaceted.collectionwidget.collectioncategoryvocabulary'
@@ -53,6 +47,19 @@ class CollectionWidget(RadioWidget):
         self.context = self.criteria.context
         # display the fieldset around the widget when rendered?
         self.display_fieldset = True
+
+    def update(self):
+        """Remove fields 'index' and 'catalog', unused."""
+        super(CollectionWidget, self).update()
+        default_group = self.groups[0]
+        if 'index' in default_group.fields:
+            del default_group.fields['index']
+        if 'catalog' in default_group.widgets:
+            del default_group.fields['catalog']
+        if 'index' in default_group.widgets:
+            del default_group.widgets['index']
+        if 'catalog' in default_group.widgets:
+            del default_group.widgets['catalog']
 
     def __call__(self, **kwargs):
         # compute the vocabulary used in the widget
@@ -81,10 +88,10 @@ class CollectionWidget(RadioWidget):
                         sort_on_is_used = True
                     break
             if not sort_on_is_used:
-                if collection.getSort_on():
-                    query['sort_on'] = collection.getSort_on()
-                if collection.getSort_reversed():
-                    query['sort_order'] = collection.getSort_reversed() and 'descending' or ''
+                if collection.sort_on:
+                    query['sort_on'] = collection.sort_on
+                if collection.sort_reversed:
+                    query['sort_order'] = collection.sort_reversed and 'descending' or ''
             return query
         return {}
 
@@ -191,10 +198,14 @@ class CollectionWidget(RadioWidget):
         categories_token = [term.token for term in self.categories]
         for term in self.vocabulary():
             parent = aq_parent(term.value)
-            if parent.UID() not in categories_token:
+            # collections directly added to context, no intermediate category
+            if parent == self.context and parent.UID() not in categories_token:
                 category = ''
-            else:
+            elif parent.UID() in categories_token:
                 category = parent.UID()
+            else:
+                # parent is not visible, a subfolder private for current user
+                continue
 
             voc[category]['collections'].append(term)
 

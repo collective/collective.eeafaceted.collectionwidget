@@ -16,7 +16,7 @@ class DefaultValue(object):
             for collection_term in group['collections']:
                 existingCollectionUids.append(collection_term.token)
         if widget.data.default not in existingCollectionUids:
-            self.value = existingCollectionUids and existingCollectionUids[0] or None
+            self.value = existingCollectionUids and existingCollectionUids[0] or ''
 
 
 class KeptCriteria(object):

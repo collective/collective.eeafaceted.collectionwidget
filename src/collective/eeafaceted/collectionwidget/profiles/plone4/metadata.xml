@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<metadata>
+  <version>2</version>
+  <dependencies>
+    <dependency>profile-plone.app.dexterity:default</dependency>
+    <dependency>profile-plone.formwidget.querystring:default</dependency>
+    <dependency>profile-collective.eeafaceted.collectionwidget:universal</dependency>
+  </dependencies>
+</metadata>

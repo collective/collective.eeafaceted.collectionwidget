@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2018-06-15 07:51+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.eeafaceted.collectionwidget\n"
+"X-is-fallback-for: en-au en-ca en-gb en-us\n"
+
+#: ./profiles/common/types/DashboardCollection.xml
+msgid "DashboardCollection"
+msgstr ""
+
+#: ./profiles.zcml:29
+msgid "Extension profile for collective.eeafaceted.collectionwidget settings that aren't version dependent."
+msgstr ""
+
+#: ./profiles.zcml:14
+msgid "Extension profile for collective.eeafaceted.collectionwidget."
+msgstr ""
+
+#: ./interfaces.py:45
+msgid "Show number of items in filter"
+msgstr ""
+
+#: ./testing.zcml:16
+msgid "Steps to ease tests of collective.eeafaceted.collectionwidget"
+msgstr ""
+
+#: ./interfaces.py:46
+msgid "This will display the number of elements this search return in the widget (or portlet) collection. Take care that this is doing the search to display the result so enable it only if necessary."
+msgstr ""
+
+#: ./profiles.zcml:14
+msgid "collective.eeafaceted.collectionwidget"
+msgstr ""
+
+#: ./profiles.zcml:29
+msgid "collective.eeafaceted.collectionwidget Common Configuration"
+msgstr ""
+
+#: ./testing.zcml:16
+msgid "collective.eeafaceted.collectionwidget tests"
+msgstr ""

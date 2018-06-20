@@ -22,7 +22,8 @@ import collective.eeafaceted.collectionwidget
 class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
 
     defaultBases = (PLONE_FIXTURE,)
-    products = ('collective.eeafaceted.collectionwidget',)
+    products = ('collective.eeafaceted.collectionwidget',
+                'Products.DateRecurringIndex')
 
     def setUpZope(self, app, configurationContext):
         """Set up Zope."""
@@ -48,24 +49,34 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
         folder2 = portal[folder2_id]
         folder2.reindexObject()
         folder2.unrestrictedTraverse('@@faceted_subtyper').enable()
-        collection = portal.portal_types.Collection._constructInstance(
+        collection = portal.portal_types.DashboardCollection._constructInstance(
             folder2,
             id='collection_review_state', title=u"Review state",
             query=[{'i': 'review_state',
                     'o': 'plone.app.querystring.operation.selection.is',
                     'v': ['published']}],
+            showNumberOfItems=True,
+            sort_on='',
+            sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
         collection_uid = collection.UID()
         criteria = queryAdapter(folder2, ICriteria)
         # edit collection-link criteria
         criteria.edit('c1', default=collection_uid)
         # create a second collection without review_state criterion
-        portal.portal_types.Collection._constructInstance(
+        portal.portal_types.DashboardCollection._constructInstance(
             folder2,
             id='collection_wo_review_state', title=u"Creator",
             query=[{'i': 'Creator',
                     'o': 'plone.app.querystring.operation.selection.is',
                     'v': ['_test_user_1']}],
+            showNumberOfItems=True,
+            sort_on='',
+            sort_reversed=False,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[],
         )
 
         # Commit so that the test browser sees these objects

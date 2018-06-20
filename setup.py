@@ -6,20 +6,14 @@ from setuptools import setup
 
 
 long_description = (
-    open('README.rst').read()
-    + '\n' +
-    'Contributors\n'
-    '============\n'
-    + '\n' +
-    open('CONTRIBUTORS.rst').read()
-    + '\n\n' +
-    open('CHANGES.rst').read()
-    + '\n')
-
+    open('README.rst').read() +
+    '\nContributors\n============\n\n' +
+    open('CONTRIBUTORS.rst').read() + '\n\n' +
+    open('CHANGES.rst').read() + '\n')
 
 setup(
     name='collective.eeafaceted.collectionwidget',
-    version='0.10.dev0',
+    version='1.0.dev0',
     description=(
         "eea.facetednavigation widget that enables selecting "
         "a collection (among several) as base filter"),
@@ -29,6 +23,8 @@ setup(
         "Environment :: Web Environment",
         "Framework :: Plone",
         "Framework :: Plone :: 4.3",
+        "Framework :: Plone :: 5.0",
+        "Framework :: Plone :: 5.1",
         "Programming Language :: Python",
         "Programming Language :: Python :: 2.7",
     ],
@@ -45,8 +41,9 @@ setup(
     install_requires=[
         'plone.api',
         'setuptools',
-        'eea.facetednavigation',
-        'plone.app.collection',
+        'collective.behavior.talcondition',
+        'eea.facetednavigation >= 10.0',
+        'plone.app.contenttypes',
     ],
     extras_require={
         'test': [

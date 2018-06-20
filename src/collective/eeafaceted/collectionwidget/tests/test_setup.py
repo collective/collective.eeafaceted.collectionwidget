@@ -24,7 +24,10 @@ class TestInstall(IntegrationTestCase):
 
     # browserlayer.xml
     def test_browserlayer(self):
-        """Test that ICollectiveEeafacetedCollectionwidgetLayer is registered."""
+        """Test that ICollectiveEeafacetedCollectionwidgetLayer is registered as well as
+           the plone.app.contenttypes BrowserLayer that is necessary for default listing_view."""
         from collective.eeafaceted.collectionwidget.interfaces import ICollectiveEeafacetedCollectionwidgetLayer
+        from plone.app.contenttypes.interfaces import IPloneAppContenttypesLayer
         from plone.browserlayer import utils
         self.assertIn(ICollectiveEeafacetedCollectionwidgetLayer, utils.registered_layers())
+        self.assertIn(IPloneAppContenttypesLayer, utils.registered_layers())
