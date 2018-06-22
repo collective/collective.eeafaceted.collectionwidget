@@ -5,8 +5,8 @@ Changelog
 1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Corrected bad release, include last code.
+  [gbastien]
 
 1.0 (2018-06-20)
 ----------------
