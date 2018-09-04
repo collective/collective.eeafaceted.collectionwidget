@@ -2,11 +2,17 @@ Changelog
 =========
 
 
-1.2 (unreleased)
+1.3 (unreleased)
 ----------------
 
 - Nothing changed yet.
 
+
+1.2 (2018-09-04)
+----------------
+
+- Added translations for `Enabled?`.
+  [gbastien]
 
 1.1 (2018-06-22)
 ----------------
