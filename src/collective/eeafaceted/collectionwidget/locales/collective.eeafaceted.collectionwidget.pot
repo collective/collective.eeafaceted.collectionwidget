@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-06-15 07:51+0000\n"
+"POT-Creation-Date: 2018-08-31 10:07+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,6 +21,10 @@ msgstr ""
 msgid "DashboardCollection"
 msgstr ""
 
+#: ./interfaces.py:56
+msgid "Enabled?"
+msgstr ""
+
 #: ./profiles.zcml:29
 msgid "Extension profile for collective.eeafaceted.collectionwidget settings that aren't version dependent."
 msgstr ""
@@ -29,7 +33,7 @@ msgstr ""
 msgid "Extension profile for collective.eeafaceted.collectionwidget."
 msgstr ""
 
-#: ./interfaces.py:45
+#: ./interfaces.py:46
 msgid "Show number of items in filter"
 msgstr ""
 
@@ -37,7 +41,7 @@ msgstr ""
 msgid "Steps to ease tests of collective.eeafaceted.collectionwidget"
 msgstr ""
 
-#: ./interfaces.py:46
+#: ./interfaces.py:47
 msgid "This will display the number of elements this search return in the widget (or portlet) collection. Take care that this is doing the search to display the result so enable it only if necessary."
 msgstr ""
 

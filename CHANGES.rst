@@ -5,8 +5,8 @@ Changelog
 1.2 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added translations for `Enabled?`.
+  [gbastien]
 
 1.1 (2018-06-22)
 ----------------
