@@ -5,8 +5,10 @@ Changelog
 1.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Removed AT Collection creation from tests as it is not used and it fails
+  because of a bug in plone.api==1.8.4.
+  See https://github.com/plone/plone.api/pull/414
+  [gbastien]
 
 1.2 (2018-09-04)
 ----------------
