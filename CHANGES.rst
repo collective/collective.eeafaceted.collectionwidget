@@ -9,6 +9,10 @@ Changelog
   because of a bug in plone.api==1.8.4.
   See https://github.com/plone/plone.api/pull/414
   [gbastien]
+- Define a `csscompilation` name for collection widget own CSS ressource.
+  Do redefine as little as possible when including widget view/edit css/js into
+  eea.facetednavigation existing bundles.
+  [gbastien]
 
 1.2 (2018-09-04)
 ----------------
