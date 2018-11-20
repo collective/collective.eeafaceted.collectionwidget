@@ -12,6 +12,7 @@
     <include package="plone.api" />
     <include package="collective.behavior.talcondition"/>
     <include package="eea.facetednavigation" />
+    <include file="events.zcml" />
     <include file="permissions.zcml" />
     <include file="profiles.zcml" />
 
@@ -20,6 +21,9 @@
     <include package=".widgets" />
 
     <!-- Vocabularies -->
+    <utility component=".vocabulary.CachedCollectionVocabularyFactory"
+             name="collective.eeafaceted.collectionwidget.cachedcollectionvocabulary" />
+
     <utility component=".vocabulary.CollectionVocabularyFactory"
              name="collective.eeafaceted.collectionwidget.collectionvocabulary" />
 

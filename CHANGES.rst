@@ -13,6 +13,10 @@ Changelog
   Do redefine as little as possible when including widget view/edit css/js into
   eea.facetednavigation existing bundles.
   [gbastien]
+- Moved CachedCollectionVocabulary from imio.dashboard, now named
+    `collective.eeafaceted.collectionwidget.cachedcollectionvocabulary`.
+  Moved dashboard collection related events.
+  [sgeulette]
 
 1.2 (2018-09-04)
 ----------------

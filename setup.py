@@ -43,6 +43,7 @@ setup(
         'setuptools',
         'collective.behavior.talcondition',
         'eea.facetednavigation >= 10.0',
+        'imio.helpers',
         'plone.app.contenttypes',
     ],
     extras_require={
