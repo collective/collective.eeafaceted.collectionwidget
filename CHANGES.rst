@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.3 (unreleased)
+1.3 (2018-11-20)
 ----------------
 
 - Removed AT Collection creation from tests as it is not used and it fails
