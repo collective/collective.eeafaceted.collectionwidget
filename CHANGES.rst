@@ -5,8 +5,8 @@ Changelog
 1.4 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Migrate IFacetedNavigable criterias, replacing old vocabulary by `cachedcollectionvocabulary`.
+  [sgeulette]
 
 1.3 (2018-11-20)
 ----------------

@@ -12,7 +12,7 @@
         title="collective.eeafaceted.collectionwidget"
         description="Extension profile for collective.eeafaceted.collectionwidget."
         provides="Products.GenericSetup.interfaces.EXTENSION" />
-  
+
     <genericsetup:registerProfile
         zcml:condition="not-have plone-5"
         name="default"
@@ -20,7 +20,7 @@
         title="collective.eeafaceted.collectionwidget"
         description="Extension profile for collective.eeafaceted.collectionwidget."
         provides="Products.GenericSetup.interfaces.EXTENSION" />
-  
+
     <genericsetup:registerProfile
         name="universal"
         directory="profiles/common"
@@ -57,5 +57,13 @@
           description=""
           import_steps="workflow" />
     </genericsetup:upgradeSteps>
-  
+
+    <genericsetup:upgradeStep
+        title="Correct collectionwidget vocabulary name"
+        description=""
+        source="2"
+        destination="3"
+        handler="collective.eeafaceted.collectionwidget.upgrades.upgrade_to_3"
+        profile="collective.eeafaceted.collectionwidget:default" />
+
 </configure>
