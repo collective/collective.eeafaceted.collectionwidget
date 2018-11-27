@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
-from Products.CMFCore.utils import getToolByName
-from Products.Five.browser import BrowserView
-from eea.facetednavigation.browser.app.view import FacetedContainerView
-from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
 from collective.eeafaceted.collectionwidget.content.dashboardcollection import IDashboardCollection
 from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidgetDefinedException
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
+from eea.facetednavigation.browser.app.view import FacetedContainerView
+from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
+from plone import api
+from Products.Five.browser import BrowserView
 
 
 class RenderCategoryView(BrowserView):
@@ -13,12 +13,19 @@ class RenderCategoryView(BrowserView):
     def __init__(self, context, request):
         ''' '''
         BrowserView.__init__(self, context, request)
-        self.portal = getToolByName(self.context, 'portal_url').getPortalObject()
+        self.portal = api.portal.get()
         self.portal_url = self.portal.absolute_url()
+
+    def _get_category_template(self):
+        '''Base method that returns the ViewPageTemplate to
+           use to display the category.
+           Made to be overrided, returns a ViewPageTemplate or None.'''
+        return None
 
     def __call__(self, widget):
         self.widget = widget
-        return self.index()
+        category_template = self._get_category_template()
+        return category_template and category_template(self) or self.index()
 
 
 class RenderTermView(BrowserView):
@@ -66,7 +73,7 @@ class FacetedDashboardView(FacetedContainerView):
             if not self.request['HTTP_REFERER'].endswith('configure_faceted.html') and \
                not self.request['URL'].endswith('folder_contents') and \
                not self.request.get('no_redirect', '0') == '1':
-                catalog = getToolByName(self.context, 'portal_catalog')
+                catalog = api.portal.get_tool('portal_catalog')
                 brains = catalog(UID=criterion.default)
                 if brains:
                     collection = brains[0].getObject()

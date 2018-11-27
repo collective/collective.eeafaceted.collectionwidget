@@ -5,8 +5,12 @@ Changelog
 1.4 (unreleased)
 ----------------
 
-- Migrate IFacetedNavigable criterias, replacing old vocabulary by `cachedcollectionvocabulary`.
+- Migrate IFacetedNavigable criterias, replacing old vocabulary by
+ `cachedcollectionvocabulary`.
   [sgeulette]
+- Added method `RenderCategoryView._get_category_template` to formalize how to
+  get template used to display a term category.
+  [gbastien]
 
 1.3 (2018-11-20)
 ----------------
