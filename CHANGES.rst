@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.4 (unreleased)
+1.4 (2018-11-29)
 ----------------
 
 - Migrate IFacetedNavigable criterias, replacing old vocabulary by
