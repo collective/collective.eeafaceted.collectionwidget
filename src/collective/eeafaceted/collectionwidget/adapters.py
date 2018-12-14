@@ -3,7 +3,7 @@
 from zope.globalrequest import getRequest
 from Products.CMFCore.utils import getToolByName
 from plone.app.querystring import queryparser
-
+from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 
 class DefaultValue(object):
     """If we  have a default value, check if it is still available
@@ -44,7 +44,8 @@ class KeptCriteria(object):
                 collection_criteria = queryparser.parseFormquery(collection, collection.query)
                 advanced_criteria = self.widget.advanced_criteria
                 for wid, index in advanced_criteria.items():
-                    if index not in collection_criteria:
+                    if index not in collection_criteria or \
+                       isinstance(catalog.Indexes.get(index), DateIndex):
                         res[wid] = []
                     else:
                         enabled_checkboxes = collection_criteria[index].get('query', [])
