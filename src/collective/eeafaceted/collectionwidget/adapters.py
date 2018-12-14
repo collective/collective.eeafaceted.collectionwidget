@@ -44,11 +44,14 @@ class KeptCriteria(object):
                 collection_criteria = queryparser.parseFormquery(collection, collection.query)
                 advanced_criteria = self.widget.advanced_criteria
                 for wid, index in advanced_criteria.items():
-                    if index not in collection_criteria or \
-                       isinstance(catalog.Indexes.get(index), DateIndex):
+                    if index not in collection_criteria:
                         res[wid] = []
                     else:
                         enabled_checkboxes = collection_criteria[index].get('query', [])
+                        # special bypass for daterange, if we have a list of dates, we use []
+                        if isinstance(catalog.Indexes.get(index), DateIndex) and \
+                           isinstance(enabled_checkboxes, list):
+                            enabled_checkboxes = []
 
                         if isinstance(enabled_checkboxes, basestring):
                             # the case {'Creator': {'query': 'test-user'}} go here
