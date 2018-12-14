@@ -24,7 +24,7 @@ install:
   - pip install setuptools==33.1.1
   - mkdir -p buildout-cache/{eggs,downloads}
   - python bootstrap.py -c travis.cfg --setuptools-version=33.1.1 --version=2.10.0
-  - bin/buildout -Nc travis.cfg
+  - bin/buildout -c travis.cfg
 
 before_script:
   - "export DISPLAY=:99.0"

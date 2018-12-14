@@ -5,6 +5,7 @@ from Products.CMFCore.utils import getToolByName
 from plone.app.querystring import queryparser
 from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 
+
 class DefaultValue(object):
     """If we  have a default value, check if it is still available
        it could have been deleted or used vocabulary could not contain it anymore.
