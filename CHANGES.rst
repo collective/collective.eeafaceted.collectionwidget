@@ -5,8 +5,9 @@ Changelog
 1.5 (unreleased)
 ----------------
 
-- Temporary fix to not crash in KeptCriteria adapter when managing daterange
-  widget.  For now, if index is a DateIndex, we do not keep criteria for it.
+- Temporary fix to not crash in `KeptCriteria` adapter when managing daterange
+  widget.  For now, if index is a `DateIndex` and values is a `list`,
+  we do not keep criteria for it.
   [gbastien]
 
 1.4 (2018-11-29)
