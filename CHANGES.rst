@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.5 (unreleased)
+1.5 (2018-12-18)
 ----------------
 
 - Temporary fix to not crash in `KeptCriteria` adapter when managing daterange
