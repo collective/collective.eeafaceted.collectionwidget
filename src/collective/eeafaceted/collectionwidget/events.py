@@ -8,6 +8,7 @@
 #
 
 from imio.helpers.cache import invalidate_cachekey_volatile_for
+from plone import api
 
 
 def onDashboardCollectionCreated(obj, event):
@@ -22,4 +23,8 @@ def onDashboardCollectionModified(obj, event):
 
 def onDashboardCollectionRemoved(obj, event):
     '''Called whenever a WF transition was triggered on a DashboardCollection.'''
+    try:
+        api.portal.get()
+    except api.portal.CannotGetPortalError:
+        return  # when deleting site
     invalidate_cachekey_volatile_for('collective.eeafaceted.collectionwidget.cachedcollectionvocabulary')

@@ -5,8 +5,8 @@ Changelog
 1.6 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Avoid error when deleting site.
+  [sgeulette]
 
 1.5 (2018-12-18)
 ----------------
