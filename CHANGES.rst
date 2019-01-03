@@ -7,6 +7,9 @@ Changelog
 
 - Avoid error when deleting site.
   [sgeulette]
+- Factorized code called in `widget.__call__` in `widget._initialize_widget`
+  method so it is easy to call from outside.
+  [gbastien]
 
 1.5 (2018-12-18)
 ----------------

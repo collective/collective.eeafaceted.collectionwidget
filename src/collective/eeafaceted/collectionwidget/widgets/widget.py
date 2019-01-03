@@ -61,9 +61,13 @@ class CollectionWidget(RadioWidget):
         if 'catalog' in default_group.widgets:
             del default_group.widgets['catalog']
 
+    def _initialize_widget(self):
+        """ """
+        self.grouped_vocabulary = self._generate_vocabulary()
+
     def __call__(self, **kwargs):
         # compute the vocabulary used in the widget
-        self.grouped_vocabulary = self._generate_vocabulary()
+        self._initialize_widget()
         return super(CollectionWidget, self).__call__(**kwargs)
 
     def query(self, form):
