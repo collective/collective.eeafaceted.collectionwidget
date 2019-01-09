@@ -5,7 +5,8 @@ Changelog
 1.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Fix an issue with the widget used in combination with collective.solr
+  [mpeeters]
 
 
 1.6 (2019-01-03)
