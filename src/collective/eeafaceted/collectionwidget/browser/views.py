@@ -30,15 +30,20 @@ class RenderCategoryView(BrowserView):
 
 class RenderTermView(BrowserView):
 
+    compute_count_on_init = True
+
     def display_number_of_items(self):
         """Display number of items in the collection."""
         if not IDashboardCollection.providedBy(self.context):
             return True
         return self.context.showNumberOfItems
 
-    def number_of_items(self):
+    def number_of_items(self, init=False):
         """Return the number of items in the collection."""
-        return len(self.context.results())
+        if init and not self.compute_count_on_init:
+            return "..."
+        else:
+            return len(self.context.results())
 
     def __call__(self, term, category, widget):
         self.term = term
