@@ -9,6 +9,8 @@ Changelog
   will do the collections count be computed when the widget is rendered. This
   makes it possible to disable it.
   [gbastien]
+- Fix an issue with the widget used in combination with collective.solr
+  [mpeeters]
 
 1.6 (2019-01-03)
 ----------------

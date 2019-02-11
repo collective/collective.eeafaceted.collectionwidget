@@ -30,6 +30,7 @@ class CollectionWidget(RadioWidget):
 
     widget_type = 'collection-link'
     widget_label = 'Collection Link'
+    faceted_field = False
 
     index = ViewPageTemplateFile('widget.pt')
 
