@@ -5,8 +5,10 @@ Changelog
 1.7 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added parameter RenderTermView.compute_count_on_init, True by default that
+  will do the collections count be computed when the widget is rendered. This
+  makes it possible to disable it.
+  [gbastien]
 
 1.6 (2019-01-03)
 ----------------
