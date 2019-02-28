@@ -11,6 +11,10 @@ Changelog
   [gbastien]
 - Fix an issue with the widget used in combination with collective.solr
   [mpeeters]
+- In `utils._updateDefaultCollectionFor` use `ICriteria.edit` to change value
+  as it handles persistence instead doing it ourselves.
+  After value is changed, trigger `FacetedGlobalSettingsChangedEvent`.
+  [gbastien]
 
 1.6 (2019-01-03)
 ----------------

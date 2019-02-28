@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 
-import json
+from config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
+from config import NO_FACETED_EXCEPTION_MSG
 from eea.facetednavigation.criteria.interfaces import ICriteria
+from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
+from interfaces import NoCollectionWidgetDefinedException
+from interfaces import NoFacetedViewDefinedException
 from plone import api
-
-from config import NO_COLLECTIONWIDGET_EXCEPTION_MSG, NO_FACETED_EXCEPTION_MSG
-from interfaces import NoCollectionWidgetDefinedException, NoFacetedViewDefinedException
 from widgets.widget import CollectionWidget
+from zope.event import notify
+
+import json
 
 
 def _get_criterion(faceted_context, criterion_type):
@@ -56,6 +60,7 @@ def _updateDefaultCollectionFor(folderObj, default_uid):
         raise NoFacetedViewDefinedException(NO_FACETED_EXCEPTION_MSG)
 
     criterion = getCollectionLinkCriterion(folderObj)
-    criterion.default = default_uid
-    # make change persist!
-    ICriteria(folderObj).criteria._p_changed = True
+    # use ICriteria.edit so change is persisted
+    ICriteria(folderObj).edit(criterion.__name__, **{'default': default_uid})
+    # notify that settings changed
+    notify(FacetedGlobalSettingsChangedEvent(folderObj))
