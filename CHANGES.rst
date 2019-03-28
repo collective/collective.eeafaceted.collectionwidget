@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.7 (unreleased)
+1.7 (2019-03-28)
 ----------------
 
 - Added parameter RenderTermView.compute_count_on_init, True by default that
