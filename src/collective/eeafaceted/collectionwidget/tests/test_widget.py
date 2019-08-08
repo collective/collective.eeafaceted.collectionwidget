@@ -156,10 +156,10 @@ class TestWidget(BaseWidgetCase):
         )
         data.sortreversed = u'0'
         widget = CollectionWidget(self.folder, self.request, data=data)
-        self.assertEquals(widget.default_term_value, self.collection1)
+        self.assertEquals(widget.default_term_value, self.collection1.absolute_url_path())
         data.sortreversed = u'1'
         widget = CollectionWidget(self.folder, self.request, data=data)
-        self.assertEquals(widget.default_term_value, self.collection2)
+        self.assertEquals(widget.default_term_value, self.collection2.absolute_url_path())
 
     def test_advanced_criteria(self):
         # we have an advanced criteria 'review_state' with name 'c2'
