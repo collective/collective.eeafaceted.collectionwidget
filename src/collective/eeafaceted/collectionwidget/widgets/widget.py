@@ -1,24 +1,25 @@
 # encoding: utf-8
 
-import json
-from Products.CMFCore.utils import getToolByName
+from Acquisition import aq_parent
 from collections import OrderedDict
 from collective.eeafaceted.collectionwidget.interfaces import IKeptCriteria
 from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
-from plone.app.querystring import queryparser
-from plone.memoize.view import memoize
-from Acquisition import aq_parent
 from DateTime import DateTime
-from zope.component import getUtility
-from zope.component import queryMultiAdapter
-from zope.component import queryUtility
-from zope.schema.interfaces import IVocabularyFactory
-
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets import ViewPageTemplateFile
 from eea.facetednavigation.widgets.radio.interfaces import IRadioSchema
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
+from plone import api
+from plone.app.querystring import queryparser
+from plone.memoize.view import memoize
+from Products.CMFCore.utils import getToolByName
+from zope.component import getUtility
+from zope.component import queryMultiAdapter
+from zope.component import queryUtility
+from zope.schema.interfaces import IVocabularyFactory
+
+import json
 
 
 class ICollectionSchema(IRadioSchema):
@@ -48,6 +49,7 @@ class CollectionWidget(RadioWidget):
         self.context = self.criteria.context
         # display the fieldset around the widget when rendered?
         self.display_fieldset = True
+        self.portal = api.portal.get()
 
     def update(self):
         """Remove fields 'index' and 'catalog', unused."""
@@ -202,7 +204,8 @@ class CollectionWidget(RadioWidget):
 
         categories_token = [term.token for term in self.categories]
         for term in self.vocabulary():
-            parent = aq_parent(term.value)
+            collection = self.portal.unrestrictedTraverse(term.value)
+            parent = aq_parent(collection)
             # collections directly added to context, no intermediate category
             if parent == self.context and parent.UID() not in categories_token:
                 category = ''
@@ -221,3 +224,15 @@ class CollectionWidget(RadioWidget):
                 res[k] = v
 
         return res
+
+    def render_category(self, term, view_name='@@render_collection_widget_category'):
+        """ """
+        collection = self.portal.unrestrictedTraverse(term.value)
+        rendered_term = collection.unrestrictedTraverse(view_name)(widget=self)
+        return rendered_term
+
+    def render_term(self, term, category, view_name='@@render_collection_widget_term'):
+        """ """
+        collection = self.portal.unrestrictedTraverse(term.value)
+        rendered_term = collection.unrestrictedTraverse(view_name)(term, category, widget=self)
+        return rendered_term

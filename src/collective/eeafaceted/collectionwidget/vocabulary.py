@@ -47,7 +47,7 @@ class CollectionVocabulary(object):
                             redirect_to = self._compute_redirect_to(collection, criterion)
                             break
 
-            items.append(SimpleTerm(collection,
+            items.append(SimpleTerm(brain.getPath(),
                                     brain.UID,
                                     (safe_unicode(brain.Title),
                                      redirect_to)))
@@ -118,7 +118,7 @@ class CollectionCategoryVocabulary(object):
         while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
             root = root.aq_inner.aq_parent
         adapter = getAdapter(root, ICollectionCategories)
-        items = [SimpleTerm(value, token, safe_unicode(value.Title())) for token, value in adapter.values]
+        items = [SimpleTerm(value.getPath(), token, safe_unicode(value.Title)) for token, value in adapter.values]
         return SimpleVocabulary(items)
 
 

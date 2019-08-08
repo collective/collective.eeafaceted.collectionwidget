@@ -5,8 +5,11 @@ Changelog
 1.8 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Do not store the collection object in `term.value` of vocabulary
+  `CollectionVocabulary` because it can be ram cached
+  (in `CachedCollectionVocabulary` for example) and ram caching methods
+  returning objects is a bad idea.
+  [gbastien]
 
 1.7 (2019-03-28)
 ----------------
