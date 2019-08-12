@@ -10,6 +10,9 @@ Changelog
   (in `CachedCollectionVocabulary` for example) and ram caching methods
   returning objects is a bad idea.
   [gbastien]
+- Added `caching=True` parameter to `utils.getCurrentCollection` so it is
+  computed one time by request for a given `faceted_context`.
+  [gbastien]
 
 1.7 (2019-03-28)
 ----------------

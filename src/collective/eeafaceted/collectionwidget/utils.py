@@ -9,7 +9,9 @@ from interfaces import NoCollectionWidgetDefinedException
 from interfaces import NoFacetedViewDefinedException
 from plone import api
 from widgets.widget import CollectionWidget
+from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
+from zope.globalrequest import getRequest
 
 import json
 
@@ -36,20 +38,36 @@ def getCollectionLinkCriterion(faceted_context):
     return criterion
 
 
-def getCurrentCollection(faceted_context):
+def getCurrentCollection(faceted_context, caching=True):
     """Return the Collection currently used by the faceted :
        - first get the collection criterion;
-       - then look in the request the used UID and get the corresponding Collection."""
-    criterion = getCollectionLinkCriterion(faceted_context)
-    collectionUID = faceted_context.REQUEST.form.get('{0}[]'.format(criterion.__name__))
-    # if not collectionUID, maybe we have a 'facetedQuery' in the REQUEST
-    if not collectionUID and \
-       ('facetedQuery' in faceted_context.REQUEST.form and faceted_context.REQUEST.form['facetedQuery']):
-        query = json.loads(faceted_context.REQUEST.form['facetedQuery'])
-        collectionUID = query.get(criterion.__name__)
-    if collectionUID:
-        catalog = api.portal.get_tool('portal_catalog')
-        return catalog(UID=collectionUID)[0].getObject()
+       - then look in the request the used UID and get the corresponding Collection.
+       If p_caching is True, the collection is stored in request cache."""
+    collection = None
+    if caching:
+        request = getRequest()
+        if request:
+            key = 'collectionwidget-utils-getCurrentCollection-{0}'.format(faceted_context.UID())
+            cache = IAnnotations(request)
+            collection = cache.get(key, None)
+        else:
+            caching = False
+
+    if collection is None:
+        criterion = getCollectionLinkCriterion(faceted_context)
+        collectionUID = faceted_context.REQUEST.form.get('{0}[]'.format(criterion.__name__))
+        # if not collectionUID, maybe we have a 'facetedQuery' in the REQUEST
+        if not collectionUID and \
+           ('facetedQuery' in faceted_context.REQUEST.form and faceted_context.REQUEST.form['facetedQuery']):
+            query = json.loads(faceted_context.REQUEST.form['facetedQuery'])
+            collectionUID = query.get(criterion.__name__)
+        if collectionUID:
+            catalog = api.portal.get_tool('portal_catalog')
+            collection = catalog(UID=collectionUID)[0].getObject()
+        if caching:
+            cache[key] = collection
+
+    return collection
 
 
 def _updateDefaultCollectionFor(folderObj, default_uid):
