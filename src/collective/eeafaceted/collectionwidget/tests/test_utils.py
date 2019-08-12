@@ -9,6 +9,7 @@ from collective.eeafaceted.collectionwidget.utils import _updateDefaultCollectio
 from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
+from zope.annotation import IAnnotations
 
 
 class TestUtils(BaseWidgetCase):
@@ -58,6 +59,9 @@ class TestUtils(BaseWidgetCase):
         # it works also with 'facetedQuery' build in the REQUEST when generating
         # a template on a dashboard
         del request.form[criterion_name]
+        # getcurrentCollection is cached, remove infos in request annotation
+        cache_key = 'collectionwidget-utils-getCurrentCollection-{0}'.format(self.folder.UID())
+        del IAnnotations(request)[cache_key]
         self.assertIsNone(getCurrentCollection(self.folder))
         request.form['facetedQuery'] = '{{"c3":["20"],"b_start":["0"],"{0}":["{1}"]}}'.format(
             criterion.__name__, dashcoll.UID())
