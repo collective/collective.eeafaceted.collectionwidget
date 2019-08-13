@@ -49,7 +49,7 @@ Changelog
 ----------------
 
 - Migrate IFacetedNavigable criterias, replacing old vocabulary by
- `cachedcollectionvocabulary`.
+  `cachedcollectionvocabulary`.
   [sgeulette]
 - Added method `RenderCategoryView._get_category_template` to formalize how to
   get template used to display a term category.
@@ -67,7 +67,7 @@ Changelog
   eea.facetednavigation existing bundles.
   [gbastien]
 - Moved CachedCollectionVocabulary from imio.dashboard, now named
-    `collective.eeafaceted.collectionwidget.cachedcollectionvocabulary`.
+  `collective.eeafaceted.collectionwidget.cachedcollectionvocabulary`.
   Moved dashboard collection related events.
   [sgeulette]
 

@@ -23,10 +23,9 @@ If you add Collections to a folder on which faceted navigation is enabled, the w
 the found Collections and use it as base searches.
 A special content DashboardCollection is also provided, it is based on the Collection but use additional
 behaviors :
-- The 'DashboardCollection' behavior that provides an extra field showNumberOfItems, making it possible
-  to display the counter on a per DashboardCollection basis;
-- The 'TAL condition' behavior that adds a field into which defining a TAL expression that will make it
-  possible to hide or show a Collection in the widget.
+
+- The 'DashboardCollection' behavior that provides an extra field showNumberOfItems, making it possible to display the counter on a per DashboardCollection basis;
+- The 'TAL condition' behavior that adds a field into which defining a TAL expression that will make it possible to hide or show a Collection in the widget.
 
 Installation
 ============
@@ -45,3 +44,4 @@ eea.facetednavigation version
 
 From version 1.0, the widget requires at least `eea.facetednavigation` 10.0 where widget is built using `z3c.form`.
 If you are using `eea.facetednavigation` < 10.0, you need to use a version of `collective.eeafaceted.collectionwidget` < 1.0.
+
