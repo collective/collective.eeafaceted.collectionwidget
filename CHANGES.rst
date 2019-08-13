@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.8 (unreleased)
+1.8 (2019-08-13)
 ----------------
 
 - Do not store the collection object in `term.value` of vocabulary
