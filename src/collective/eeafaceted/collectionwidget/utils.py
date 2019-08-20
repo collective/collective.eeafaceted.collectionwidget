@@ -16,11 +16,14 @@ from zope.globalrequest import getRequest
 import json
 
 
-def _get_criterion(faceted_context, criterion_type):
+def _get_criterion(faceted_context, criterion_type, raise_on_error=True):
     """Return the given criterion_type instance of a
        context with a faceted navigation/search view on it."""
     if not IFacetedNavigable.providedBy(faceted_context):
-        raise NoFacetedViewDefinedException(NO_FACETED_EXCEPTION_MSG)
+        if raise_on_error:
+            raise NoFacetedViewDefinedException(NO_FACETED_EXCEPTION_MSG)
+        else:
+            return None
 
     criteria = ICriteria(faceted_context).criteria
     for criterion in criteria:

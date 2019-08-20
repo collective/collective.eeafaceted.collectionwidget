@@ -5,8 +5,10 @@ Changelog
 1.9 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Added parameter `raise_on_error=True` to `utils._get_criterion` so it will
+  return `None` in case passed context is not a faceted context instead
+  raising an error.
+  [gbastien]
 
 1.8 (2019-08-13)
 ----------------
