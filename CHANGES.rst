@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.9 (unreleased)
+1.9 (2019-08-23)
 ----------------
 
 - Added parameter `raise_on_error=True` to `utils._get_criterion` so it will
