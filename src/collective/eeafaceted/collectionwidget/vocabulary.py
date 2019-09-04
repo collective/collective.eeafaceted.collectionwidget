@@ -136,13 +136,15 @@ class CachedCollectionVocabulary(CollectionVocabulary):
            - current user, in case faceted is stored in the user personal folder;
            - a stored cache volatile that is destroyed if a DashboardCollection is modified somewhere;
            - the first facetednavigable context encountered when ascending context parents
-             (useful when collections are defined in a single folder but displayed on various faceted container).'''
+             (useful when collections are defined in a single folder but displayed on various faceted container);
+           - the application is accessed thru different portal_url.'''
         user = api.user.get_current()
         date = get_cachekey_volatile('collective.eeafaceted.collectionwidget.cachedcollectionvocabulary')
         parent = context
         while not IFacetedNavigable.providedBy(parent) and parent.meta_type != 'Plone Site':
             parent = parent.aq_parent
-        return user, date, parent
+        portal_url = api.portal.get().absolute_url()
+        return user, date, parent, portal_url
 
     @ram.cache(__call___cachekey)
     def __call__(self, context):

@@ -5,8 +5,10 @@ Changelog
 1.10 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Invalidate `collective.eeafaceted.collectionwidget.cachedcollectionvocabulary`
+  if `portal_url` changed, this can be the case when application is accessed
+  by same user from different URi.
+  [gbastien]
 
 1.9 (2019-08-23)
 ----------------
