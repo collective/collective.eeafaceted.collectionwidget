@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.10 (unreleased)
+1.10 (2019-09-12)
 -----------------
 
 - Invalidate `collective.eeafaceted.collectionwidget.cachedcollectionvocabulary`
