@@ -5,7 +5,7 @@ Changelog
 1.11 (unreleased)
 -----------------
 
-- Give real context to vocabulary.
+- Added `real_context` parameter to `CollectionVocabulary`.
   [sgeulette]
 
 1.10 (2019-09-12)

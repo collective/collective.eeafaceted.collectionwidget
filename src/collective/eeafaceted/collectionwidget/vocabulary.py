@@ -144,7 +144,10 @@ class CachedCollectionVocabulary(CollectionVocabulary):
         while not IFacetedNavigable.providedBy(parent) and parent.meta_type != 'Plone Site':
             parent = parent.aq_parent
         portal_url = api.portal.get().absolute_url()
-        return user, date, parent, portal_url
+        if getRequest().get('force_redirect_to', False):
+            return user, date, parent, portal_url, real_context.portal_type
+        else:
+            return user, date, parent, portal_url
 
     @ram.cache(__call___cachekey)
     def __call__(self, context, real_context):
