@@ -5,8 +5,8 @@ Changelog
 1.11 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Give real context to vocabulary.
+  [sgeulette]
 
 1.10 (2019-09-12)
 -----------------

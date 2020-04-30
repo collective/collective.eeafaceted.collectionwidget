@@ -43,10 +43,14 @@ class CollectionWidget(RadioWidget):
 
     def __init__(self, context, request, data=None):
         super(CollectionWidget, self).__init__(context, request, data)
-        # real context could not be current context but some distant context
+        # widget context could not be current context but some distant context
         # look in eea.facetednavigation.criteria.handler.Criteria
         self.criteria = ICriteria(self.context)
         self.context = self.criteria.context
+        if 'PUBLISHED' in request and hasattr(request['PUBLISHED'], 'context'):
+            self.real_context = request['PUBLISHED'].context
+        else:
+            self.real_context = request['PARENTS'][0]
         # display the fieldset around the widget when rendered?
         self.display_fieldset = True
         self.portal = api.portal.get()
@@ -193,7 +197,7 @@ class CollectionWidget(RadioWidget):
         if voc is None:
             return []
 
-        return list(voc(self.context))
+        return list(voc(self.context, self.real_context))
 
     def _generate_vocabulary(self):
         voc = OrderedDict()

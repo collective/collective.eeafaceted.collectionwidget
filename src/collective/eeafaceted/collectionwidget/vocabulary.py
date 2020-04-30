@@ -21,7 +21,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 class CollectionVocabulary(object):
     implements(IVocabularyFactory)
 
-    def __call__(self, context):
+    def __call__(self, context, real_context):
         self.context = context
         items = []
         current_url = context.absolute_url()
@@ -127,11 +127,11 @@ CollectionCategoryVocabularyFactory = CollectionCategoryVocabulary()
 
 class CachedCollectionVocabulary(CollectionVocabulary):
 
-    def __call___cachekey(method, self, context):
+    def __call___cachekey(method, self, context, real_context):
         '''cachekey method for self.__call__.'''
-        return self._cache_invalidation_key(context)
+        return self._cache_invalidation_key(context, real_context)
 
-    def _cache_invalidation_key(self, context):
+    def _cache_invalidation_key(self, context, real_context):
         '''The key will rely on :
            - current user, in case faceted is stored in the user personal folder;
            - a stored cache volatile that is destroyed if a DashboardCollection is modified somewhere;
@@ -147,9 +147,9 @@ class CachedCollectionVocabulary(CollectionVocabulary):
         return user, date, parent, portal_url
 
     @ram.cache(__call___cachekey)
-    def __call__(self, context):
+    def __call__(self, context, real_context):
         """Same behaviour as the original CollectionVocabulary, just cached."""
-        terms = super(CachedCollectionVocabulary, self).__call__(context)
+        terms = super(CachedCollectionVocabulary, self).__call__(context, real_context)
         return terms
 
 
