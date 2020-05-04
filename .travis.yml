@@ -23,9 +23,10 @@ before_install:
     - export PATH=$PATH:$PWD/geckodriver
 
 install:
-  - easy_install --version
-  - pip install -r requirements.txt
   - mkdir -p buildout-cache/{eggs,downloads}
+  - virtualenv .
+  - bin/pip install --upgrade pip
+  - bin/pip install -r requirements.txt
   - bin/buildout -c travis.cfg
 
 script:
