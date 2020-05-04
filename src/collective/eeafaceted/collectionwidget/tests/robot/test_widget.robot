@@ -59,12 +59,12 @@ Advanced criterion are disabled based on selected collection
     Click Element  css=.faceted-sections-buttons-more
     Wait Until Element Is Visible  css=div#c2_widget
     # for the Review state criterion, 6 checkbox are disabled and 1 checked
-    ${disabledCount} =  Get Matching Xpath Count  xpath=//*[@id='c2_widget']//input[@disabled]
-    Should Be Equal  ${disabledCount}  6
+    ${disabledCount} =  Get Element Count  xpath=//*[@id='c2_widget']//input[@disabled]
+    Should Be True  ${disabledCount} == 6
     Click Element  css=li[title="Creator"]
     # all checkboxes for the review state criterion should be available again
-    ${disabledCount} =  Get Matching Xpath Count  xpath=//*[@id='c2_widget']//input[@disabled]
-    Should Be Equal  ${disabledCount}  0
+    ${disabledCount} =  Get Element Count  xpath=//*[@id='c2_widget']//input[@disabled]
+    Should Be True  ${disabledCount} == 0
 
 *** Keywords ***
 Suite Setup

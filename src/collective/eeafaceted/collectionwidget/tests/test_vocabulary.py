@@ -133,8 +133,7 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
-        self.assertTrue(folderCatVocabulary.by_token.keys() ==
-                        subfolderCatVocabulary.by_token.keys())
+        self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
         # redirect_to is not filled
         self.assertFalse(vocabulary.getTermByToken(c1.UID()).title[1])
         self.assertFalse(vocabulary.getTermByToken(c2.UID()).title[1])
@@ -154,8 +153,7 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
-        self.assertTrue(folderCatVocabulary.by_token.keys() ==
-                        subfolderCatVocabulary.by_token.keys())
+        self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
         # as we are getting the vocabulary on self.folder,
         # redirect_to is filled for collections of subfolder
         # while generating links to specific sub faceted, a 'no_redirect' is added
@@ -177,8 +175,7 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
-        self.assertTrue(folderCatVocabulary.by_token.keys() ==
-                        subfolderCatVocabulary.by_token.keys())
+        self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}'.format(self.folder.absolute_url(),
                                                             c1.UID())

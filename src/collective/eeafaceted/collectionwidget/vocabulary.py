@@ -31,7 +31,7 @@ class CollectionVocabulary(object):
             # except if current user is Manager
             if ITALConditionable.providedBy(collection) and \
                not evaluateExpressionFor(collection, extra_expr_ctx=self._extra_expr_ctx()):
-                    continue
+                continue
 
             redirect_to = ''
             brain_folder_url = '/'.join(brain.getURL().split('/')[:-1])
