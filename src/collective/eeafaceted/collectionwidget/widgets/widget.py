@@ -199,6 +199,12 @@ class CollectionWidget(RadioWidget):
 
         return list(voc(self.context, self.real_context))
 
+    def portal_vocabulary(self):
+        values = []
+        for term in self.vocabulary():
+            values.append((term.value, term.title[0]))
+        return values
+
     def _generate_vocabulary(self):
         voc = OrderedDict()
         # empty category
