@@ -4,6 +4,7 @@ Resource  plone/app/robotframework/selenium.robot
 
 Library  Remote  ${PLONE_URL}/RobotRemote
 Library  plone.app.robotframework.keywords.Debugging
+Library  Selenium2Screenshots
 
 Suite Setup  Suite Setup
 Suite Teardown  Close all browsers
@@ -48,7 +49,7 @@ Faceted title matches selected collection
     Create content  type=DashboardCollection  title=Info  id=info  showNumberOfItems=True  query=  sort_on=  sort_reversed=  tal_condition=  roles_bypassing_talcondition=  container=${folder}
     Go to  ${PLONE_URL}/faceted/configure_faceted.html
     Wait Until Page Contains  Basic search
-    Sleep  1
+    Update element style  id=faceted-portal-status-message-area  display  none
     Click Element  css=li[title="Info"]
     Go to  ${PLONE_URL}/faceted
     Wait Until Page Contains Element  css=div.eea-preview-items
