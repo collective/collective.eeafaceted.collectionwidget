@@ -48,6 +48,7 @@ Faceted title matches selected collection
     Create content  type=DashboardCollection  title=Info  id=info  showNumberOfItems=True  query=  sort_on=  sort_reversed=  tal_condition=  roles_bypassing_talcondition=  container=${folder}
     Go to  ${PLONE_URL}/faceted/configure_faceted.html
     Wait Until Page Contains  Basic search
+    Sleep  1
     Click Element  css=li[title="Info"]
     Go to  ${PLONE_URL}/faceted
     Wait Until Page Contains Element  css=div.eea-preview-items
