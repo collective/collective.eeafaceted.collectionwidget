@@ -67,7 +67,7 @@ class TestVocabulary(IntegrationTestCase):
             tal_condition=u'',
             roles_bypassing_talcondition=[],
         )
-        vocabulary = CollectionVocabularyFactory(self.folder)
+        vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         self.assertEquals(len(vocabulary), 2)
 
         self.assertTrue(c1.UID() in [term.token for term in vocabulary])
@@ -78,7 +78,7 @@ class TestVocabulary(IntegrationTestCase):
         # disabled DashboardCollection are not returned
         c2.enabled = False
         c2.reindexObject(idxs=['enabled'])
-        vocabulary = CollectionVocabularyFactory(self.folder)
+        vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         self.assertEquals([(u'Collection 1', '')],
                           [term.title for term in vocabulary])
 
@@ -130,7 +130,7 @@ class TestVocabulary(IntegrationTestCase):
         # for now, faceted navigation is not enabled on subfolder,
         # it behaves like a normal category
 
-        vocabulary = CollectionVocabularyFactory(self.folder)
+        vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
         self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
@@ -150,7 +150,7 @@ class TestVocabulary(IntegrationTestCase):
         self.assertEquals(collection_widget.widget,
                           CollectionWidget.widget_type)
         collection_widget.__name__ = u'c44'
-        vocabulary = CollectionVocabularyFactory(self.folder)
+        vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
         self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
@@ -172,7 +172,7 @@ class TestVocabulary(IntegrationTestCase):
         # if we get vocabulary from subfolder, it works the other way round
         # but moreover, we have a no_redirect=1 that avoid to redirect if we
         # are sending the user to the root folder of the faceted navigation
-        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
         self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
@@ -190,13 +190,13 @@ class TestVocabulary(IntegrationTestCase):
         # test the generated link when having a faceted using a sorting index reversed or not
         data = {'default': u'effective(reverse)'}
         sortingCriterionId = ICriteria(self.folder).add('sorting', 'bottom', **data)
-        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c5=effective&reversed=on'.format(self.folder.absolute_url(),
                                                                                      c1.UID()))
         data = {'default': u'effective'}
         ICriteria(self.folder).edit(sortingCriterionId, **data)
-        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c5=effective'.format(self.folder.absolute_url(),
                                                                          c1.UID()))
@@ -204,7 +204,7 @@ class TestVocabulary(IntegrationTestCase):
         # test that other default values are kept also, add a 'resultsperpage' widget
         data = {'default': u'20'}
         ICriteria(self.folder).add('resultsperpage', 'bottom', **data)
-        vocabulary = CollectionVocabularyFactory(self.folder.subfolder)
+        vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c5=effective&c6=20'.format(self.folder.absolute_url(),
                                                                                c1.UID()))
@@ -231,30 +231,30 @@ class TestVocabulary(IntegrationTestCase):
         factory = queryUtility(IVocabularyFactory, u'collective.eeafaceted.collectionwidget.collectionvocabulary')
         # for now, no condition defined on the collection so it is in the vocabulary
         self.assertEqual(self.dashboardcollection.tal_condition, u'')
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
         # now define a condition and by pass for Manager
         self.dashboardcollection.tal_condition = u'python:False'
         self.dashboardcollection.roles_bypassing_talcondition = [u"Manager"]
         notify(ObjectModifiedEvent(self.dashboardcollection))
         # No more listed except for Manager
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
         login(self.portal, 'user_not_manager')
         # cache is user aware
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
         # Now, desactivate bypass for manager
         login(self.portal, TEST_USER_NAME)
         self.dashboardcollection.roles_bypassing_talcondition = []
         # ObjectModified event on DashboardCollection invalidate the vocabulary caching
         notify(ObjectModifiedEvent(self.dashboardcollection))
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
         # If condition is True, it is listed
         self.dashboardcollection.tal_condition = u'python:True'
         notify(ObjectModifiedEvent(self.dashboardcollection))
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
 
     def test_cachedcollectionvocabulary(self):
@@ -282,18 +282,18 @@ class TestVocabulary(IntegrationTestCase):
         self.dashboardcollection.roles_bypassing_talcondition = [u"Manager"]
         notify(ObjectModifiedEvent(self.dashboardcollection))
         # No more listed except for Manager
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
         login(self.portal, 'user_not_manager')
         # cache is user aware
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
         # Now, desactivate bypass for manager
         login(self.portal, TEST_USER_NAME)
         self.dashboardcollection.roles_bypassing_talcondition = []
         # ObjectModified event on DashboardCollection invalidate the vocabulary caching
         notify(ObjectModifiedEvent(self.dashboardcollection))
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
 
         # cache invalidated when new DashboardCollection added
@@ -305,10 +305,36 @@ class TestVocabulary(IntegrationTestCase):
             tal_condition=u'',
             roles_bypassing_talcondition=[]
         )
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertTrue(self.dashboardcollection2.title in [term.title[0] for term in vocab._terms])
 
         # cache invalidated when DashboardCollection deleted
         api.content.delete(self.dashboardcollection2)
-        vocab = factory(self.portal)
+        vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection2.title in [term.title[0] for term in vocab._terms])
+
+        # cache invalidated when new DashboardCollection added
+        self.dashboardcollection2 = api.content.create(
+            id='dc2',
+            type='DashboardCollection',
+            title='Dashboard collection 2',
+            container=self.folder,
+            tal_condition=u'',
+            roles_bypassing_talcondition=[]
+        )
+        self.assertEqual(len(factory._cache_invalidation_key(self.portal, self.portal)), 4)
+        from zope.globalrequest import getRequest
+        req = getRequest()
+        req.set('force_redirect_to', True)
+        # cache key has one element more
+        self.assertEqual(len(factory._cache_invalidation_key(self.portal, self.portal)), 5)
+        vocab = factory(self.portal, self.portal)
+        self.assertTrue(self.dashboardcollection2.title in [term.title[0] for term in vocab._terms])
+        # modification of title without calling event: cache is not invalidated
+        self.dashboardcollection2.title = 'Dashboard collection modified 2'
+        self.dashboardcollection2.reindexObject()
+        vocab = factory(self.portal, self.portal)
+        self.assertFalse(self.dashboardcollection2.title in [term.title[0] for term in vocab._terms])
+        # we change real context, cache key is changed
+        vocab = factory(self.portal, self.folder)
+        self.assertTrue(self.dashboardcollection2.title in [term.title[0] for term in vocab._terms])
