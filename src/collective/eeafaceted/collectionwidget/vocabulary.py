@@ -1,7 +1,7 @@
 # encoding: utf-8
 
+from collective.behavior.talcondition.behavior import ITALCondition
 from collective.behavior.talcondition.interfaces import ITALConditionable
-from collective.behavior.talcondition.utils import evaluateExpressionFor
 from collective.eeafaceted.collectionwidget.interfaces import ICollectionCategories
 from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.interfaces import ICriteria
@@ -28,9 +28,9 @@ class CollectionVocabulary(object):
         for brain in self._brains(context):
             collection = brain.getObject()
             # if collection is ITALConditionable, evaluate the TAL condition
-            # except if current user is Manager
+            # will not be evaluated if current user is Manager
             if ITALConditionable.providedBy(collection) and \
-               not evaluateExpressionFor(collection, extra_expr_ctx=self._extra_expr_ctx()):
+               not ITALCondition(collection).evaluate(extra_expr_ctx=self._extra_expr_ctx()):
                 continue
 
             redirect_to = ''

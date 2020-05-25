@@ -7,6 +7,9 @@ Changelog
 
 - Added `real_context` parameter to `CollectionVocabulary`.
   [sgeulette]
+- Use `ITALCondition` behavior to evaluate the `tal_condition` expression so
+  `ITALCondition.complete_extra_expr_ctx` is taken into account.
+  [gbastien]
 
 1.10 (2019-09-12)
 -----------------
