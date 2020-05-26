@@ -3,8 +3,8 @@
   :target: https://travis-ci.org/collective/collective.eeafaceted.collectionwidget
 
 
-.. image:: https://coveralls.io/repos/collective/collective.eeafaceted.collectionwidget/badge.svg?branch=master&service=github
-  :target: https://coveralls.io/github/collective/collective.eeafaceted.collectionwidget?branch=master
+.. image:: https://coveralls.io/repos/github/collective/collective.eeafaceted.collectionwidget/badge.svg?branch=master
+:target: https://coveralls.io/github/collective/collective.eeafaceted.collectionwidget?branch=master
 
 ==========================================================================
 collective.eeafaceted.collectionwidget
