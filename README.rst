@@ -4,7 +4,8 @@
 
 
 .. image:: https://coveralls.io/repos/github/collective/collective.eeafaceted.collectionwidget/badge.svg?branch=master
-:target: https://coveralls.io/github/collective/collective.eeafaceted.collectionwidget?branch=master
+  :target: https://coveralls.io/github/collective/collective.eeafaceted.collectionwidget?branch=master
+
 
 ==========================================================================
 collective.eeafaceted.collectionwidget
