@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.11 (unreleased)
+1.11 (2020-05-28)
 -----------------
 
 - Added `real_context` parameter to `CollectionVocabulary`.
