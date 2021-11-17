@@ -5,8 +5,13 @@ Changelog
 1.12 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Added `ram.cache` for `CollectionCategoryVocabulary` to avoid query at each
+  request as query is using a `sort_on=getObjPositionInParent` which is very slow.
+  [gbastien]
+- Override `DashboardCollection` query computation that by default in
+  `plone.app.contenttypes` and `plone.app.querystring` will arbitrary add a `path`
+  index in the query, and again, the `path` index is very slow and just not necessary.
+  [gbastien]
 
 1.11 (2020-05-28)
 -----------------

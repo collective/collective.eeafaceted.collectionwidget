@@ -112,13 +112,22 @@ CollectionVocabularyFactory = CollectionVocabulary()
 class CollectionCategoryVocabulary(object):
     implements(IVocabularyFactory)
 
+    def __call___cachekey(method, self, context):
+        '''cachekey method for self.__call__.'''
+        root = context
+        while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
+            root = root.aq_inner.aq_parent
+        return repr(root)
+
+    @ram.cache(__call___cachekey)
     def __call__(self, context):
         # find root
         root = context
         while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
             root = root.aq_inner.aq_parent
         adapter = getAdapter(root, ICollectionCategories)
-        items = [SimpleTerm(value.getPath(), token, safe_unicode(value.Title)) for token, value in adapter.values]
+        items = [SimpleTerm(value.getPath(), token, safe_unicode(value.Title))
+                 for token, value in adapter.values]
         return SimpleVocabulary(items)
 
 
@@ -138,16 +147,16 @@ class CachedCollectionVocabulary(CollectionVocabulary):
            - the first facetednavigable context encountered when ascending context parents
              (useful when collections are defined in a single folder but displayed on various faceted container);
            - the application is accessed thru different portal_url.'''
-        user = api.user.get_current()
+        user = api.user.get_current().getId()
         date = get_cachekey_volatile('collective.eeafaceted.collectionwidget.cachedcollectionvocabulary')
         parent = context
         while not IFacetedNavigable.providedBy(parent) and parent.meta_type != 'Plone Site':
             parent = parent.aq_parent
         portal_url = api.portal.get().absolute_url()
         if getRequest().get('force_redirect_to', False):
-            return user, date, parent, portal_url, real_context.portal_type
+            return user, date, repr(parent), portal_url, real_context.portal_type
         else:
-            return user, date, parent, portal_url
+            return user, date, repr(parent), portal_url
 
     @ram.cache(__call___cachekey)
     def __call__(self, context, real_context):
