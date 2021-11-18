@@ -12,6 +12,8 @@ Changelog
   `plone.app.contenttypes` and `plone.app.querystring` will arbitrary add a `path`
   index in the query, and again, the `path` index is very slow and just not necessary.
   [gbastien]
+- Use unrestricted catalog query when possible.
+  [gbastien]
 
 1.11 (2020-05-28)
 -----------------

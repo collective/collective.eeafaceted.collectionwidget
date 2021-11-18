@@ -10,6 +10,7 @@ from eea.facetednavigation.widgets import ViewPageTemplateFile
 from eea.facetednavigation.widgets.radio.interfaces import IRadioSchema
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
+from imio.helpers.content import uuidToObject
 from plone import api
 from plone.app.querystring import queryparser
 from plone.memoize.view import memoize
@@ -84,9 +85,7 @@ class CollectionWidget(RadioWidget):
         collection_uid = form.get(self.data.__name__, '')
         if collection_uid and not collection_uid == 'all':
             # get the collection and compute the query
-            catalog = getToolByName(self.context, 'portal_catalog')
-            brains = catalog(UID=collection_uid)
-            collection = brains[0].getObject()
+            collection = uuidToObject(collection_uid, unrestricted=True)
             query = queryparser.parseFormquery(collection, collection.query)
             # use sort_on defined on the collection if it is
             # not already in the request.form

@@ -5,6 +5,7 @@ from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidget
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
 from eea.facetednavigation.browser.app.view import FacetedContainerView
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
+from imio.helpers.content import uuidToObject
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.querystring import queryparser
@@ -87,10 +88,8 @@ class FacetedDashboardView(FacetedContainerView):
             if not self.request['HTTP_REFERER'].endswith('configure_faceted.html') and \
                not self.request['URL'].endswith('folder_contents') and \
                not self.request.get('no_redirect', '0') == '1':
-                catalog = api.portal.get_tool('portal_catalog')
-                brains = catalog(UID=criterion.default)
-                if brains:
-                    collection = brains[0].getObject()
+                collection = uuidToObject(criterion.default, unrestricted=True)
+                if collection:
                     container = collection.aq_inner.aq_parent
                     if not container == criteria_holder and \
                        IFacetedNavigable.providedBy(container):
