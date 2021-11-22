@@ -142,7 +142,7 @@ class CachedCollectionVocabulary(CollectionVocabulary):
 
     def _cache_invalidation_key(self, context, real_context):
         '''The key will rely on :
-           - current user, in case faceted is stored in the user personal folder;
+           - current user as list of collections may vary depending on tal_condition per user;
            - a stored cache volatile that is destroyed if a DashboardCollection is modified somewhere;
            - the first facetednavigable context encountered when ascending context parents
              (useful when collections are defined in a single folder but displayed on various faceted container);
