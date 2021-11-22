@@ -53,7 +53,8 @@ class RenderTermView(BrowserView):
         if init and not self.compute_count_on_init:
             return "..."
         else:
-            return len(self.context.results())
+            return len(self.context.results(
+                batch=False, brains=True, custom_query={"sort_on": None}))
 
     def __call__(self, term, category, widget):
         self.term = term

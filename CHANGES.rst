@@ -14,6 +14,8 @@ Changelog
   [gbastien]
 - Use unrestricted catalog query when possible.
   [gbastien]
+- Optimized the catalog query that compute the `number_of_items` counters.
+  [gbastien]
 
 1.11 (2020-05-28)
 -----------------
