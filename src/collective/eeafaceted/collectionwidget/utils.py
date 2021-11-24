@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
-from config import NO_FACETED_EXCEPTION_MSG
+import json
+
+from collective.eeafaceted.collectionwidget.config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
+from collective.eeafaceted.collectionwidget.config import NO_FACETED_EXCEPTION_MSG
+from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidgetDefinedException
+from collective.eeafaceted.collectionwidget.interfaces import NoFacetedViewDefinedException
+from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.criteria.interfaces import ICriteria
 from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
-from interfaces import NoCollectionWidgetDefinedException
-from interfaces import NoFacetedViewDefinedException
 from plone import api
-from widgets.widget import CollectionWidget
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.globalrequest import getRequest
-
-import json
 
 
 def _get_criterion(faceted_context, criterion_type, raise_on_error=True):

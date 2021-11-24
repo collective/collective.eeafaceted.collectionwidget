@@ -5,7 +5,8 @@ Changelog
 1.12 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Fix py3 errors.
+  [fngaha]
 
 
 1.11 (2020-05-28)
