@@ -1,5 +1,6 @@
 # encoding: utf-8
 
+from Products.CMFPlone.utils import safe_unicode
 from collective.behavior.talcondition.behavior import ITALCondition
 from collective.behavior.talcondition.interfaces import ITALConditionable
 from collective.eeafaceted.collectionwidget.interfaces import ICollectionCategories
@@ -9,7 +10,6 @@ from eea.facetednavigation.interfaces import IFacetedNavigable
 from imio.helpers.cache import get_cachekey_volatile
 from plone import api
 from plone.memoize import ram
-from Products.CMFPlone.utils import safe_unicode
 from zope.component import getAdapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
