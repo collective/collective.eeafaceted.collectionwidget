@@ -5,7 +5,8 @@ Changelog
 1.18 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Fix py3 errors.
+  [fngaha]
 
 
 1.17 (2024-04-10)

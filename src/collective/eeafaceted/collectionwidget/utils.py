@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import json
+
 from collective.eeafaceted.collectionwidget.config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
 from collective.eeafaceted.collectionwidget.config import NO_FACETED_EXCEPTION_MSG
 from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidgetDefinedException
@@ -13,8 +15,6 @@ from imio.helpers.content import uuidToObject
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.globalrequest import getRequest
-
-import json
 
 
 def _get_criterion(faceted_context, criterion_type, raise_on_error=True):
