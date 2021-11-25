@@ -39,9 +39,9 @@ class KeptCriteria(object):
         if collection_uid == 'all':
             res = dict([(k, []) for k in self.widget.advanced_criteria])
         else:
-            catalog = getToolByName(self.context, 'portal_catalog')
-            collection = catalog.unrestrictedSearchResults(**{'UID': collection_uid})
+            collection = uuidToObject(collection_uid, unrestricted=True)
             if collection:
+                catalog = getToolByName(self.context, 'portal_catalog')
                 collection_criteria = queryparser.parseFormquery(collection, collection.query)
                 advanced_criteria = self.widget.advanced_criteria
                 for wid, index in advanced_criteria.items():
