@@ -37,4 +37,14 @@
         />
     </configure>
 
+    <!-- override the querybuilderresults to avoid forced "path" index -->
+    <browser:page
+      name="querybuilderresults"
+      class=".views.QueryBuilder"
+      permission="zope2.View"
+      for="*"
+      layer="collective.eeafaceted.collectionwidget.interfaces.ICollectiveEeafacetedCollectionwidgetLayer"
+      />
+
+
 </configure>

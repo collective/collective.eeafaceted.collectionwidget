@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
-"""Setup/installation tests for this package."""
-import json
+
+from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
+from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
+from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
+from DateTime import DateTime
+from eea.facetednavigation.widgets.storage import Criterion
+from imio.helpers.cache import cleanRamCacheFor
+from plone import api
+from Products.CMFCore.utils import getToolByName
 from zope.annotation import IAnnotations
 from zope.component import getGlobalSiteManager
 from zope.component import getMultiAdapter
 from zope.interface import Interface
-from plone import api
-from DateTime import DateTime
-from Products.CMFCore.utils import getToolByName
 
-from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
-from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
-from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
-from eea.facetednavigation.widgets.storage import Criterion
+import json
+
 
 COLLECTION_VOCABULARY = (
     'collective.eeafaceted.collectionwidget.collectionvocabulary'
@@ -125,6 +127,8 @@ class TestWidget(BaseWidgetCase):
         # clean memoize for widget.categories,
         # it was memoized when calling _generate_vocabulary here above
         del IAnnotations(self.request)['plone.memoize']
+        # clean ram.cache for CollectionCategoryVocabulary
+        cleanRamCacheFor('collective.eeafaceted.collectionwidget.vocabulary.__call__')
         vocabulary = widget._generate_vocabulary()
         # both collections appear in widget.vocabulary()
         self.assertEqual(

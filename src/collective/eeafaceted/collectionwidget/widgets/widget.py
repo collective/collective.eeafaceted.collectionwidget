@@ -84,9 +84,8 @@ class CollectionWidget(RadioWidget):
         collection_uid = form.get(self.data.__name__, '')
         if collection_uid and not collection_uid == 'all':
             # get the collection and compute the query
-            catalog = getToolByName(self.context, 'portal_catalog')
-            brains = catalog(UID=collection_uid)
-            collection = brains[0].getObject()
+            from collective.eeafaceted.collectionwidget.utils import getCurrentCollection
+            collection = getCurrentCollection(self.context)
             query = queryparser.parseFormquery(collection, collection.query)
             # use sort_on defined on the collection if it is
             # not already in the request.form

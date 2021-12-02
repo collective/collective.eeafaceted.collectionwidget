@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from zope.globalrequest import getRequest
-from Products.CMFCore.utils import getToolByName
+from imio.helpers.content import uuidToObject
 from plone.app.querystring import queryparser
+from Products.CMFCore.utils import getToolByName
 from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
+from zope.globalrequest import getRequest
 
 
 class DefaultValue(object):
@@ -38,10 +39,9 @@ class KeptCriteria(object):
         if collection_uid == 'all':
             res = dict([(k, []) for k in self.widget.advanced_criteria])
         else:
-            catalog = getToolByName(self.context, 'portal_catalog')
-            brains = catalog(UID=collection_uid)
-            if brains:
-                collection = brains[0].getObject()
+            collection = uuidToObject(collection_uid, unrestricted=True)
+            if collection:
+                catalog = getToolByName(self.context, 'portal_catalog')
                 collection_criteria = queryparser.parseFormquery(collection, collection.query)
                 advanced_criteria = self.widget.advanced_criteria
                 for wid, index in advanced_criteria.items():

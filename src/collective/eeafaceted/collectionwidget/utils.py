@@ -5,9 +5,9 @@ from config import NO_FACETED_EXCEPTION_MSG
 from eea.facetednavigation.criteria.interfaces import ICriteria
 from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
+from imio.helpers.content import uuidToObject
 from interfaces import NoCollectionWidgetDefinedException
 from interfaces import NoFacetedViewDefinedException
-from plone import api
 from widgets.widget import CollectionWidget
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
@@ -61,12 +61,12 @@ def getCurrentCollection(faceted_context, caching=True):
         collectionUID = faceted_context.REQUEST.form.get('{0}[]'.format(criterion.__name__))
         # if not collectionUID, maybe we have a 'facetedQuery' in the REQUEST
         if not collectionUID and \
-           ('facetedQuery' in faceted_context.REQUEST.form and faceted_context.REQUEST.form['facetedQuery']):
+           ('facetedQuery' in faceted_context.REQUEST.form and
+                faceted_context.REQUEST.form['facetedQuery']):
             query = json.loads(faceted_context.REQUEST.form['facetedQuery'])
             collectionUID = query.get(criterion.__name__)
         if collectionUID:
-            catalog = api.portal.get_tool('portal_catalog')
-            collection = catalog(UID=collectionUID)[0].getObject()
+            collection = uuidToObject(collectionUID, unrestricted=True)
         if caching:
             cache[key] = collection
 

@@ -20,17 +20,17 @@ class TestUtils(BaseWidgetCase):
            the current CollectionWidget but may be used to get any
            kind of criterion."""
         # get the collection widget
-        self.assertEquals(_get_criterion(self.folder, CollectionWidget.widget_type).widget,
-                          CollectionWidget.widget_type)
+        self.assertEqual(_get_criterion(self.folder, CollectionWidget.widget_type).widget,
+                         CollectionWidget.widget_type)
         # get the sorting widget
-        self.assertEquals(_get_criterion(self.folder, SortingWidget.widget_type).widget,
-                          SortingWidget.widget_type)
+        self.assertEqual(_get_criterion(self.folder, SortingWidget.widget_type).widget,
+                         SortingWidget.widget_type)
 
     def test_getCollectionLinkCriterion(self):
         """This method will return the Collection-link widget defined on a folder if ever."""
         # self.folder is faceted enabled
-        self.assertEquals(getCollectionLinkCriterion(self.folder).widget,
-                          CollectionWidget.widget_type)
+        self.assertEqual(getCollectionLinkCriterion(self.folder).widget,
+                         CollectionWidget.widget_type)
         # remove the criterion then try to get it again
         ICriteria(self.folder).delete(getCollectionLinkCriterion(self.folder).getId())
         with self.assertRaises(NoCollectionWidgetDefinedException):
@@ -54,7 +54,7 @@ class TestUtils(BaseWidgetCase):
 
         # set a correct collection in the REQUEST
         request.form[criterion_name] = dashcoll.UID()
-        self.assertEquals(getCurrentCollection(self.folder), dashcoll)
+        self.assertEqual(getCurrentCollection(self.folder), dashcoll)
 
         # it works also with 'facetedQuery' build in the REQUEST when generating
         # a template on a dashboard
@@ -63,9 +63,9 @@ class TestUtils(BaseWidgetCase):
         cache_key = 'collectionwidget-utils-getCurrentCollection-{0}'.format(self.folder.UID())
         del IAnnotations(request)[cache_key]
         self.assertIsNone(getCurrentCollection(self.folder))
-        request.form['facetedQuery'] = '{{"c3":["20"],"b_start":["0"],"{0}":["{1}"]}}'.format(
+        request.form['facetedQuery'] = '{{"c3":["20"],"b_start":["0"],"{0}":"{1}"}}'.format(
             criterion.__name__, dashcoll.UID())
-        self.assertEquals(getCurrentCollection(self.folder), dashcoll)
+        self.assertEqual(getCurrentCollection(self.folder), dashcoll)
 
     def test_updateDefaultCollectionFor(self):
         """This method will define the default collection used by the collection-link
@@ -78,7 +78,7 @@ class TestUtils(BaseWidgetCase):
         dashcoll = getattr(self.folder, dashcoll_id)
         dashcoll.reindexObject()
         _updateDefaultCollectionFor(self.folder, dashcoll.UID())
-        self.assertEquals(criterion.default, dashcoll.UID())
+        self.assertEqual(criterion.default, dashcoll.UID())
 
         # calling it on a non faceted enabled folder will raise a NoFacetedViewDefinedException
         nonfacetedfolder_id = self.portal.invokeFactory('Folder', 'notnacetedfolder', title='Non Faceted Folder')
