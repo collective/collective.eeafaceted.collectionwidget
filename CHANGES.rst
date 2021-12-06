@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.12 (unreleased)
+1.12 (2021-12-06)
 -----------------
 
 - Added `ram.cache` for `CollectionCategoryVocabulary` to avoid query at each
