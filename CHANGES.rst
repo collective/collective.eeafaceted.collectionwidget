@@ -5,8 +5,9 @@ Changelog
 1.13 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Use an alias for `__call__` methods that use `ram.cache` in `vocabulary.py`
+  this way, the key generated for the `ram.cache` storage is different.
+  [gbastien]
 
 1.12 (2021-12-06)
 -----------------

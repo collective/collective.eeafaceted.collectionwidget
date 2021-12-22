@@ -120,7 +120,7 @@ class CollectionCategoryVocabulary(object):
         return repr(root)
 
     @ram.cache(__call___cachekey)
-    def __call__(self, context):
+    def CollectionCategoryVocabulary__call__(self, context):
         # find root
         root = context
         while IFacetedNavigable.providedBy(root.aq_inner.aq_parent):
@@ -129,6 +129,9 @@ class CollectionCategoryVocabulary(object):
         items = [SimpleTerm(value.getPath(), token, safe_unicode(value.Title))
                  for token, value in adapter.values]
         return SimpleVocabulary(items)
+
+    # do ram.cache have a different key name
+    __call__ = CollectionCategoryVocabulary__call__
 
 
 CollectionCategoryVocabularyFactory = CollectionCategoryVocabulary()
@@ -159,10 +162,13 @@ class CachedCollectionVocabulary(CollectionVocabulary):
             return user, date, repr(parent), portal_url
 
     @ram.cache(__call___cachekey)
-    def __call__(self, context, real_context):
+    def CachedCollectionVocabulary__call__(self, context, real_context):
         """Same behaviour as the original CollectionVocabulary, just cached."""
         terms = super(CachedCollectionVocabulary, self).__call__(context, real_context)
         return terms
+
+    # do ram.cache have a different key name
+    __call__ = CachedCollectionVocabulary__call__
 
 
 CachedCollectionVocabularyFactory = CachedCollectionVocabulary()

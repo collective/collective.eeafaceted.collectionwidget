@@ -128,7 +128,9 @@ class TestWidget(BaseWidgetCase):
         # it was memoized when calling _generate_vocabulary here above
         del IAnnotations(self.request)['plone.memoize']
         # clean ram.cache for CollectionCategoryVocabulary
-        cleanRamCacheFor('collective.eeafaceted.collectionwidget.vocabulary.__call__')
+        cleanRamCacheFor(
+            'collective.eeafaceted.collectionwidget.vocabulary.'
+            'CollectionCategoryVocabulary__call__')
         vocabulary = widget._generate_vocabulary()
         # both collections appear in widget.vocabulary()
         self.assertEqual(
@@ -255,6 +257,7 @@ class TestWidget(BaseWidgetCase):
         )
         widget = CollectionWidget(self.folder, self.request, data=data)
         widget._generate_vocabulary()
+        self.request.form['c1[]'] = self.collection1.UID()
         count_dico = widget.count(brains)
         # with vocabulary
         self.assertEquals(
@@ -282,7 +285,10 @@ class TestWidget(BaseWidgetCase):
         query_dico = widget.query(form={data.__name__: ''})
         self.assertEquals(query_dico, {})
         # with collection_uid
-        query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
+        self.request.form['c0'] = self.collection1.UID()
+        # make also getCurrentCollection happy
+        self.request.form['c1[]'] = self.collection1.UID()
+        query_dico = widget.query(self.request.form)
         # the sort_on paramter of the collection is taken into account
         self.assertTrue(self.collection1.sort_on == 'sortable_title')
         self.assertTrue(self.collection1.sort_reversed is False)
