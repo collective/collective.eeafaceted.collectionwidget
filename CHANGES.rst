@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.13 (unreleased)
+1.13 (2022-01-03)
 -----------------
 
 - Use an alias for `__call__` methods that use `ram.cache` in `vocabulary.py`
