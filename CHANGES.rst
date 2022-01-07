@@ -5,8 +5,9 @@ Changelog
 1.14 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Fixed `utils.getCurrentCollection`, when `collectionUID` retrieved from
+  `facetedQuery` form value, we have a list of values.
+  [gbastien]
 
 1.13 (2022-01-03)
 -----------------

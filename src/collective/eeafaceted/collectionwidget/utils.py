@@ -5,6 +5,7 @@ from config import NO_FACETED_EXCEPTION_MSG
 from eea.facetednavigation.criteria.interfaces import ICriteria
 from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
+from imio.helpers.content import base_hasattr
 from imio.helpers.content import uuidToObject
 from interfaces import NoCollectionWidgetDefinedException
 from interfaces import NoFacetedViewDefinedException
@@ -66,8 +67,10 @@ def getCurrentCollection(faceted_context, caching=True):
             query = json.loads(faceted_context.REQUEST.form['facetedQuery'])
             collectionUID = query.get(criterion.__name__)
         if collectionUID:
+            if base_hasattr(collectionUID, "__iter__"):
+                collectionUID = collectionUID[0]
             collection = uuidToObject(collectionUID, unrestricted=True)
-        if caching:
+        if caching and collection:
             cache[key] = collection
 
     return collection
