@@ -39,7 +39,7 @@ jobs:
           restore-keys: ${{ runner.os }}-test-${{ env.cache-name }}-${{ matrix.plone }}
       - name: buildout
         run: |
-          sed -ie "s#test-4.3#test-${{matrix.plone}}#" buildout.cfg 
+          sed -ie "s#plone-4.3#plone-${{matrix.plone}}#" buildout.cfg 
           buildout -c ci.cfg annotate
           buildout -c ci.cfg
       - name: test
