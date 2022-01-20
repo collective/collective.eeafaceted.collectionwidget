@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Base module for unittesting."""
 
+from eea.facetednavigation.interfaces import ICriteria
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -12,8 +13,6 @@ from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
 from plone.testing import z2
-
-from eea.facetednavigation.interfaces import ICriteria
 from zope.component import queryAdapter
 
 import collective.eeafaceted.collectionwidget

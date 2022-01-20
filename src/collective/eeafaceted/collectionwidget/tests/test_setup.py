@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
-from plone import api
-
 from ..testing.testcase import IntegrationTestCase
+from plone import api
 
 
 class TestInstall(IntegrationTestCase):

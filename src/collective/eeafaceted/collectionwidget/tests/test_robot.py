@@ -1,9 +1,9 @@
-import os
-import unittest
-import robotsuite
+from ..testing.layers import ACCEPTANCE
 from plone.testing import layered
 
-from ..testing.layers import ACCEPTANCE
+import os
+import robotsuite
+import unittest
 
 
 def test_suite():

@@ -1,7 +1,7 @@
-import unittest
-
-from .layers import INTEGRATION
 from .layers import FUNCTIONAL
+from .layers import INTEGRATION
+
+import unittest
 
 
 class IntegrationTestCase(unittest.TestCase):
