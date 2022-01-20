@@ -5,6 +5,8 @@ from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
 from plone import api
 
 import logging
+
+
 logger = logging.getLogger('collective.eeafaceted.collectionwidget')
 
 

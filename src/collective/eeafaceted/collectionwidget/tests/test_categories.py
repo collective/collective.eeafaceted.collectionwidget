@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
-from plone import api
-
 from ..testing.testcase import IntegrationTestCase
+from plone import api
 
 
 class TestCategories(IntegrationTestCase):
@@ -14,9 +13,7 @@ class TestCategories(IntegrationTestCase):
         self.folder = self.portal.folder
 
     def test_no_categories(self):
-        from collective.eeafaceted.collectionwidget.categories import (
-            CategoriesFromFolder
-        )
+        from collective.eeafaceted.collectionwidget.categories import CategoriesFromFolder
         """There should be no categories
         when the folder does not hold any folders.
         """
@@ -24,9 +21,7 @@ class TestCategories(IntegrationTestCase):
         self.assertFalse(categories)
 
     def test_categories(self):
-        from collective.eeafaceted.collectionwidget.categories import (
-            CategoriesFromFolder
-        )
+        from collective.eeafaceted.collectionwidget.categories import CategoriesFromFolder
         """There should be categories
         """
         api.content.create(
@@ -47,9 +42,7 @@ class TestCategories(IntegrationTestCase):
                           [c[1].Title for c in categories])
 
     def test_categories_only_from_folder(self):
-        from collective.eeafaceted.collectionwidget.categories import (
-            CategoriesFromFolder
-        )
+        from collective.eeafaceted.collectionwidget.categories import CategoriesFromFolder
         """Only folders are categories
         """
         api.content.create(
@@ -71,9 +64,7 @@ class TestCategories(IntegrationTestCase):
         self.assertEquals(len(categories), 2)
 
     def test_categories_ordered(self):
-        from collective.eeafaceted.collectionwidget.categories import (
-            CategoriesFromFolder
-        )
+        from collective.eeafaceted.collectionwidget.categories import CategoriesFromFolder
         """categories should be ordered as the folders in the dashboard
         """
         api.content.create(
@@ -97,9 +88,7 @@ class TestCategories(IntegrationTestCase):
         self.assertEquals('Category 1', categories[1][1].Title)
 
     def test_no_subCategorie(self):
-        from collective.eeafaceted.collectionwidget.categories import (
-            CategoriesFromFolder
-        )
+        from collective.eeafaceted.collectionwidget.categories import CategoriesFromFolder
         """subfolders are not categories
         """
         category1 = api.content.create(

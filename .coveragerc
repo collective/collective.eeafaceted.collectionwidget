@@ -1,8 +1,6 @@
 [report]
 include =
-    src/collective/*
+    src/collective/eeafaceted/collectionwidget/*
 omit =
     */test*
-    src/collective/__init__.py
-    src/collective/eeafaceted/__init__.py
-    src/collective/eeafaceted/collectionwidget/__init__.py
+    */__init__.py

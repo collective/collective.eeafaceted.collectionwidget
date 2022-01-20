@@ -3,6 +3,7 @@
 
 from zope.i18nmessageid import MessageFactory
 
+
 FacetedCollectionMessageFactory = MessageFactory('collective.eeafaceted.collectionwidget')
 
 

@@ -3,9 +3,9 @@ from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidget
 from collective.eeafaceted.collectionwidget.interfaces import NoFacetedViewDefinedException
 from collective.eeafaceted.collectionwidget.tests.test_widget import BaseWidgetCase
 from collective.eeafaceted.collectionwidget.utils import _get_criterion
+from collective.eeafaceted.collectionwidget.utils import _updateDefaultCollectionFor
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
 from collective.eeafaceted.collectionwidget.utils import getCurrentCollection
-from collective.eeafaceted.collectionwidget.utils import _updateDefaultCollectionFor
 from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
