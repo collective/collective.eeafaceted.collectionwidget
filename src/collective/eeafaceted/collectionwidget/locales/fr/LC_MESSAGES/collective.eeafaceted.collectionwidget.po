@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-08-31 10:07+0000\n"
+"POT-Creation-Date: 2023-05-24 11:10+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -14,42 +14,50 @@ msgstr ""
 "Preferred-Encodings: utf-8 latin1\n"
 "Domain: DOMAIN\n"
 
-#: ./profiles/common/types/DashboardCollection.xml
+#: ../profiles/common/types/DashboardCollection.xml
 msgid "DashboardCollection"
 msgstr "Collection pour tableau de bord"
 
-#: ./interfaces.py:56
+#: ../interfaces.py:56
 msgid "Enabled?"
 msgstr "Activé?"
 
-#: ./profiles.zcml:29
+#: ../profiles.zcml:29
 msgid "Extension profile for collective.eeafaceted.collectionwidget settings that aren't version dependent."
 msgstr ""
 
-#: ./profiles.zcml:14
+#: ../profiles.zcml:14
 msgid "Extension profile for collective.eeafaceted.collectionwidget."
 msgstr ""
 
-#: ./interfaces.py:46
+#: ../widgets/widget.py:35
+msgid "Hide category"
+msgstr "Cacher la catégorie"
+
+#: ../widgets/widget.py:36
+msgid "If this checkbox is checked, hide the category title"
+msgstr "Si cette case est cochée, le titre de la catégorie est masqué"
+
+#: ../interfaces.py:46
 msgid "Show number of items in filter"
 msgstr "Afficher le nombre d'éléments"
 
-#: ./testing.zcml:16
+#: ../testing.zcml:16
 msgid "Steps to ease tests of collective.eeafaceted.collectionwidget"
 msgstr ""
 
-#: ./interfaces.py:47
+#: ../interfaces.py:47
 msgid "This will display the number of elements this search return in the widget (or portlet) collection. Take care that this is doing the search to display the result so enable it only if necessary."
 msgstr "Ceci affichera le nombre d'éléments retournés par la recherche dans le widget (ou portlet) collection. Attention que ceci va faire la recherche pour afficher le résultat ce qui peut prendre un certain temps, ne l'activer que si nécessaire."
 
-#: ./profiles.zcml:14
+#: ../profiles.zcml:14
 msgid "collective.eeafaceted.collectionwidget"
 msgstr ""
 
-#: ./profiles.zcml:29
+#: ../profiles.zcml:29
 msgid "collective.eeafaceted.collectionwidget Common Configuration"
 msgstr ""
 
-#: ./testing.zcml:16
+#: ../testing.zcml:16
 msgid "collective.eeafaceted.collectionwidget tests"
 msgstr ""

@@ -2,18 +2,25 @@
 
 from Acquisition import aq_parent
 from collections import OrderedDict
+from collective.eeafaceted.collectionwidget import FacetedCollectionMessageFactory as _
 from collective.eeafaceted.collectionwidget.interfaces import IKeptCriteria
 from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
 from DateTime import DateTime
 from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets import ViewPageTemplateFile
+from eea.facetednavigation.widgets.interfaces import DefaultSchemata as DS
+from eea.facetednavigation.widgets.radio.interfaces import CountableSchemata
+from eea.facetednavigation.widgets.radio.interfaces import DisplaySchemata
 from eea.facetednavigation.widgets.radio.interfaces import IRadioSchema
+from eea.facetednavigation.widgets.radio.interfaces import LayoutSchemata
 from eea.facetednavigation.widgets.radio.widget import Widget as RadioWidget
 from eea.facetednavigation.widgets.sorting.widget import Widget as SortingWidget
 from plone import api
 from plone.app.querystring import queryparser
 from plone.memoize.view import memoize
 from Products.CMFCore.utils import getToolByName
+from z3c.form import field
+from zope import schema
 from zope.component import getUtility
 from zope.component import queryMultiAdapter
 from zope.component import queryUtility
@@ -24,6 +31,25 @@ import json
 
 class ICollectionSchema(IRadioSchema):
     """ """
+    hide_category = schema.Bool(
+        title=_("Hide category"),
+        description=_("If this checkbox is checked, hide the category title"),
+        default=False,
+    )
+
+
+class DefaultSchemata(DS):
+    """ Schemata default
+    """
+    fields = field.Fields(ICollectionSchema).select(
+        u'title',
+        u'index',
+        u'vocabulary',
+        u'catalog',
+        u'hidealloption',
+        u'default',
+        u'hide_category',
+    )
 
 
 class CollectionWidget(RadioWidget):
@@ -32,6 +58,12 @@ class CollectionWidget(RadioWidget):
     widget_type = 'collection-link'
     widget_label = 'Collection Link'
     faceted_field = False
+    groups = (
+        DefaultSchemata,
+        LayoutSchemata,
+        CountableSchemata,
+        DisplaySchemata
+    )
 
     index = ViewPageTemplateFile('widget.pt')
 
@@ -182,6 +214,10 @@ class CollectionWidget(RadioWidget):
     @property
     def hidealloption(self):
         return bool(int(getattr(self.data, 'hidealloption', u'0') or u'0'))
+
+    @property
+    def hide_category(self):
+        return getattr(self.data, "hide_category", False) or False
 
     @property
     @memoize

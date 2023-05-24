@@ -5,7 +5,8 @@ Changelog
 1.15 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Add `hide_category` option (False by default) to add the possibility to hide category titles
+  [mpeeters]
 
 
 1.14 (2022-01-10)

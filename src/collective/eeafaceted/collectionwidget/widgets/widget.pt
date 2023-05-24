@@ -14,7 +14,8 @@
   maxitems python:view.data.get('maxitems', 0) or 0;
   edit_mode python:request.URL0.endswith('@@faceted_widgets');
   display_fieldset view/display_fieldset;
-  grouped_vocabulary view/grouped_vocabulary"
+  grouped_vocabulary view/grouped_vocabulary;
+  hide_category view/hide_category;"
   tal:condition="python:edit_mode or grouped_vocabulary"
   tal:attributes="id string:${wid}_widget; class css">
 
@@ -42,7 +43,7 @@
                             category_term python:grouped_element[1].get('term', None) ;
                             collection_terms python:grouped_element[1]['collections'];">
           <div class="category">
-            <tal:renderCategory condition="category"
+            <tal:renderCategory condition="python:category and not hide_category"
                 replace="structure python: view.render_category(category_term)" />
             <tal:items repeat="term collection_terms">
               <tal:renderTerm replace="structure python: view.render_term(term, category)" />
