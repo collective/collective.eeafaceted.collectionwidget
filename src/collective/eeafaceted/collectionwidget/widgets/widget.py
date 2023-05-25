@@ -254,6 +254,8 @@ class CollectionWidget(RadioWidget):
             # collections directly added to context, no intermediate category
             if parent == self.context and parent.UID() not in categories_token:
                 category = ''
+            elif self.hide_category is True:
+                category = ''
             elif parent.UID() in categories_token:
                 category = parent.UID()
             else:

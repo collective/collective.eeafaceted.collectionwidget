@@ -5,6 +5,8 @@ Changelog
 1.15 (unreleased)
 -----------------
 
+- Ensure that parent can be displayed if `hide_category` is True and without category
+  [mpeeters]
 - Add `hide_category` option (False by default) to add the possibility to hide category titles
   [mpeeters]
 
