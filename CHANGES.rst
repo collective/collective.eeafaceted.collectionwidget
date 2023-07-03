@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.15 (unreleased)
+1.15 (2023-07-03)
 -----------------
 
 - Ensure that parent can be displayed if `hide_category` is True and without category
