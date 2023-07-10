@@ -5,6 +5,8 @@ Changelog
 1.16 (unreleased)
 -----------------
 
+- Use default value if available and if there is no parameter in request
+  [mpeeters]
 - Fix for Python 3 compatibilty
   [mpeeters]
 
