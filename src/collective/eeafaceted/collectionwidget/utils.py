@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
-from config import NO_FACETED_EXCEPTION_MSG
+from collective.eeafaceted.collectionwidget.config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
+from collective.eeafaceted.collectionwidget.config import NO_FACETED_EXCEPTION_MSG
 from eea.facetednavigation.criteria.interfaces import ICriteria
 from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
