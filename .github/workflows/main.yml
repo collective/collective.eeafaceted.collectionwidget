@@ -16,7 +16,7 @@ jobs:
           - python: 2.7.18
             PLONE_VERSION: 4.3
             continue-on-error: false
-          - python: 3.8.16
+          - python: 2.7.18
             PLONE_VERSION: 5.2
             continue-on-error: true
     steps:
@@ -49,7 +49,7 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.PLONE_VERSION }}
       - name: buildout
         run: |
-          sed -ie "s#plone-4.3#plone-${{matrix.PLONE_VERSION}}#" buildout.cfg 
+          sed -ie "s#plone-4.3#plone-${{matrix.PLONE_VERSION}}#" buildout.cfg
           buildout -c ci.cfg annotate
           buildout -c ci.cfg
       - name: test
