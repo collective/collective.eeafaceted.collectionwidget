@@ -8,63 +8,90 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       fail-fast: false
       matrix:
         include:
-          - python: 2.7
-            plone: 4.3
-          - python: 2.7
-            plone: 5.1
-          - python: 2.7
-            plone: 5.2
+          - python: 2.7.18
+            PLONE_VERSION: 4
+            continue-on-error: false
+          - python: 3.8.16
+            PLONE_VERSION: 52
+            continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Set up pyenv and Python
+        uses: "gabrielfalcao/pyenv-action@v14"
         with:
-          python-version: ${{ matrix.python }}
+          default: "${{ matrix.python }}"
+          command: pyenv -v
       - name: Setup Env
         run: |
-          pip install -r requirements.txt coverage==5.3.1
+          sudo apt-get update -qqy
+          sudo apt-get install -qqy g++ libpng-dev cmake libqt5widgets5 qttools5-dev
+          wget -t 3 -T 60 --waitretry 5 -O zint-2.8.0.tar.gz https://sourceforge.net/projects/zint/files/zint/2.8.0/zint-2.8.0.tar.gz/download
+          tar -xf zint-2.8.0.tar.gz
+          cd zint-2.8.0
+          sudo cmake .
+          sudo make
+          sudo make install
+          cd ..
+          mkdir -p buildout-cache/{eggs,downloads}
+          pip install -r requirements.txt coverage==5.3.1 wheel
       - name: Cache eggs
         uses: actions/cache@v2
         env:
           cache-name: cache-eggs
         with:
           path: ~/buildout-cache/eggs
-          key: ${{ runner.os }}-test-${{ env.cache-name }}-${{ matrix.plone }}
-          restore-keys: ${{ runner.os }}-test-${{ env.cache-name }}-${{ matrix.plone }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ matrix.PLONE_VERSION }}
       - name: buildout
         run: |
-          sed -ie "s#plone-4.3#plone-${{matrix.plone}}#" buildout.cfg 
+          sed -ie "s#plone-4.3#plone-${{matrix.PLONE_VERSION}}#" buildout.cfg 
           buildout -c ci.cfg annotate
           buildout -c ci.cfg
       - name: test
         run: |
           bin/test -t !robot
   coverage:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - python: 2.7.18
+            PLONE_VERSION: 4
+            continue-on-error: false
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Set up Python 2.7
-        uses: actions/setup-python@v2
+      - name: Set up pyenv and Python
+        uses: "gabrielfalcao/pyenv-action@v14"
         with:
-          python-version: 2.7
+          default: "${{ matrix.python }}"
+          command: pyenv -v
       - name: Setup Env
         run: |
-          pip install -r requirements.txt coverage==5.3.1
+          sudo apt-get update -qqy
+          sudo apt-get install -qqy g++ libpng-dev cmake libqt5widgets5 qttools5-dev
+          wget -t 3 -T 60 --waitretry 5 -O zint-2.8.0.tar.gz https://sourceforge.net/projects/zint/files/zint/2.8.0/zint-2.8.0.tar.gz/download
+          tar -xf zint-2.8.0.tar.gz
+          cd zint-2.8.0
+          sudo cmake .
+          sudo make
+          sudo make install
+          cd ..
+          mkdir -p buildout-cache/{eggs,downloads}
+          pip install -r requirements.txt coverage==5.3.1 wheel
       - name: Cache eggs
         uses: actions/cache@v2
         env:
           cache-name: cache-eggs
         with:
           path: ~/buildout-cache/eggs
-          key: ${{ runner.os }}-coverage-${{ env.cache-name }}
-          restore-keys: ${{ runner.os }}-coverage-${{ env.cache-name }}
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-coverage-${{ matrix.PLONE_VERSION }}
       - name: buildout
         run: |
           buildout -c ci.cfg
