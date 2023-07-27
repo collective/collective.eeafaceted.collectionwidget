@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.16 (unreleased)
+1.16 (2023-07-27)
 -----------------
 
 - Use default value if available and if there is no parameter in request
