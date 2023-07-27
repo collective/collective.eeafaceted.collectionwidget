@@ -12,14 +12,14 @@ from plone.memoize import ram
 from Products.CMFPlone.utils import safe_unicode
 from zope.component import getAdapter
 from zope.globalrequest import getRequest
-from zope.interface import implements
+from zope.interface import implementer
 from zope.schema.interfaces import IVocabularyFactory
 from zope.schema.vocabulary import SimpleTerm
 from zope.schema.vocabulary import SimpleVocabulary
 
 
+@implementer(IVocabularyFactory)
 class CollectionVocabulary(object):
-    implements(IVocabularyFactory)
 
     def __call__(self, context, real_context):
         self.context = context
@@ -109,8 +109,8 @@ class CollectionVocabulary(object):
 CollectionVocabularyFactory = CollectionVocabulary()
 
 
+@implementer(IVocabularyFactory)
 class CollectionCategoryVocabulary(object):
-    implements(IVocabularyFactory)
 
     def __call___cachekey(method, self, context):
         '''cachekey method for self.__call__.'''

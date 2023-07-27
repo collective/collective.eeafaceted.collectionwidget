@@ -5,7 +5,8 @@ Changelog
 1.16 (unreleased)
 -----------------
 
-- Nothing changed yet.
+- Fix for Python 3 compatibilty
+  [mpeeters]
 
 
 1.15 (2023-07-03)

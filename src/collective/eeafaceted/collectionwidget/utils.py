@@ -2,14 +2,14 @@
 
 from collective.eeafaceted.collectionwidget.config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
 from collective.eeafaceted.collectionwidget.config import NO_FACETED_EXCEPTION_MSG
+from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidgetDefinedException
+from collective.eeafaceted.collectionwidget.interfaces import NoFacetedViewDefinedException
+from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.criteria.interfaces import ICriteria
 from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
 from imio.helpers.content import base_hasattr
 from imio.helpers.content import uuidToObject
-from interfaces import NoCollectionWidgetDefinedException
-from interfaces import NoFacetedViewDefinedException
-from widgets.widget import CollectionWidget
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
 from zope.globalrequest import getRequest
