@@ -114,6 +114,8 @@ class CollectionWidget(RadioWidget):
         # we receive the UID of the selected Collection
         # get the collection, compute the query and return it
         collection_uid = form.get(self.data.__name__, '')
+        if not collection_uid and self.data.default:
+            collection_uid = self.data.default
         if collection_uid and not collection_uid == 'all':
             # get the collection and compute the query
             from collective.eeafaceted.collectionwidget.utils import getCurrentCollection

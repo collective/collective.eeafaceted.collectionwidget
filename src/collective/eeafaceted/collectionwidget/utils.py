@@ -65,6 +65,8 @@ def getCurrentCollection(faceted_context, caching=True):
            ('facetedQuery' in faceted_context.REQUEST.form and faceted_context.REQUEST.form['facetedQuery']):
             query = json.loads(faceted_context.REQUEST.form['facetedQuery'])
             collectionUID = query.get(criterion.__name__)
+        if not collectionUID and criterion.default:
+            collectionUID = criterion.default
         if collectionUID:
             if base_hasattr(collectionUID, "__iter__"):
                 collectionUID = collectionUID[0]
