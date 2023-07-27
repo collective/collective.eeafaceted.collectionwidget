@@ -12,3 +12,5 @@ exclude .mr.developer.cfg
 exclude *.yml
 exclude .coveragerc
 global-exclude *.pyc
+exclude .github
+recursive-exclude .github *
