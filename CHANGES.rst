@@ -5,8 +5,10 @@ Changelog
 1.17 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Added `DashboardCollection.brains_results` that will return the result of the
+  query as brains, this is used to make the `@@folder_contents` view work for
+  `DashboardCollection` in `imio.helpers`.
+  [gbastien]
 
 1.16 (2023-07-27)
 -----------------

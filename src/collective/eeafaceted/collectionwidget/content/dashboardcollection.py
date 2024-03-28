@@ -2,6 +2,7 @@
 
 
 from collective.eeafaceted.collectionwidget.interfaces import IDashboardCollection
+from plone import api
 from plone.app.contenttypes.content import Collection
 from plone.app.querystring.queryparser import parseFormquery
 from zope.component import getMultiAdapter
@@ -16,6 +17,13 @@ class DashboardCollection(Collection):
         """
           Return the stored query as a readable catalog query."""
         return parseFormquery(self, self.query)
+
+    def brains_results(self, *args):
+        catalog = api.portal.get_tool('portal_catalog')
+        query = parseFormquery(self, self.query)
+        if 'sort_on' not in query:
+            query['sort_on'] = 'created'
+        return catalog(**query)
 
     def results(self, batch=True, b_start=0, b_size=None,
                 sort_on=None, limit=None, brains=False,
