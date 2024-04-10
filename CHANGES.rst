@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.17 (unreleased)
+1.17 (2024-04-10)
 -----------------
 
 - Added `DashboardCollection.brains_results` that will return the result of the

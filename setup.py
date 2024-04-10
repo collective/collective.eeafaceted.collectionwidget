@@ -10,7 +10,7 @@ long_description = (
 
 setup(
     name='collective.eeafaceted.collectionwidget',
-    version='1.17.dev0',
+    version='1.17',
     description=(
         "eea.facetednavigation widget that enables selecting "
         "a collection (among several) as base filter"),
