@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-[C (unreleased)
-----------------
+1.18 (unreleased)
+-----------------
 
 - Nothing changed yet.
 
