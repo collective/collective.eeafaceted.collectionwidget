@@ -20,7 +20,7 @@ class TestViews(BaseWidgetCase):
         crit.default = self.collection2.UID()
         ret = view()
         self.assertIn('Base collections', ret)
-        self.assertEquals(self.request.RESPONSE.status, 200)
+        self.assertEqual(self.request.RESPONSE.status, 200)
 
         # now set default on a collection of the subfolder
         crit.default = self.collection1.UID()
@@ -30,18 +30,18 @@ class TestViews(BaseWidgetCase):
         self.request['URL'] = self.folder.absolute_url() + '/folder_contents'
         ret = view()
         self.assertIn('Base collections', ret)
-        self.assertEquals(self.request.RESPONSE.status, 200)
+        self.assertEqual(self.request.RESPONSE.status, 200)
         folderURL = self.folder.absolute_url()
         self.request['URL'] = folderURL
         self.request['HTTP_REFERER'] = self.folder.absolute_url() + '/configure_faceted.html'
         ret = view()
         self.assertIn('Base collections', ret)
-        self.assertEquals(self.request.RESPONSE.status, 200)
+        self.assertEqual(self.request.RESPONSE.status, 200)
 
         # we are redirected to the subfolder if accessing directly folder
         self.request['URL'] = folderURL
         self.request['HTTP_REFERER'] = folderURL
         ret = view()
         self.assertFalse(ret)
-        self.assertEquals(self.request.RESPONSE.status, 302)
-        self.assertEquals(self.request.RESPONSE.getHeader('location'), self.category1.absolute_url())
+        self.assertEqual(self.request.RESPONSE.status, 302)
+        self.assertEqual(self.request.RESPONSE.getHeader('location'), self.category1.absolute_url())

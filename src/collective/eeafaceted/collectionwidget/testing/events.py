@@ -27,7 +27,7 @@ def add_default_collection_widgets(context):
         if context != canonical:
             return
 
-    if criteria.keys():
+    if list(criteria.keys()):
         criteria.criteria = []
 
     widgets = context.unrestrictedTraverse('@@default_collection_widgets.xml')

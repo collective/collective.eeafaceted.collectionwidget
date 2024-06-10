@@ -125,7 +125,7 @@ class CollectionWidget(RadioWidget):
             # not already in the request.form
             # get the sort_on criterion and look in the request.form if it is used
             sort_on_is_used = False
-            for criterion_id, criterion in self.criteria.items():
+            for criterion_id, criterion in list(self.criteria.items()):
                 if criterion.widget == SortingWidget.widget_type:
                     # criterion id in the request.form is like c0[]
                     if "{0}[]".format(criterion_id) in self.request.form:
@@ -187,7 +187,7 @@ class CollectionWidget(RadioWidget):
                                     IKeptCriteria)
         res = adapter.compute(collection_uid)
         # DateTime are not json serializable, we convert them before
-        for k, v in res.iteritems():
+        for k, v in res.items():
             if isinstance(v, DateTime):
                 res[k] = v.ISO()
 
@@ -207,7 +207,7 @@ class CollectionWidget(RadioWidget):
 
     @property
     def advanced_criteria_as_json(self):
-        return json.dumps(self.advanced_criteria.keys())
+        return json.dumps(list(self.advanced_criteria.keys()))
 
     @property
     def sortreversed(self):
@@ -268,7 +268,7 @@ class CollectionWidget(RadioWidget):
 
         # remove empty categories
         res = OrderedDict()
-        for k, v in voc.items():
+        for k, v in list(voc.items()):
             if v['collections']:
                 res[k] = v
 

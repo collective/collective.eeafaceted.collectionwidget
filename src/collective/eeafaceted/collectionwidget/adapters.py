@@ -14,7 +14,7 @@ class DefaultValue(object):
     def __init__(self, context, request, widget):
         self.value = widget.data.default
         existingCollectionUids = []
-        for group in widget.grouped_vocabulary.values():
+        for group in list(widget.grouped_vocabulary.values()):
             for collection_term in group['collections']:
                 existingCollectionUids.append(collection_term.token)
         if widget.data.default not in existingCollectionUids:
@@ -44,7 +44,7 @@ class KeptCriteria(object):
                 catalog = getToolByName(self.context, 'portal_catalog')
                 collection_criteria = queryparser.parseFormquery(collection, collection.query)
                 advanced_criteria = self.widget.advanced_criteria
-                for wid, index in advanced_criteria.items():
+                for wid, index in list(advanced_criteria.items()):
                     if index not in collection_criteria:
                         res[wid] = []
                     else:
@@ -54,7 +54,7 @@ class KeptCriteria(object):
                            isinstance(enabled_checkboxes, list):
                             enabled_checkboxes = []
 
-                        if isinstance(enabled_checkboxes, basestring):
+                        if isinstance(enabled_checkboxes, str):
                             # the case {'Creator': {'query': 'test-user'}} go here
                             enabled_checkboxes = [enabled_checkboxes]
 
