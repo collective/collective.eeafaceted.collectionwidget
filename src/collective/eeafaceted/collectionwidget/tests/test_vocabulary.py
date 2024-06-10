@@ -45,9 +45,9 @@ class TestVocabulary(IntegrationTestCase):
             container=self.folder
         )
         vocabulary = CollectionCategoryVocabularyFactory(self.folder)
-        self.assertEquals(len(vocabulary), 2)
-        self.assertEquals('Category 1', vocabulary.getTermByToken(self.folder.category1.UID()).title)
-        self.assertEquals('Category 2', vocabulary.getTermByToken(self.folder.category2.UID()).title)
+        self.assertEqual(len(vocabulary), 2)
+        self.assertEqual('Category 1', vocabulary.getTermByToken(self.folder.category1.UID()).title)
+        self.assertEqual('Category 2', vocabulary.getTermByToken(self.folder.category2.UID()).title)
 
     def test_collectionvocabulary(self):
         """ """
@@ -68,18 +68,18 @@ class TestVocabulary(IntegrationTestCase):
             roles_bypassing_talcondition=[],
         )
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
-        self.assertEquals(len(vocabulary), 2)
+        self.assertEqual(len(vocabulary), 2)
 
         self.assertTrue(c1.UID() in [term.token for term in vocabulary])
         self.assertTrue(c2.UID() in [term.token for term in vocabulary])
-        self.assertEquals([(u'Collection 1', ''), (u'Collection 2', '')],
+        self.assertEqual([(u'Collection 1', ''), (u'Collection 2', '')],
                           [term.title for term in vocabulary])
 
         # disabled DashboardCollection are not returned
         c2.enabled = False
         c2.reindexObject(idxs=['enabled'])
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
-        self.assertEquals([(u'Collection 1', '')],
+        self.assertEqual([(u'Collection 1', '')],
                           [term.title for term in vocabulary])
 
     def test_with_sub_faceted(self):
@@ -133,7 +133,7 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
-        self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
+        self.assertTrue(list(folderCatVocabulary.by_token.keys()) == list(subfolderCatVocabulary.by_token.keys()))
         # redirect_to is not filled
         self.assertFalse(vocabulary.getTermByToken(c1.UID()).title[1])
         self.assertFalse(vocabulary.getTermByToken(c2.UID()).title[1])
@@ -147,24 +147,24 @@ class TestVocabulary(IntegrationTestCase):
         # change the CollectionWidget id to "c44" so we are sure that
         # the generated link is the one to this widget
         collection_widget = ICriteria(self.folder.subfolder).get('c1')
-        self.assertEquals(collection_widget.widget,
+        self.assertEqual(collection_widget.widget,
                           CollectionWidget.widget_type)
         collection_widget.__name__ = u'c44'
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
-        self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
+        self.assertTrue(list(folderCatVocabulary.by_token.keys()) == list(subfolderCatVocabulary.by_token.keys()))
         # as we are getting the vocabulary on self.folder,
         # redirect_to is filled for collections of subfolder
         # while generating links to specific sub faceted, a 'no_redirect' is added
         # so the user is not redirected to the faceted using the default
         self.assertFalse(vocabulary.getTermByToken(c1.UID()).title[1])
         self.assertFalse(vocabulary.getTermByToken(c2.UID()).title[1])
-        self.assertEquals(vocabulary.getTermByToken(c3.UID()).title[1],
+        self.assertEqual(vocabulary.getTermByToken(c3.UID()).title[1],
                           '{0}?no_redirect=1#c44={1}'.format(self.folder.subfolder.absolute_url(),
                                                              c3.UID())
                           )
-        self.assertEquals(vocabulary.getTermByToken(c4.UID()).title[1],
+        self.assertEqual(vocabulary.getTermByToken(c4.UID()).title[1],
                           '{0}?no_redirect=1#c44={1}'.format(self.folder.subfolder.absolute_url(),
                                                              c4.UID())
                           )
@@ -175,12 +175,12 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder.subfolder)
-        self.assertTrue(folderCatVocabulary.by_token.keys() == subfolderCatVocabulary.by_token.keys())
-        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
+        self.assertTrue(list(folderCatVocabulary.by_token.keys()) == list(subfolderCatVocabulary.by_token.keys()))
+        self.assertEqual(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}'.format(self.folder.absolute_url(),
                                                             c1.UID())
                           )
-        self.assertEquals(vocabulary.getTermByToken(c2.UID()).title[1],
+        self.assertEqual(vocabulary.getTermByToken(c2.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}'.format(self.folder.absolute_url(),
                                                             c2.UID())
                           )
@@ -191,13 +191,13 @@ class TestVocabulary(IntegrationTestCase):
         data = {'default': u'effective(reverse)'}
         sortingCriterionId = ICriteria(self.folder).add('sorting', 'bottom', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
-        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
+        self.assertEqual(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c5=effective&reversed=on'.format(self.folder.absolute_url(),
                                                                                      c1.UID()))
         data = {'default': u'effective'}
         ICriteria(self.folder).edit(sortingCriterionId, **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
-        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
+        self.assertEqual(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c5=effective'.format(self.folder.absolute_url(),
                                                                          c1.UID()))
 
@@ -205,7 +205,7 @@ class TestVocabulary(IntegrationTestCase):
         data = {'default': u'20'}
         ICriteria(self.folder).add('resultsperpage', 'bottom', **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
-        self.assertEquals(vocabulary.getTermByToken(c1.UID()).title[1],
+        self.assertEqual(vocabulary.getTermByToken(c1.UID()).title[1],
                           '{0}?no_redirect=1#c1={1}&c5=effective&c6=20'.format(self.folder.absolute_url(),
                                                                                c1.UID()))
 

@@ -89,9 +89,9 @@ class TestWidget(BaseWidgetCase):
             container=self.folder
         )
         vocabulary = widget._generate_vocabulary()
-        self.assertEquals(len(vocabulary), 3)  # 3 categories including '' (no category)
-        self.assertEquals(len(vocabulary['']['collections']), 1)
-        self.assertEquals(vocabulary['']['collections'][0].token, collection3.UID())
+        self.assertEqual(len(vocabulary), 3)  # 3 categories including '' (no category)
+        self.assertEqual(len(vocabulary['']['collections']), 1)
+        self.assertEqual(vocabulary['']['collections'][0].token, collection3.UID())
 
     def test_generate_vocabulary(self):
         data = dict(
@@ -99,17 +99,17 @@ class TestWidget(BaseWidgetCase):
         )
         widget = CollectionWidget(self.folder, self.request, data=data)
         vocabulary = widget._generate_vocabulary()
-        self.assertEquals(len(vocabulary), 2)
-        first_category, second_category = vocabulary.values()
-        self.assertEquals(u'Category 1', first_category['term'].title)
-        self.assertEquals(u'Category 2', second_category['term'].title)
-        self.assertEquals(len(first_category['collections']), 1)
-        self.assertEquals(len(second_category['collections']), 1)
-        self.assertEquals(
+        self.assertEqual(len(vocabulary), 2)
+        first_category, second_category = list(vocabulary.values())
+        self.assertEqual(u'Category 1', first_category['term'].title)
+        self.assertEqual(u'Category 2', second_category['term'].title)
+        self.assertEqual(len(first_category['collections']), 1)
+        self.assertEqual(len(second_category['collections']), 1)
+        self.assertEqual(
             (first_category['collections'][0].token, first_category['collections'][0].title),
             (self.collection1.UID(), (self.collection1.Title(), ''))
         )
-        self.assertEquals(
+        self.assertEqual(
             (second_category['collections'][0].token, second_category['collections'][0].title),
             (self.collection2.UID(), (self.collection2.Title(), ''))
         )
@@ -136,7 +136,7 @@ class TestWidget(BaseWidgetCase):
         self.assertEqual(
             [elt.token for elt in widget.vocabulary()],
             [self.collection1.UID(), self.collection2.UID()])
-        self.assertNotIn(u'Category 1', [c['term'].title for c in vocabulary.values()])
+        self.assertNotIn(u'Category 1', [c['term'].title for c in list(vocabulary.values())])
 
     def test_hidealloption(self):
         data = Criterion()
@@ -162,16 +162,16 @@ class TestWidget(BaseWidgetCase):
         )
         data.sortreversed = u'0'
         widget = CollectionWidget(self.folder, self.request, data=data)
-        self.assertEquals(widget.default_term_value, self.collection1.absolute_url_path())
+        self.assertEqual(widget.default_term_value, self.collection1.absolute_url_path())
         data.sortreversed = u'1'
         widget = CollectionWidget(self.folder, self.request, data=data)
-        self.assertEquals(widget.default_term_value, self.collection2.absolute_url_path())
+        self.assertEqual(widget.default_term_value, self.collection2.absolute_url_path())
 
     def test_advanced_criteria(self):
         # we have an advanced criteria 'review_state' with name 'c2'
         widget = CollectionWidget(self.folder, self.request)
-        self.assertEquals(len(widget.advanced_criteria), 3)
-        self.assertEquals(widget.advanced_criteria, {
+        self.assertEqual(len(widget.advanced_criteria), 3)
+        self.assertEqual(widget.advanced_criteria, {
             u'c3': u'Creator', u'c2': u'review_state', u'c4': 'created'
         })
 
@@ -185,7 +185,7 @@ class TestWidget(BaseWidgetCase):
         # response is in JSON format
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         # response is valid JSON
-        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
                           {u'c3': [], u'c2': [], u'c4': []})
         # ok, now update collection1 so it manage 'review_state'
         collection1.query = [{'i': 'review_state',
@@ -193,12 +193,12 @@ class TestWidget(BaseWidgetCase):
                               'v': ['private']}]
         # now 'c2' will be hidden
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
-        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
                           {u'c3': [], u'c2': [u'private'], u'c4': []})
         # but it is still kept when using collection2
         collection2 = self.folder.category2.collection2
         kept_criteria_as_json = widget.kept_criteria_as_json(collection2.UID())
-        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
                           {u'c3': [], u'c2': [], u'c4': []})
 
         # test case where value is a string, not a list
@@ -206,7 +206,7 @@ class TestWidget(BaseWidgetCase):
                               'o': 'plone.app.querystring.operation.string.currentUser'
                               }]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
-        self.assertEquals(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
                           {u'c3': [u'test-user'], u'c2': [], u'c4': []})
 
         # test case where value is a DateTime
@@ -214,7 +214,7 @@ class TestWidget(BaseWidgetCase):
             {'i': 'created', 'o': 'plone.app.querystring.operation.date.lessThan', 'v': DateTime(2000, 1, 1)},
         ]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
-        self.assertEquals(
+        self.assertEqual(
             json._default_decoder.decode(kept_criteria_as_json)['c4'][:10],
             u'2000-01-01'
         )
@@ -224,25 +224,25 @@ class TestWidget(BaseWidgetCase):
         data = Criterion(vocabulary=COLLECTION_VOCABULARY)
         widget = CollectionWidget(self.folder, self.request, data=data)
         widget()
-        self.assertEquals(widget.default, '')
+        self.assertEqual(widget.default, '')
         # a default value is selected, it will use adapter_default_value
         collection1UID = self.collection1.UID()
         widget.data.default = collection1UID
         # default is memoized, so clean it
         del IAnnotations(self.request)['plone.memoize']
         widget()
-        self.assertEquals(widget.default, collection1UID)
+        self.assertEqual(widget.default, collection1UID)
         # if the selected value is no more available, it falls back to first available element
         self.collection1.getParentNode().manage_delObjects(ids=[self.collection1.getId()])
         del IAnnotations(self.request)['plone.memoize']
         widget()
-        self.assertEquals(widget.data.default, collection1UID)
-        self.assertEquals(widget.default, self.collection2.UID())
+        self.assertEqual(widget.data.default, collection1UID)
+        self.assertEqual(widget.default, self.collection2.UID())
         # if no fallback available, it will return None
         self.collection2.getParentNode().manage_delObjects(ids=[self.collection2.getId()])
         del IAnnotations(self.request)['plone.memoize']
         widget()
-        self.assertEquals(widget.default, '')
+        self.assertEqual(widget.default, '')
 
     def test_count(self):
         data = Criterion()
@@ -251,7 +251,7 @@ class TestWidget(BaseWidgetCase):
         brains = catalog(UID=self.collection1.UID())
         count_dico = widget.count(brains)
         # without vocabulary and sequence
-        self.assertEquals(count_dico, {})
+        self.assertEqual(count_dico, {})
         data = Criterion(
             vocabulary=COLLECTION_VOCABULARY
         )
@@ -260,14 +260,14 @@ class TestWidget(BaseWidgetCase):
         self.request.form['c1[]'] = self.collection1.UID()
         count_dico = widget.count(brains)
         # with vocabulary
-        self.assertEquals(
+        self.assertEqual(
             count_dico,
             {self.collection1.UID(): 8, self.collection2.UID(): 8}
         )
         # with sequence
         sequence = {u'': 1, self.collection1.UID(): 2}
         count_dico = widget.count(brains, sequence=sequence)
-        self.assertEquals(
+        self.assertEqual(
             count_dico,
             {u'': 1, self.collection1.UID(): 8}
         )
@@ -283,7 +283,7 @@ class TestWidget(BaseWidgetCase):
         widget._generate_vocabulary()
         # no collection_uid
         query_dico = widget.query(form={data.__name__: ''})
-        self.assertEquals(query_dico, {})
+        self.assertEqual(query_dico, {})
         # with collection_uid
         self.request.form['c0'] = self.collection1.UID()
         # make also getCurrentCollection happy
@@ -292,12 +292,12 @@ class TestWidget(BaseWidgetCase):
         # the sort_on paramter of the collection is taken into account
         self.assertTrue(self.collection1.sort_on == 'sortable_title')
         self.assertTrue(self.collection1.sort_reversed is False)
-        self.assertEquals(query_dico, {'review_state': {'query': ['private']},
+        self.assertEqual(query_dico, {'review_state': {'query': ['private']},
                                        'sort_on': 'sortable_title'})
         # if sort_reversed is True, it is kept in the query
         self.collection1.setSort_reversed(True)
         query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
-        self.assertEquals(query_dico, {'review_state': {'query': ['private']},
+        self.assertEqual(query_dico, {'review_state': {'query': ['private']},
                                        'sort_on': 'sortable_title',
                                        'sort_order': 'descending'})
         # if we receive a value for a SortingCriterion,
@@ -305,7 +305,7 @@ class TestWidget(BaseWidgetCase):
         # here c0 is a SortingCriterion
         self.request.form['c0[]'] = 'created'
         query_dico = widget.query(form={data.__name__: widget.vocabulary()[0].token})
-        self.assertEquals(query_dico, {'review_state': {'query': ['private']}})
+        self.assertEqual(query_dico, {'review_state': {'query': ['private']}})
 
     def test_call(self):
         data = Criterion(
@@ -326,7 +326,7 @@ class TestWidgetWithDefaultValueAdapter(BaseWidgetCase):
 
     def test_adapter_default_value(self):
         widget = CollectionWidget(self.folder, self.request, data={})
-        self.assertEquals(widget.adapter_default_value, self.collection1)
+        self.assertEqual(widget.adapter_default_value, self.collection1)
 
     def setUp(self):
         super(TestWidgetWithDefaultValueAdapter, self).setUp()

@@ -23,5 +23,5 @@ class TestDashboardCollection(IntegrationTestCase):
         self.dashboardcollection.query = [
             {'i': 'portal_type', 'o': 'plone.app.querystring.operation.selection.is', 'v': ['Folder', ]},
         ]
-        self.assertEquals(self.dashboardcollection.displayCatalogQuery(),
+        self.assertEqual(self.dashboardcollection.displayCatalogQuery(),
                           {'portal_type': {'query': ['Folder']}})

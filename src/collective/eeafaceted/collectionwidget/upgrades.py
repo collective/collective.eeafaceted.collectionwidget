@@ -17,7 +17,7 @@ def upgrade_to_3(context):
         obj = brain.getObject()
         criterias = ICriteria(obj)
         changes = False
-        for cid, crit in criterias.items():
+        for cid, crit in list(criterias.items()):
             if crit.get('vocabulary', u'') in (u'imio.dashboard.conditionawarecollectionvocabulary',
                                                u'imio.dashboard.cachedcollectionvocabulary'):
                 crit.vocabulary = u'collective.eeafaceted.collectionwidget.cachedcollectionvocabulary'
