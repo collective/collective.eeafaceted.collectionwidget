@@ -28,6 +28,12 @@ class TestVocabulary(IntegrationTestCase):
             (self.folder, self.request), name=u'faceted_subtyper'
         )
         subtyper.enable()
+        # add on non Manager user
+        api.user.create(
+            username='user_not_manager',
+            password='user_not_manager',
+            email="imio@dashboard.org",
+            roles=['Member'])
 
     def test_categoryvocabulary(self):
         """There should be categories
@@ -81,6 +87,21 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         self.assertEquals([(u'Collection 1', '')],
                           [term.title for term in vocabulary])
+
+        # Manager bypass "tal_condition"
+        c1.tal_condition = "python: False"
+        vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
+        self.assertEquals([(u'Collection 1', '')],
+                          [term.title for term in vocabulary])
+        login(self.portal, 'user_not_manager')
+        vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
+        self.assertEquals([term.title for term in vocabulary], [])
+        # Manager does not bypass "enabled=False"
+        login(self.portal, TEST_USER_NAME)
+        c1.enabled = False
+        c1.reindexObject(idxs=['enabled'])
+        vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
+        self.assertEquals([term.title for term in vocabulary], [])
 
     def test_with_sub_faceted(self):
         """Test behaviour of the vocabulary when we have subfolders
@@ -221,12 +242,6 @@ class TestVocabulary(IntegrationTestCase):
             tal_condition=u'',
             roles_bypassing_talcondition=[],
         )
-        # add on non Manager user
-        api.user.create(
-            username='user_not_manager',
-            password='user_not_manager',
-            email="imio@dashboard.org",
-            roles=['Member'])
         self.assertTrue(ITALConditionable.providedBy(self.dashboardcollection))
         factory = queryUtility(IVocabularyFactory, u'collective.eeafaceted.collectionwidget.collectionvocabulary')
         # for now, no condition defined on the collection so it is in the vocabulary
@@ -270,12 +285,6 @@ class TestVocabulary(IntegrationTestCase):
             tal_condition=u'',
             roles_bypassing_talcondition=[],
         )
-        # add on non Manager user
-        api.user.create(
-            username='user_not_manager',
-            password='user_not_manager',
-            email="imio@dashboard.org",
-            roles=['Member'])
         factory = queryUtility(IVocabularyFactory, u'collective.eeafaceted.collectionwidget.cachedcollectionvocabulary')
         # now define a condition and by pass for Manager
         self.dashboardcollection.tal_condition = u'python:False'

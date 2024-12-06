@@ -9,6 +9,8 @@ from eea.facetednavigation.interfaces import IFacetedNavigable
 from imio.helpers.cache import get_cachekey_volatile
 from plone import api
 from plone.memoize import ram
+from Products.CMFCore.utils import _checkPermission
+from Products.CMFCore.permissions import ManagePortal
 from Products.CMFPlone.utils import safe_unicode
 from zope.component import getAdapter
 from zope.globalrequest import getRequest
@@ -25,11 +27,13 @@ class CollectionVocabulary(object):
         self.context = context
         items = []
         current_url = context.absolute_url()
+        is_manager = _checkPermission(ManagePortal, context)
         for brain in self._brains(context):
             collection = brain.getObject()
             # if collection is ITALConditionable, evaluate the TAL condition
             # will not be evaluated if current user is Manager
-            if ITALConditionable.providedBy(collection) and \
+            if not is_manager and \
+               ITALConditionable.providedBy(collection) and \
                not ITALCondition(collection).evaluate(extra_expr_ctx=self._extra_expr_ctx()):
                 continue
 

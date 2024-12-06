@@ -5,8 +5,9 @@ Changelog
 1.18 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- In `CollectionVocabulary` really bypass `Collection` `tal_condition`
+  evaluation for `Manager`.
+  [gbastien]
 
 1.17 (2024-04-10)
 -----------------
