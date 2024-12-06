@@ -31,7 +31,7 @@ class CollectionVocabulary(object):
         for brain in self._brains(context):
             collection = brain.getObject()
             # if collection is ITALConditionable, evaluate the TAL condition
-            # will not be evaluated if current user is Manager
+            # can be bypassed for "Manager" using "roles_bypassing_talcondition"
             if not is_manager and \
                ITALConditionable.providedBy(collection) and \
                not ITALCondition(collection).evaluate(extra_expr_ctx=self._extra_expr_ctx()):

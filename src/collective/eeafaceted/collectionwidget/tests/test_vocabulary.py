@@ -297,7 +297,7 @@ class TestVocabulary(IntegrationTestCase):
         # cache is user aware
         vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
-        # Now, desactivate bypass for manager
+        # Now, deactivate bypass for manager
         login(self.portal, TEST_USER_NAME)
         self.dashboardcollection.roles_bypassing_talcondition = []
         # ObjectModified event on DashboardCollection invalidate the vocabulary caching
