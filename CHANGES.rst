@@ -5,8 +5,9 @@ Changelog
 1.18 (unreleased)
 -----------------
 
-- Nothing changed yet.
-
+- Added CSS class on widget terms to style each term based on something else
+  than `UID`, generated CSS class contains collection id and parent folder id.
+  [gbastien]
 
 1.17 (2024-04-10)
 -----------------
