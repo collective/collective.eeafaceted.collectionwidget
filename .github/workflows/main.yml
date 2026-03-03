@@ -22,13 +22,13 @@ jobs:
             continue-on-error: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y libjpeg-dev libbz2-dev
       - name: Set up pyenv and Python
-        uses: "gabrielfalcao/pyenv-action@v14"
+        uses: "gabrielfalcao/pyenv-action@v18"
         with:
           default: "${{ matrix.python }}"
           command: pyenv -v
@@ -46,7 +46,7 @@ jobs:
           mkdir -p buildout-cache/{eggs,downloads}
           pip install -r requirements.txt coverage==5.3.1 wheel
       - name: Cache eggs
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: cache-eggs
         with:
@@ -71,9 +71,9 @@ jobs:
             continue-on-error: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v5
       - name: Set up pyenv and Python
-        uses: "gabrielfalcao/pyenv-action@v14"
+        uses: "gabrielfalcao/pyenv-action@v18"
         with:
           default: "${{ matrix.python }}"
           command: pyenv -v
@@ -91,7 +91,7 @@ jobs:
           mkdir -p buildout-cache/{eggs,downloads}
           pip install -r requirements.txt coverage==5.3.1 wheel
       - name: Cache eggs
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: cache-eggs
         with:
