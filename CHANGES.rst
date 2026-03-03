@@ -2,7 +2,7 @@ Changelog
 =========
 
 
-1.18 (unreleased)
+1.18 (2026-03-03)
 -----------------
 
 - Added CSS class on widget terms to style each term based on something else
