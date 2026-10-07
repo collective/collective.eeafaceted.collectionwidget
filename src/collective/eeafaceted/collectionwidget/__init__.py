@@ -4,7 +4,9 @@
 from zope.i18nmessageid import MessageFactory
 
 
-FacetedCollectionMessageFactory = MessageFactory('collective.eeafaceted.collectionwidget')
+FacetedCollectionMessageFactory = MessageFactory(
+    "collective.eeafaceted.collectionwidget"
+)
 
 
 def initialize(context):

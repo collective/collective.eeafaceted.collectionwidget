@@ -31,6 +31,7 @@ import json
 
 class ICollectionSchema(IRadioSchema):
     """ """
+
     hide_category = schema.Bool(
         title=_("Hide category"),
         description=_("If this checkbox is checked, hide the category title"),
@@ -39,38 +40,33 @@ class ICollectionSchema(IRadioSchema):
 
 
 class DefaultSchemata(DS):
-    """ Schemata default
-    """
+    """Schemata default"""
+
     fields = field.Fields(ICollectionSchema).select(
-        u'title',
-        u'index',
-        u'vocabulary',
-        u'catalog',
-        u'hidealloption',
-        u'default',
-        u'hide_category',
+        u"title",
+        u"index",
+        u"vocabulary",
+        u"catalog",
+        u"hidealloption",
+        u"default",
+        u"hide_category",
     )
 
 
 class CollectionWidget(RadioWidget):
     """A widget listing collections used as base query."""
 
-    widget_type = 'collection-link'
-    widget_label = 'Collection Link'
+    widget_type = "collection-link"
+    widget_label = "Collection Link"
     faceted_field = False
-    groups = (
-        DefaultSchemata,
-        LayoutSchemata,
-        CountableSchemata,
-        DisplaySchemata
-    )
+    groups = (DefaultSchemata, LayoutSchemata, CountableSchemata, DisplaySchemata)
 
-    index = ViewPageTemplateFile('widget.pt')
+    index = ViewPageTemplateFile("widget.pt")
 
-    css_class = 'faceted-tagscloud-collection-widget'
+    css_class = "faceted-tagscloud-collection-widget"
 
     category_vocabulary = (
-        'collective.eeafaceted.collectionwidget.collectioncategoryvocabulary'
+        "collective.eeafaceted.collectionwidget.collectioncategoryvocabulary"
     )
 
     def __init__(self, context, request, data=None):
@@ -79,10 +75,10 @@ class CollectionWidget(RadioWidget):
         # look in eea.facetednavigation.criteria.handler.Criteria
         self.criteria = ICriteria(self.context)
         self.context = self.criteria.context
-        if 'PUBLISHED' in request and hasattr(request['PUBLISHED'], 'context'):
-            self.real_context = request['PUBLISHED'].context
+        if "PUBLISHED" in request and hasattr(request["PUBLISHED"], "context"):
+            self.real_context = request["PUBLISHED"].context
         else:
-            self.real_context = request['PARENTS'][0]
+            self.real_context = request["PARENTS"][0]
         # display the fieldset around the widget when rendered?
         self.display_fieldset = True
         self.portal = api.portal.get()
@@ -91,14 +87,14 @@ class CollectionWidget(RadioWidget):
         """Remove fields 'index' and 'catalog', unused."""
         super(CollectionWidget, self).update()
         default_group = self.groups[0]
-        if 'index' in default_group.fields:
-            del default_group.fields['index']
-        if 'catalog' in default_group.widgets:
-            del default_group.fields['catalog']
-        if 'index' in default_group.widgets:
-            del default_group.widgets['index']
-        if 'catalog' in default_group.widgets:
-            del default_group.widgets['catalog']
+        if "index" in default_group.fields:
+            del default_group.fields["index"]
+        if "catalog" in default_group.widgets:
+            del default_group.fields["catalog"]
+        if "index" in default_group.widgets:
+            del default_group.widgets["index"]
+        if "catalog" in default_group.widgets:
+            del default_group.widgets["catalog"]
 
     def _initialize_widget(self):
         """ """
@@ -110,15 +106,18 @@ class CollectionWidget(RadioWidget):
         return super(CollectionWidget, self).__call__(**kwargs)
 
     def query(self, form):
-        """ Get value from form and return a catalog dict query """
+        """Get value from form and return a catalog dict query"""
         # we receive the UID of the selected Collection
         # get the collection, compute the query and return it
-        collection_uid = form.get(self.data.__name__, '')
+        collection_uid = form.get(self.data.__name__, "")
         if not collection_uid and self.data.default:
             collection_uid = self.data.default
-        if collection_uid and not collection_uid == 'all':
+        if collection_uid and not collection_uid == "all":
             # get the collection and compute the query
-            from collective.eeafaceted.collectionwidget.utils import getCurrentCollection
+            from collective.eeafaceted.collectionwidget.utils import (
+                getCurrentCollection,
+            )
+
             collection = getCurrentCollection(self.context)
             query = queryparser.parseFormquery(collection, collection.query)
             # use sort_on defined on the collection if it is
@@ -133,26 +132,26 @@ class CollectionWidget(RadioWidget):
                     break
             if not sort_on_is_used:
                 if collection.sort_on:
-                    query['sort_on'] = collection.sort_on
+                    query["sort_on"] = collection.sort_on
                 if collection.sort_reversed:
-                    query['sort_order'] = collection.sort_reversed and 'descending' or ''
+                    query["sort_order"] = (
+                        collection.sort_reversed and "descending" or ""
+                    )
             return query
         return {}
 
     def count(self, brains, sequence=None):
-        """
-        """
+        """ """
         res = {}
         if not sequence:
             sequence = [term.token for term in self.vocabulary()]
 
-        catalog = getToolByName(self.context, 'portal_catalog')
+        catalog = getToolByName(self.context, "portal_catalog")
         for value in sequence:
             if not value:
                 res[value] = len(brains)
                 continue
-            res[value] = len(
-                catalog(self.query(form={self.data.__name__: value})))
+            res[value] = len(catalog(self.query(form={self.data.__name__: value})))
         return res
 
     @property
@@ -169,8 +168,9 @@ class CollectionWidget(RadioWidget):
 
     @property
     def adapter_default_value(self):
-        adapter = queryMultiAdapter((self.context, self.request, self),
-                                    IWidgetDefaultValue)
+        adapter = queryMultiAdapter(
+            (self.context, self.request, self), IWidgetDefaultValue
+        )
         if adapter:
             return adapter.value
 
@@ -182,9 +182,8 @@ class CollectionWidget(RadioWidget):
             return terms[idx][0]
 
     def kept_criteria_as_json(self, collection_uid):
-        '''Given a p_collectionUID, get indexes managed by the collection.'''
-        adapter = queryMultiAdapter((self.context, self),
-                                    IKeptCriteria)
+        """Given a p_collectionUID, get indexes managed by the collection."""
+        adapter = queryMultiAdapter((self.context, self), IKeptCriteria)
         res = adapter.compute(collection_uid)
         # DateTime are not json serializable, we convert them before
         for k, v in res.items():
@@ -195,13 +194,14 @@ class CollectionWidget(RadioWidget):
 
     @property
     def advanced_criteria(self):
-        '''Returns a dict containing advanced criteria, the key is the
-           criterion id and the value is the managed index.'''
-        faceted_config = queryMultiAdapter((self.context, self.request),
-                                           name='configure_faceted.html')
+        """Returns a dict containing advanced criteria, the key is the
+        criterion id and the value is the managed index."""
+        faceted_config = queryMultiAdapter(
+            (self.context, self.request), name="configure_faceted.html"
+        )
         advanced_criteria = {}
         for criterion in faceted_config.get_criteria():
-            if criterion.section == u'advanced':
+            if criterion.section == u"advanced":
                 advanced_criteria[criterion.getId()] = criterion.index
         return advanced_criteria
 
@@ -211,11 +211,11 @@ class CollectionWidget(RadioWidget):
 
     @property
     def sortreversed(self):
-        return bool(int(getattr(self.data, 'sortreversed', u'0') or u'0'))
+        return bool(int(getattr(self.data, "sortreversed", u"0") or u"0"))
 
     @property
     def hidealloption(self):
-        return bool(int(getattr(self.data, 'hidealloption', u'0') or u'0'))
+        return bool(int(getattr(self.data, "hidealloption", u"0") or u"0"))
 
     @property
     def hide_category(self):
@@ -229,7 +229,7 @@ class CollectionWidget(RadioWidget):
         return voc
 
     def vocabulary(self):
-        voc_id = self.data.get('vocabulary', None)
+        voc_id = self.data.get("vocabulary", None)
         voc = queryUtility(IVocabularyFactory, voc_id, None)
         if voc is None:
             return []
@@ -245,9 +245,9 @@ class CollectionWidget(RadioWidget):
     def _generate_vocabulary(self):
         voc = OrderedDict()
         # empty category
-        voc[''] = {'collections': []}
+        voc[""] = {"collections": []}
         for term in self.categories:
-            voc[term.token] = {'term': term, 'collections': []}
+            voc[term.token] = {"term": term, "collections": []}
 
         categories_token = [term.token for term in self.categories]
         for term in self.vocabulary():
@@ -255,33 +255,35 @@ class CollectionWidget(RadioWidget):
             parent = aq_parent(collection)
             # collections directly added to context, no intermediate category
             if parent == self.context and parent.UID() not in categories_token:
-                category = ''
+                category = ""
             elif self.hide_category is True:
-                category = ''
+                category = ""
             elif parent.UID() in categories_token:
                 category = parent.UID()
             else:
                 # parent is not visible, a subfolder private for current user
                 continue
 
-            voc[category]['collections'].append(term)
+            voc[category]["collections"].append(term)
 
         # remove empty categories
         res = OrderedDict()
         for k, v in list(voc.items()):
-            if v['collections']:
+            if v["collections"]:
                 res[k] = v
 
         return res
 
-    def render_category(self, term, view_name='@@render_collection_widget_category'):
+    def render_category(self, term, view_name="@@render_collection_widget_category"):
         """ """
         collection = self.portal.unrestrictedTraverse(term.value)
         rendered_term = collection.unrestrictedTraverse(view_name)(widget=self)
         return rendered_term
 
-    def render_term(self, term, category, view_name='@@render_collection_widget_term'):
+    def render_term(self, term, category, view_name="@@render_collection_widget_term"):
         """ """
         collection = self.portal.unrestrictedTraverse(term.value)
-        rendered_term = collection.unrestrictedTraverse(view_name)(term, category, widget=self)
+        rendered_term = collection.unrestrictedTraverse(view_name)(
+            term, category, widget=self
+        )
         return rendered_term

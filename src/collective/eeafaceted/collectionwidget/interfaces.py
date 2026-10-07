@@ -27,32 +27,36 @@ class IKeptCriteria(Interface):
 
 
 class NotDashboardContextException(Exception):
-    """ To be raised when a context has no faceted view defined on it. """
+    """To be raised when a context has no faceted view defined on it."""
 
 
 class NoFacetedViewDefinedException(NotDashboardContextException):
-    """ To be raised when a context has no faceted view defined on it. """
+    """To be raised when a context has no faceted view defined on it."""
 
 
 class NoCollectionWidgetDefinedException(NotDashboardContextException):
-    """ To be raised when a context has no collection widget defined on it. """
+    """To be raised when a context has no collection widget defined on it."""
 
 
 class IDashboardCollection(ICollection):
     """ """
 
-    form.widget('showNumberOfItems', RadioFieldWidget)
+    form.widget("showNumberOfItems", RadioFieldWidget)
     showNumberOfItems = schema.Bool(
-        title=_(u'Show number of items in filter'),
-        description=_(u'This will display the number of elements this search '
-                      u'return in the widget (or portlet) collection. Take '
-                      u'care that this is doing the search to display the result '
-                      u'so enable it only if necessary.'),
+        title=_(u"Show number of items in filter"),
+        description=_(
+            u"This will display the number of elements this search "
+            u"return in the widget (or portlet) collection. Take "
+            u"care that this is doing the search to display the result "
+            u"so enable it only if necessary."
+        ),
         default=False,
-        required=False,)
+        required=False,
+    )
 
-    form.widget('enabled', RadioFieldWidget)
+    form.widget("enabled", RadioFieldWidget)
     enabled = schema.Bool(
-        title=_(u'Enabled?'),
+        title=_(u"Enabled?"),
         default=True,
-        required=False,)
+        required=False,
+    )

@@ -7,21 +7,27 @@ from plone import api
 import logging
 
 
-logger = logging.getLogger('collective.eeafaceted.collectionwidget')
+logger = logging.getLogger("collective.eeafaceted.collectionwidget")
 
 
 def upgrade_to_3(context):
-    catalog = api.portal.get_tool('portal_catalog')
+    catalog = api.portal.get_tool("portal_catalog")
     brains = catalog(object_provides=IFacetedNavigable.__identifier__)
     for brain in brains:
         obj = brain.getObject()
         criterias = ICriteria(obj)
         changes = False
         for cid, crit in list(criterias.items()):
-            if crit.get('vocabulary', u'') in (u'imio.dashboard.conditionawarecollectionvocabulary',
-                                               u'imio.dashboard.cachedcollectionvocabulary'):
-                crit.vocabulary = u'collective.eeafaceted.collectionwidget.cachedcollectionvocabulary'
+            if crit.get("vocabulary", u"") in (
+                u"imio.dashboard.conditionawarecollectionvocabulary",
+                u"imio.dashboard.cachedcollectionvocabulary",
+            ):
+                crit.vocabulary = (
+                    u"collective.eeafaceted.collectionwidget.cachedcollectionvocabulary"
+                )
                 changes = True
-                logger.info('Criterion {} updated on object {}'.format(cid, brain.getPath()))
+                logger.info(
+                    "Criterion {} updated on object {}".format(cid, brain.getPath())
+                )
         if changes:
             criterias.criteria._p_changed = 1
