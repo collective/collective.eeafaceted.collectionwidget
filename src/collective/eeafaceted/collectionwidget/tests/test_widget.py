@@ -225,7 +225,7 @@ class TestWidget(BaseWidgetCase):
         # response is in JSON format
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         # response is valid JSON
-        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json.loads(kept_criteria_as_json),
                           {u'c3': [], u'c2': [], u'c4': []})
         # ok, now update collection1 so it manage 'review_state'
         collection1.query = [{'i': 'review_state',
@@ -233,12 +233,12 @@ class TestWidget(BaseWidgetCase):
                               'v': ['private']}]
         # now 'c2' will be hidden
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
-        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json.loads(kept_criteria_as_json),
                           {u'c3': [], u'c2': [u'private'], u'c4': []})
         # but it is still kept when using collection2
         collection2 = self.folder.category2.collection2
         kept_criteria_as_json = widget.kept_criteria_as_json(collection2.UID())
-        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json.loads(kept_criteria_as_json),
                           {u'c3': [], u'c2': [], u'c4': []})
 
         # test case where value is a string, not a list
@@ -246,7 +246,7 @@ class TestWidget(BaseWidgetCase):
                               'o': 'plone.app.querystring.operation.string.currentUser'
                               }]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
-        self.assertEqual(json._default_decoder.decode(kept_criteria_as_json),
+        self.assertEqual(json.loads(kept_criteria_as_json),
                           {u'c3': [u'test-user'], u'c2': [], u'c4': []})
 
         # test case where value is a DateTime
@@ -255,7 +255,7 @@ class TestWidget(BaseWidgetCase):
         ]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEqual(
-            json._default_decoder.decode(kept_criteria_as_json)['c4'][:10],
+            json.loads(kept_criteria_as_json)['c4'][:10],
             u'2000-01-01'
         )
 

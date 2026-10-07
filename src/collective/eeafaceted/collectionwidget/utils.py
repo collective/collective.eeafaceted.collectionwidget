@@ -8,7 +8,6 @@ from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidg
 from eea.facetednavigation.criteria.interfaces import ICriteria
 from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
-from imio.helpers.content import base_hasattr
 from imio.helpers.content import uuidToObject
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
@@ -68,7 +67,7 @@ def getCurrentCollection(faceted_context, caching=True):
         if not collectionUID and criterion.default:
             collectionUID = criterion.default
         if collectionUID:
-            if base_hasattr(collectionUID, "__iter__"):
+            if isinstance(collectionUID, (list, tuple)):
                 collectionUID = collectionUID[0]
             collection = uuidToObject(collectionUID, unrestricted=True)
         if caching and collection:

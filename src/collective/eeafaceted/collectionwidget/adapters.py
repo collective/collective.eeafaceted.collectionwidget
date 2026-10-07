@@ -6,6 +6,8 @@ from Products.CMFCore.utils import getToolByName
 from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 from zope.globalrequest import getRequest
 
+import six
+
 
 class DefaultValue(object):
     """If we  have a default value, check if it is still available
@@ -54,7 +56,7 @@ class KeptCriteria(object):
                            isinstance(enabled_checkboxes, list):
                             enabled_checkboxes = []
 
-                        if isinstance(enabled_checkboxes, str):
+                        if isinstance(enabled_checkboxes, six.string_types):
                             # the case {'Creator': {'query': 'test-user'}} go here
                             enabled_checkboxes = [enabled_checkboxes]
 

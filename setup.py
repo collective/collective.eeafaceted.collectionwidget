@@ -44,6 +44,7 @@ setup(
         'eea.facetednavigation >= 10.0',
         'imio.helpers',
         'plone.app.contenttypes',
+        'six',
     ],
     extras_require={
         'test': [
