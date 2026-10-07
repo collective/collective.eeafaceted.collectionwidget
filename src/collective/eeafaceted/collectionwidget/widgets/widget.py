@@ -43,13 +43,13 @@ class DefaultSchemata(DS):
     """Schemata default"""
 
     fields = field.Fields(ICollectionSchema).select(
-        u"title",
-        u"index",
-        u"vocabulary",
-        u"catalog",
-        u"hidealloption",
-        u"default",
-        u"hide_category",
+        "title",
+        "index",
+        "vocabulary",
+        "catalog",
+        "hidealloption",
+        "default",
+        "hide_category",
     )
 
 
@@ -201,7 +201,7 @@ class CollectionWidget(RadioWidget):
         )
         advanced_criteria = {}
         for criterion in faceted_config.get_criteria():
-            if criterion.section == u"advanced":
+            if criterion.section == "advanced":
                 advanced_criteria[criterion.getId()] = criterion.index
         return advanced_criteria
 
@@ -211,11 +211,11 @@ class CollectionWidget(RadioWidget):
 
     @property
     def sortreversed(self):
-        return bool(int(getattr(self.data, "sortreversed", u"0") or u"0"))
+        return bool(int(getattr(self.data, "sortreversed", "0") or "0"))
 
     @property
     def hidealloption(self):
-        return bool(int(getattr(self.data, "hidealloption", u"0") or u"0"))
+        return bool(int(getattr(self.data, "hidealloption", "0") or "0"))
 
     @property
     def hide_category(self):

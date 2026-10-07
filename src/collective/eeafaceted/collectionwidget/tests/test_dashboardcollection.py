@@ -4,7 +4,7 @@
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
 from DateTime import DateTime
 from plone import api
-from plone.app.layout.navigation.interfaces import INavigationRoot
+from plone.base.interfaces import INavigationRoot
 from zope.interface import alsoProvides
 
 
@@ -39,9 +39,9 @@ class TestDashboardCollection(IntegrationTestCase):
 
     def test_brains_results(self):
         """Catalog brains of the query, sorted on creation date (the collection sort_on is not used)."""
-        self.portal.folder.setCreationDate(DateTime("2010/01/01"))
+        self.portal.folder.creation_date = DateTime("2010/01/01")
         self.portal.folder.reindexObject(idxs=["created"])
-        self.portal.folder2.setCreationDate(DateTime("2000/01/01"))
+        self.portal.folder2.creation_date = DateTime("2000/01/01")
         self.portal.folder2.reindexObject(idxs=["created"])
         self.dashboardcollection.query = [
             {

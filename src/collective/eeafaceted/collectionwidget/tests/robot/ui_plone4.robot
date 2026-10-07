@@ -11,6 +11,7 @@ Library  Remote  ${PLONE_URL}/RobotRemote
 ${MODAL}  css=div.overlay-ajax
 ${ERROR_PAGE_TEXT}  there seems to be an error
 ${NOT_FOUND_TEXT}  This page does not seem to exist
+${HEADING}  css=#content h1.documentFirstHeading
 
 
 *** Keywords ***

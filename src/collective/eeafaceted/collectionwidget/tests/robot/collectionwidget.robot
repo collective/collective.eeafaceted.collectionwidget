@@ -12,7 +12,6 @@ Resource  ui_plone${PLONE_MAJOR}.robot
 *** Variables ***
 ${WIDGET}  css=#c1_widget
 ${RESULTS}  css=#faceted-results
-${HEADING}  css=#content h1.documentFirstHeading
 
 
 *** Keywords ***
@@ -31,8 +30,11 @@ Create a faceted folder
     Enable the faceted navigation  faceted
 
 Enable the faceted navigation
+    [Documentation]  "Enable faceted navigation" of the Actions menu, which adds the CSRF token
+    ...              (Plone 6 asks to confirm a direct GET on @@faceted_subtyper/enable)
     [Arguments]  ${path}
-    Go to  ${PLONE_URL}/${path}/@@faceted_subtyper/enable
+    Go to  ${PLONE_URL}/${path}
+    Click the content action  faceted\\.enable
     Wait until page contains element  css=#faceted-form
 
 Create a collection
@@ -57,9 +59,11 @@ Open the faceted folder
     The faceted results are loaded
 
 Open the faceted configuration
+    [Documentation]  Waits for the edit widgets, bound once eea.facetednavigation has loaded them
     [Arguments]  ${path}
     Go to  ${PLONE_URL}/${path}/configure_faceted.html
     Wait until page contains element  ${WIDGET}
+    Wait for condition  return typeof FacetedEdit !== 'undefined' && FacetedEdit.Widgets.c1 !== undefined
 
 The faceted results are loaded
     Wait until page contains element  ${RESULTS}
@@ -71,10 +75,14 @@ Select the collection
     The faceted results are loaded
 
 Set the default collection
-    [Documentation]  In the faceted configuration, a click on a collection makes it the default of the widget
+    [Documentation]  In the faceted configuration, a click on a collection makes it the default of the widget.
+    ...              A click on the term outside its link: eea.facetednavigation disables the links of the
+    ...              widgets there (a click on the label does nothing, Plone 4 too), and the term may be
+    ...              covered by its link, depending on the layout.
     [Arguments]  ${path}  ${title}
     Open the faceted configuration  ${path}
-    Click element  ${WIDGET} li[title="${title}"]
+    ${term}=  Get WebElement  ${WIDGET} li[title="${title}"]
+    Execute javascript  arguments[0].click();  ARGUMENTS  ${term}
     Wait until element contains  css=#faceted-portal-status-message-area  Changes saved
 
 Show the advanced criteria

@@ -146,7 +146,8 @@ showRelevantAdvancedCriteria = function(tag) {
 }
 
 updatePageTitle = function(tag) {
-  var currentTitleTag = $('#content h1.documentFirstHeading');
+  /* Plone 6.2 renders the page heading as a plain h1 in the content header */
+  var currentTitleTag = $('#content h1.documentFirstHeading, #content > header > h1').first();
   if (currentTitleTag.hasClass('dontupdate')) {
       return;
   }
@@ -183,8 +184,5 @@ Faceted.initializeTagsCloudCollectionWidget = function(evt){
   });
 };
 
-jQuery(document).ready(function(){
-  jQuery(Faceted.Events).bind(
-    Faceted.Events.INITIALIZE,
-    Faceted.initializeTagsCloudCollectionWidget);
-});
+// Initialize: bound now, eea.facetednavigation triggers INITIALIZE from its own document ready handler
+jQuery(Faceted.Events).on(Faceted.Events.INITIALIZE, Faceted.initializeTagsCloudCollectionWidget);

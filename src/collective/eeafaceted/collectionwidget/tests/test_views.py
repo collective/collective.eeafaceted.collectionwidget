@@ -11,7 +11,7 @@ class TestViews(BaseWidgetCase):
 
     def test_FacetedDashboardView(self):
         subtyper = getMultiAdapter(
-            (self.category1, self.request), name=u"faceted_subtyper"
+            (self.category1, self.request), name="faceted_subtyper"
         )
         subtyper.enable()
         # enabling a faceted will redirect to it, so, cancel this
@@ -19,7 +19,7 @@ class TestViews(BaseWidgetCase):
 
         # when default in self.folder, not redirected already at the right place
         view = getMultiAdapter(
-            (self.folder, self.request), name=u"facetednavigation_view"
+            (self.folder, self.request), name="facetednavigation_view"
         )
         crit = getCollectionLinkCriterion(self.folder)
         crit.default = self.collection2.UID()
@@ -116,8 +116,8 @@ class TestQueryBuilder(BaseWidgetCase):
         return getMultiAdapter((self.folder, self.request), name="querybuilderresults")
 
     def test__makequery(self):
-        """No "path" added to the query (the catalog ignores the {'query': ''} added by the
-        original, so the results do not differ: only the registration and results are tested)."""
+        """No "path" added to the query: no navigation root (the query modifier of
+        plone.app.querystring is skipped, see "no valid index")."""
         self.assertIsInstance(self._querybuilder(), QueryBuilder)
         query = [
             {

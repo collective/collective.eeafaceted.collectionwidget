@@ -90,10 +90,10 @@ class TestUtils(BaseWidgetCase):
         )
         del IAnnotations(request)[cache_key]
         self.assertIsNone(getCurrentCollection(self.folder))
-        request.form[
-            "facetedQuery"
-        ] = '{{"c3":["20"],"b_start":["0"],"{0}":"{1}"}}'.format(
-            criterion.__name__, dashcoll.UID()
+        request.form["facetedQuery"] = (
+            '{{"c3":["20"],"b_start":["0"],"{0}":"{1}"}}'.format(
+                criterion.__name__, dashcoll.UID()
+            )
         )
         self.assertEqual(getCurrentCollection(self.folder), dashcoll)
 

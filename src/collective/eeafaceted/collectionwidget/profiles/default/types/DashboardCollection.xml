@@ -8,7 +8,7 @@
   <property name="title" i18n:translate="">DashboardCollection</property>
   <property name="description"
     i18n:translate="">DashboardCollection</property>
-  <property name="icon_expr">string:${portal_url}/++resource++collective.eeafaceted.collectionwidget/dashboardcollection.png</property>
+  <property name="icon_expr">string:contenttype/dashboardcollection</property>
   <property name="factory">DashboardCollection</property>
   <property name="global_allow">True</property>
   <property name="filter_content_types">False</property>
@@ -16,18 +16,15 @@
   <property name="allow_discussion">False</property>
   <property name="add_permission">collective.eeafaceted.collectionwidget.addDashboardCollection</property>
   <property name="klass">collective.eeafaceted.collectionwidget.content.dashboardcollection.DashboardCollection</property>
-  <property name="schema"></property>
-  <property name="model_source"></property>
-  <property name="model_file" />
   <property name="behaviors" purge="false">
-    <element value="plone.app.content.interfaces.INameFromTitle"/>
-    <element value="plone.app.contenttypes.behaviors.collection.ICollection"/>
+    <element value="plone.namefromtitle"/>
+    <element value="plone.collection"/>
     <element value="collective.behavior.talcondition.behavior.ITALCondition"/>
-    <element value="plone.app.dexterity.behaviors.discussion.IAllowDiscussion"/>
-    <element value="plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation"/>
-    <element value="plone.app.dexterity.behaviors.metadata.IDublinCore"/>
-    <element value="plone.app.contenttypes.behaviors.richtext.IRichText"/>
-    <element value="plone.app.relationfield.behavior.IRelatedItems"/>
+    <element value="plone.allowdiscussion"/>
+    <element value="plone.excludefromnavigation"/>
+    <element value="plone.dublincore"/>
+    <element value="plone.richtext"/>
+    <element value="plone.relateditems"/>
   </property>
   <property name="schema">collective.eeafaceted.collectionwidget.interfaces.IDashboardCollection</property>
   <property name="model_source"></property>

@@ -11,6 +11,7 @@ Library  Remote  ${PLONE_URL}/RobotRemote
 ${MODAL}  css=.modal-dialog
 ${ERROR_PAGE_TEXT}  there seems to be an error
 ${NOT_FOUND_TEXT}  This page does not seem to exist
+${HEADING}  css=#content > header > h1
 
 
 *** Keywords ***
@@ -103,6 +104,8 @@ Add the query criterion
     [Documentation]  Collection query widget (pat-querystring): criterion of the empty last row, by title
     ...              (from collective.compoundcriterion, checked on Plone 6)
     [Arguments]  ${criterion}
+    # a click scrolls the element to the bottom of the window, under the sticky form buttons
+    Set window size  1280  2000
     ${index}=  Set variable  xpath=(//div[contains(@class, "querystring-criteria-wrapper")])[last()]//div[contains(@class, "querystring-criteria-index")]//a[contains(@class, "select2-choice")]
     Wait until element is visible  ${index}
     Click element  ${index}

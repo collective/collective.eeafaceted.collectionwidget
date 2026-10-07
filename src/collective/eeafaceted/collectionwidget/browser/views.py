@@ -10,12 +10,15 @@ from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriter
 from eea.facetednavigation.browser.app.view import FacetedContainerView
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
 from imio.helpers.content import uuidToObject
+from operator import itemgetter
 from plone import api
 from plone.app.contentlisting.interfaces import IContentListing
 from plone.app.querystring import queryparser
 from plone.app.querystring.interfaces import IParsedQueryIndexModifier
+from plone.app.querystring.interfaces import IQueryModifier
 from plone.app.querystring.querybuilder import logger
 from plone.app.querystring.querybuilder import QueryBuilder as OriginalQueryBuilder
+from plone.app.querystring.querymodifiers import modify_query_to_enforce_navigation_root
 from plone.batching import Batch
 from Products.CMFCore.utils import getToolByName
 from Products.Five.browser import BrowserView
@@ -126,7 +129,15 @@ class QueryBuilder(OriginalQueryBuilder):
         brains=False,
         custom_query=None,
     ):
-        """Overrided to avoid added "path" index."""
+        """Copy of plone.app.querystring 3.0.0's, without the "path" index it adds."""
+        query_modifiers = getUtilitiesFor(IQueryModifier)
+        for name, modifier in sorted(query_modifiers, key=itemgetter(0)):
+            # Begin changes, skip the modifier adding the navigation root "path"
+            if modifier is modify_query_to_enforce_navigation_root:
+                continue
+            # End changes
+            query = modifier(query)
+
         parsedquery = queryparser.parseFormquery(
             self.context, query, sort_on, sort_order
         )
@@ -152,11 +163,7 @@ class QueryBuilder(OriginalQueryBuilder):
             logger.warning("Using empty query because there are no valid indexes used.")
             parsedquery = {}
 
-        if not parsedquery:
-            if brains:
-                return []
-            else:
-                return IContentListing([])
+        empty_query = not parsedquery  # store emptiness
 
         if batch:
             parsedquery["b_start"] = b_start
@@ -165,21 +172,34 @@ class QueryBuilder(OriginalQueryBuilder):
             parsedquery["sort_limit"] = limit
 
         # Begin changes, comment "path" arbitrary added
-        # if 'path' not in parsedquery:
-        #     parsedquery['path'] = {'query': ''}
+        # if "path" not in parsedquery:
+        #     parsedquery["path"] = {"query": ""}
         # End changes, comment "path" arbitrary added
 
-        if isinstance(custom_query, dict):
-            # Update the parsed query with extra query dictionary. This may
-            # override parsed query options.
-            parsedquery.update(custom_query)
-        results = catalog(**parsedquery)
-        if (
-            getattr(results, "actual_result_count", False)
-            and limit
-            and results.actual_result_count > limit
-        ):
-            results.actual_result_count = limit
+        if isinstance(custom_query, dict) and custom_query:
+            # Update the parsed query with an extra query dictionary. This may
+            # override the parsed query. The custom_query is a dictionary of
+            # index names and their associated query values.
+            for key in custom_query:
+                if isinstance(parsedquery.get(key), dict) and isinstance(
+                    custom_query.get(key), dict
+                ):
+                    parsedquery[key].update(custom_query[key])
+                    continue
+                parsedquery[key] = custom_query[key]
+            empty_query = False
+
+        # filter bad term and operator in query
+        parsedquery = self.filter_query(parsedquery)
+        results = []
+        if not empty_query:
+            results = catalog(**parsedquery)
+            if (
+                getattr(results, "actual_result_count", False)
+                and limit
+                and results.actual_result_count > limit
+            ):
+                results.actual_result_count = limit
 
         if not brains:
             results = IContentListing(results)

@@ -2,7 +2,10 @@
 """Base module for unittesting."""
 
 from eea.facetednavigation.interfaces import ICriteria
+from plone.app.robotframework.content import Content
+from plone.app.robotframework.remote import RemoteLibraryLayer
 from plone.app.robotframework.testing import REMOTE_LIBRARY_BUNDLE_FIXTURE
+from plone.app.robotframework.utils import disableCSRFProtection
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
@@ -12,17 +15,10 @@ from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import TEST_USER_NAME
+from plone.testing import zope
 from zope.component import queryAdapter
 
 import collective.eeafaceted.collectionwidget
-
-
-try:
-    from plone.testing import zope as z2
-    from plone.testing.zope import WSGI_SERVER_FIXTURE as SERVER_FIXTURE
-except ImportError:  # Plone 4
-    from plone.testing import z2
-    from plone.testing.z2 import ZSERVER_FIXTURE as SERVER_FIXTURE
 
 
 class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
@@ -37,7 +33,7 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
             package=collective.eeafaceted.collectionwidget, name="testing.zcml"
         )
         for p in self.products:
-            z2.installProduct(app, p)
+            zope.installProduct(app, p)
 
     def setUpPloneSite(self, portal):
         """Set up Plone."""
@@ -51,14 +47,15 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
         folder = portal[folder_id]
         folder.reindexObject()
 
-        folder2_id = portal.invokeFactory("Folder", "folder2")
+        # titled: Plone 6.2 renders no page heading for an empty title
+        folder2_id = portal.invokeFactory("Folder", "folder2", title="Folder 2")
         folder2 = portal[folder2_id]
         folder2.reindexObject()
         folder2.unrestrictedTraverse("@@faceted_subtyper").enable()
         collection = portal.portal_types.DashboardCollection._constructInstance(
             folder2,
             id="collection_review_state",
-            title=u"Review state",
+            title="Review state",
             query=[
                 {
                     "i": "review_state",
@@ -69,7 +66,7 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
             showNumberOfItems=True,
             sort_on="",
             sort_reversed=False,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         collection_uid = collection.UID()
@@ -80,7 +77,7 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
         portal.portal_types.DashboardCollection._constructInstance(
             folder2,
             id="collection_wo_review_state",
-            title=u"Creator",
+            title="Creator",
             query=[
                 {
                     "i": "Creator",
@@ -91,7 +88,7 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
             showNumberOfItems=True,
             sort_on="",
             sort_reversed=False,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
 
@@ -103,7 +100,7 @@ class CollectiveEeafacetedCollectionwidgetLayer(PloneSandboxLayer):
     def tearDownZope(self, app):
         """Tear down Zope."""
         for p in reversed(self.products):
-            z2.uninstallProduct(app, p)
+            zope.uninstallProduct(app, p)
 
 
 FIXTURE = CollectiveEeafacetedCollectionwidgetLayer(name="FIXTURE")
@@ -115,6 +112,24 @@ INTEGRATION = IntegrationTesting(bases=(FIXTURE,), name="INTEGRATION")
 FUNCTIONAL = FunctionalTesting(bases=(FIXTURE,), name="FUNCTIONAL")
 
 
+class SetFieldValue(Content):
+    def set_field_value(self, uid, field, value, field_type):
+        """plone.app.robotframework 3.0.0 doesn't disable the CSRF protection here (as
+        create_content does): plone.protect silently aborts the change (MIGRATION.md).
+        """
+        disableCSRFProtection()
+        return super().set_field_value(uid, field, value, field_type)
+
+
+# REMOTE_LIBRARY_BUNDLE_FIXTURE with the fixed "Set field value" keyword
+REMOTE_LIBRARY_FIXTURE = RemoteLibraryLayer(
+    bases=(PLONE_FIXTURE,),
+    libraries=(SetFieldValue,) + REMOTE_LIBRARY_BUNDLE_FIXTURE.libraryBases[1:],
+    name="CollectionwidgetRemoteLibrary:RobotRemote",
+)
+
+
 ACCEPTANCE = FunctionalTesting(
-    bases=(FIXTURE, REMOTE_LIBRARY_BUNDLE_FIXTURE, SERVER_FIXTURE), name="ACCEPTANCE"
+    bases=(FIXTURE, REMOTE_LIBRARY_FIXTURE, zope.WSGI_SERVER_FIXTURE),
+    name="ACCEPTANCE",
 )

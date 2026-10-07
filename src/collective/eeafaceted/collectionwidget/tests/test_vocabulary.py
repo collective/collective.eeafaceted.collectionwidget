@@ -28,9 +28,7 @@ class TestVocabulary(IntegrationTestCase):
         self.request = self.layer["request"]
         self.portal = self.layer["portal"]
         self.folder = self.portal.folder
-        subtyper = getMultiAdapter(
-            (self.folder, self.request), name=u"faceted_subtyper"
-        )
+        subtyper = getMultiAdapter((self.folder, self.request), name="faceted_subtyper")
         subtyper.enable()
 
     def test_categoryvocabulary(self):
@@ -57,7 +55,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Collection 1",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         c2 = api.content.create(
@@ -65,7 +63,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Collection 2",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
@@ -74,7 +72,7 @@ class TestVocabulary(IntegrationTestCase):
         self.assertTrue(c1.UID() in [term.token for term in vocabulary])
         self.assertTrue(c2.UID() in [term.token for term in vocabulary])
         self.assertEqual(
-            [(u"Collection 1", ""), (u"Collection 2", "")],
+            [("Collection 1", ""), ("Collection 2", "")],
             [term.title for term in vocabulary],
         )
 
@@ -82,7 +80,7 @@ class TestVocabulary(IntegrationTestCase):
         c2.enabled = False
         c2.reindexObject(idxs=["enabled"])
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
-        self.assertEqual([(u"Collection 1", "")], [term.title for term in vocabulary])
+        self.assertEqual([("Collection 1", "")], [term.title for term in vocabulary])
 
     def test_with_sub_faceted(self):
         """Test behaviour of the vocabulary when we have subfolders
@@ -93,7 +91,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Collection 1",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         c2 = api.content.create(
@@ -101,7 +99,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Collection 2",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
 
@@ -114,7 +112,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Collection 3",
             container=self.folder.subfolder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         c4 = api.content.create(
@@ -122,7 +120,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Collection 4",
             container=self.folder.subfolder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
 
@@ -146,14 +144,14 @@ class TestVocabulary(IntegrationTestCase):
 
         # now enable faceted navigation for subfolder
         subtyper = getMultiAdapter(
-            (self.folder.subfolder, self.request), name=u"faceted_subtyper"
+            (self.folder.subfolder, self.request), name="faceted_subtyper"
         )
         subtyper.enable()
         # change the CollectionWidget id to "c44" so we are sure that
         # the generated link is the one to this widget
         collection_widget = ICriteria(self.folder.subfolder).get("c1")
         self.assertEqual(collection_widget.widget, CollectionWidget.widget_type)
-        collection_widget.__name__ = u"c44"
+        collection_widget.__name__ = "c44"
         vocabulary = CollectionVocabularyFactory(self.folder, self.folder)
         folderCatVocabulary = CollectionCategoryVocabularyFactory(self.folder)
         subfolderCatVocabulary = CollectionCategoryVocabularyFactory(
@@ -206,7 +204,7 @@ class TestVocabulary(IntegrationTestCase):
         self.assertFalse(vocabulary.getTermByToken(c4.UID()).title[1])
 
         # test the generated link when having a faceted using a sorting index reversed or not
-        data = {"default": u"effective(reverse)"}
+        data = {"default": "effective(reverse)"}
         sortingCriterionId = ICriteria(self.folder).add("sorting", "bottom", **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEqual(
@@ -215,7 +213,7 @@ class TestVocabulary(IntegrationTestCase):
                 self.folder.absolute_url(), c1.UID()
             ),
         )
-        data = {"default": u"effective"}
+        data = {"default": "effective"}
         ICriteria(self.folder).edit(sortingCriterionId, **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEqual(
@@ -226,7 +224,7 @@ class TestVocabulary(IntegrationTestCase):
         )
 
         # test that other default values are kept also, add a 'resultsperpage' widget
-        data = {"default": u"20"}
+        data = {"default": "20"}
         ICriteria(self.folder).add("resultsperpage", "bottom", **data)
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEqual(
@@ -245,7 +243,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Dashboard collection 1",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         # add on non Manager user
@@ -258,15 +256,15 @@ class TestVocabulary(IntegrationTestCase):
         self.assertTrue(ITALConditionable.providedBy(self.dashboardcollection))
         factory = queryUtility(
             IVocabularyFactory,
-            u"collective.eeafaceted.collectionwidget.collectionvocabulary",
+            "collective.eeafaceted.collectionwidget.collectionvocabulary",
         )
         # for now, no condition defined on the collection so it is in the vocabulary
-        self.assertEqual(self.dashboardcollection.tal_condition, u"")
+        self.assertEqual(self.dashboardcollection.tal_condition, "")
         vocab = factory(self.portal, self.portal)
         self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
         # now define a condition and by pass for Manager
-        self.dashboardcollection.tal_condition = u"python:False"
-        self.dashboardcollection.roles_bypassing_talcondition = [u"Manager"]
+        self.dashboardcollection.tal_condition = "python:False"
+        self.dashboardcollection.roles_bypassing_talcondition = ["Manager"]
         notify(ObjectModifiedEvent(self.dashboardcollection))
         # No more listed except for Manager
         vocab = factory(self.portal, self.portal)
@@ -283,7 +281,7 @@ class TestVocabulary(IntegrationTestCase):
         vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
         # If condition is True, it is listed
-        self.dashboardcollection.tal_condition = u"python:True"
+        self.dashboardcollection.tal_condition = "python:True"
         notify(ObjectModifiedEvent(self.dashboardcollection))
         vocab = factory(self.portal, self.portal)
         self.assertTrue(self.dashboardcollection.UID() in vocab.by_token)
@@ -298,7 +296,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Dashboard collection 1",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         # add on non Manager user
@@ -310,11 +308,11 @@ class TestVocabulary(IntegrationTestCase):
         )
         factory = queryUtility(
             IVocabularyFactory,
-            u"collective.eeafaceted.collectionwidget.cachedcollectionvocabulary",
+            "collective.eeafaceted.collectionwidget.cachedcollectionvocabulary",
         )
         # now define a condition and by pass for Manager
-        self.dashboardcollection.tal_condition = u"python:False"
-        self.dashboardcollection.roles_bypassing_talcondition = [u"Manager"]
+        self.dashboardcollection.tal_condition = "python:False"
+        self.dashboardcollection.roles_bypassing_talcondition = ["Manager"]
         notify(ObjectModifiedEvent(self.dashboardcollection))
         # No more listed except for Manager
         vocab = factory(self.portal, self.portal)
@@ -337,7 +335,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Dashboard collection 2",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         vocab = factory(self.portal, self.portal)
@@ -358,7 +356,7 @@ class TestVocabulary(IntegrationTestCase):
             type="DashboardCollection",
             title="Dashboard collection 2",
             container=self.folder,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
         )
         self.assertEqual(

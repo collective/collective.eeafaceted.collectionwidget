@@ -8,8 +8,8 @@ from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.interfaces import IFacetedNavigable
 from imio.helpers.cache import get_cachekey_volatile
 from plone import api
+from plone.base.utils import safe_text
 from plone.memoize import ram
-from Products.CMFPlone.utils import safe_unicode
 from zope.component import getAdapter
 from zope.globalrequest import getRequest
 from zope.interface import implementer
@@ -53,7 +53,7 @@ class CollectionVocabulary(object):
 
             items.append(
                 SimpleTerm(
-                    brain.getPath(), brain.UID, (safe_unicode(brain.Title), redirect_to)
+                    brain.getPath(), brain.UID, (safe_text(brain.Title), redirect_to)
                 )
             )
         return SimpleVocabulary(items)
@@ -83,13 +83,13 @@ class CollectionVocabulary(object):
         for criterion in criteria:
             # keep default of criteria in the "default"
             # section omitting the collection widget
-            if criterion.section == u"default":
+            if criterion.section == "default":
                 if criterion.widget == CollectionWidget.widget_type:
                     default_criteria.append(
                         "{0}={1}".format(criterion.__name__, collection.UID())
                     )
                 elif criterion.default:
-                    if criterion.widget == u"sorting":
+                    if criterion.widget == "sorting":
                         # manage sort order criterion, received as c0=effective(reverse),
                         # changed for c0=effective&reversed=on
                         if criterion.default.endswith("(reverse)"):
@@ -136,7 +136,7 @@ class CollectionCategoryVocabulary(object):
             root = root.aq_inner.aq_parent
         adapter = getAdapter(root, ICollectionCategories)
         items = [
-            SimpleTerm(value.getPath(), token, safe_unicode(value.Title))
+            SimpleTerm(value.getPath(), token, safe_text(value.Title))
             for token, value in adapter.values
         ]
         return SimpleVocabulary(items)

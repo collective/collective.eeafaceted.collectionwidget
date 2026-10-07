@@ -1,25 +1,23 @@
 # -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
+
 from ..testing.testcase import IntegrationTestCase
 from collective.eeafaceted.collectionwidget import FacetedCollectionMessageFactory as _
-from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from plone.base.interfaces import IBundleRegistry
+from plone.base.utils import get_installer
 from plone.behavior.interfaces import IBehavior
-from Products.CMFPlone.utils import getFSVersionTuple
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
 from zope.component import queryUtility
 from zope.i18n import translate
 
 
-def registered_resources(portal):
-    """Ids of the CSS and JS resources registered in the site."""
-    if getFSVersionTuple()[0] < 5:
-        return (
-            portal.portal_css.getResourceIds()
-            + portal.portal_javascripts.getResourceIds()
-        )
-    raise NotImplementedError(
-        "Plone 6: read the resource registry (MIGRATION.md phase 7)"
+def registered_bundles():
+    """Resource registry bundles, by name."""
+    return getUtility(IRegistry).collectionOfInterface(
+        IBundleRegistry, prefix="plone.bundles", check=False
     )
 
 
@@ -29,25 +27,44 @@ class TestInstall(IntegrationTestCase):
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer["portal"]
-        self.installer = api.portal.get_tool("portal_quickinstaller")
+        self.installer = get_installer(self.portal, self.layer["request"])
 
     def test_product_installed(self):
-        """Test if collective.eeafaceted.collectionwidget is installed with portal_quickinstaller."""
+        """Test if collective.eeafaceted.collectionwidget is installed."""
         self.assertTrue(
-            self.installer.isProductInstalled("collective.eeafaceted.collectionwidget")
+            self.installer.is_product_installed(
+                "collective.eeafaceted.collectionwidget"
+            )
         )
 
     def test_uninstall(self):
         """Test if collective.eeafaceted.collectionwidget is cleanly uninstalled."""
-        self.installer.uninstallProducts(["collective.eeafaceted.collectionwidget"])
+        from collective.eeafaceted.collectionwidget.interfaces import (
+            ICollectiveEeafacetedCollectionwidgetLayer,
+        )
+        from plone.browserlayer import utils
+
+        self.installer.uninstall_product("collective.eeafaceted.collectionwidget")
         self.assertFalse(
-            self.installer.isProductInstalled("collective.eeafaceted.collectionwidget")
+            self.installer.is_product_installed(
+                "collective.eeafaceted.collectionwidget"
+            )
+        )
+        self.assertNotIn(
+            ICollectiveEeafacetedCollectionwidgetLayer, utils.registered_layers()
+        )
+        self.assertFalse(
+            [name for name in registered_bundles() if "collectionwidget" in name]
+        )
+        self.assertNotIn(
+            "plone.icon.contenttype/dashboardcollection", getUtility(IRegistry)
         )
 
     # browserlayer.xml
     def test_browserlayer(self):
         """Test that ICollectiveEeafacetedCollectionwidgetLayer is registered as well as
-        the plone.app.contenttypes BrowserLayer that is necessary for default listing_view."""
+        the plone.app.contenttypes BrowserLayer that is necessary for default listing_view.
+        """
         from collective.eeafaceted.collectionwidget.interfaces import (
             ICollectiveEeafacetedCollectionwidgetLayer,
         )
@@ -76,18 +93,27 @@ class TestInstall(IntegrationTestCase):
             "collective.eeafaceted.collectionwidget.addDashboardCollection",
         )
         self.assertEqual(fti.default_view, "listing_view")
+        # icon_expr: name of the icon, registered in registry.xml
+        self.assertEqual(fti.icon_expr, "string:contenttype/dashboardcollection")
+        self.assertEqual(
+            self.portal.restrictedTraverse("@@iconresolver").url(
+                "contenttype/dashboardcollection"
+            ),
+            "http://nohost/plone/++resource++collective.eeafaceted.collectionwidget/"
+            "dashboardcollection.png",
+        )
         self.assertTrue(fti.global_allow)
         self.assertEqual(
             tuple(fti.behaviors),
             (
-                "plone.app.content.interfaces.INameFromTitle",
-                "plone.app.contenttypes.behaviors.collection.ICollection",
+                "plone.namefromtitle",
+                "plone.collection",
                 "collective.behavior.talcondition.behavior.ITALCondition",
-                "plone.app.dexterity.behaviors.discussion.IAllowDiscussion",
-                "plone.app.dexterity.behaviors.exclfromnav.IExcludeFromNavigation",
-                "plone.app.dexterity.behaviors.metadata.IDublinCore",
-                "plone.app.contenttypes.behaviors.richtext.IRichText",
-                "plone.app.relationfield.behavior.IRelatedItems",
+                "plone.allowdiscussion",
+                "plone.excludefromnavigation",
+                "plone.dublincore",
+                "plone.richtext",
+                "plone.relateditems",
             ),
         )
         # every behavior exists
@@ -128,17 +154,47 @@ class TestInstall(IntegrationTestCase):
             self.portal.portal_workflow.getChainForPortalType("DashboardCollection"), ()
         )
 
-    # cssregistry.xml, jsregistry.xml
+    # registry.xml
     def test_resources(self):
-        resources = registered_resources(self.portal)
-        for resource in (
-            "++resource++collective.eeafaceted.collectionwidget.view.css",
-            "++resource++collective.eeafaceted.collectionwidget.edit.css",
-            "++resource++collective.eeafaceted.collectionwidget/collective.eeafaceted.collectionwidget.css",
-            "++resource++collective.eeafaceted.collectionwidget.widgets.view.js",
-            "++resource++collective.eeafaceted.collectionwidget.widgets.edit.js",
+        bundles = registered_bundles()
+        # forms of the DashboardCollection
+        self.assertEqual(
+            bundles["collectionwidget"].csscompilation,
+            "++resource++collective.eeafaceted.collectionwidget/"
+            "collective.eeafaceted.collectionwidget.css",
+        )
+        # widget, loaded after the eea.facetednavigation bundle it extends, deferred as it is
+        for name, js, css, depends in (
+            (
+                "faceted.collectionwidget.view",
+                "++resource++collective.eeafaceted.collectionwidget.widgets.view.js",
+                "++resource++collective.eeafaceted.collectionwidget.view.css",
+                "faceted.view",
+            ),
+            (
+                "faceted.collectionwidget.edit",
+                "++resource++collective.eeafaceted.collectionwidget.widgets.edit.js",
+                None,
+                "faceted.edit",
+            ),
         ):
-            self.assertIn(resource, resources)
+            bundle = bundles[name]
+            self.assertTrue(bundle.enabled)
+            self.assertEqual(
+                (bundle.jscompilation, bundle.csscompilation, bundle.depends),
+                (js, css, depends),
+            )
+            self.assertIn(depends, bundles)
+            self.assertTrue(bundle.load_defer)
+            self.assertFalse(bundle.load_async)
+        # every resource exists
+        for bundle in ("collectionwidget", "faceted.collectionwidget.view"):
+            self.portal.restrictedTraverse(bundles[bundle].csscompilation)
+        for bundle in (
+            "faceted.collectionwidget.view",
+            "faceted.collectionwidget.edit",
+        ):
+            self.portal.restrictedTraverse(bundles[bundle].jscompilation)
 
     # locales
     def test_translations(self):
@@ -147,9 +203,9 @@ class TestInstall(IntegrationTestCase):
             "Collection pour tableau de bord",
         )
         self.assertEqual(
-            translate(_("Hide category"), target_language="fr"), u"Cacher la catégorie"
+            translate(_("Hide category"), target_language="fr"), "Cacher la catégorie"
         )
         self.assertEqual(
             translate(_("Show number of items in filter"), target_language="fr"),
-            u"Afficher le nombre d'éléments",
+            "Afficher le nombre d'éléments",
         )

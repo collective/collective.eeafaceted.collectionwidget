@@ -43,12 +43,12 @@ class IDashboardCollection(ICollection):
 
     form.widget("showNumberOfItems", RadioFieldWidget)
     showNumberOfItems = schema.Bool(
-        title=_(u"Show number of items in filter"),
+        title=_("Show number of items in filter"),
         description=_(
-            u"This will display the number of elements this search "
-            u"return in the widget (or portlet) collection. Take "
-            u"care that this is doing the search to display the result "
-            u"so enable it only if necessary."
+            "This will display the number of elements this search "
+            "return in the widget (or portlet) collection. Take "
+            "care that this is doing the search to display the result "
+            "so enable it only if necessary."
         ),
         default=False,
         required=False,
@@ -56,7 +56,7 @@ class IDashboardCollection(ICollection):
 
     form.widget("enabled", RadioFieldWidget)
     enabled = schema.Bool(
-        title=_(u"Enabled?"),
+        title=_("Enabled?"),
         default=True,
         required=False,
     )

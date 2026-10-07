@@ -7,9 +7,11 @@ from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidg
 from collective.eeafaceted.collectionwidget.widgets.widget import ICollectionSchema
 from DateTime import DateTime
 from eea.facetednavigation.interfaces import ICriteria
+from eea.facetednavigation.interfaces import IWidget
 from eea.facetednavigation.widgets.storage import Criterion
 from imio.helpers.cache import cleanRamCacheFor
 from plone import api
+from plone.app.testing import TEST_USER_ID
 from Products.CMFCore.utils import getToolByName
 from zope.annotation import IAnnotations
 from zope.component import getGlobalSiteManager
@@ -43,7 +45,7 @@ class BaseWidgetCase(IntegrationTestCase):
             query=[],
             sort_on="sortable_title",
             sort_reversed=False,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
             container=self.category1,
         )
@@ -55,13 +57,11 @@ class BaseWidgetCase(IntegrationTestCase):
             query=[],
             sort_on="sortable_title",
             sort_reversed=False,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
             container=self.category2,
         )
-        subtyper = getMultiAdapter(
-            (self.folder, self.request), name=u"faceted_subtyper"
-        )
+        subtyper = getMultiAdapter((self.folder, self.request), name="faceted_subtyper")
         subtyper.enable()
 
 
@@ -113,7 +113,7 @@ class TestWidget(BaseWidgetCase):
             type="DashboardCollection",
             title="Collection 3",
             showNumberOfItems=True,
-            tal_condition=u"",
+            tal_condition="",
             roles_bypassing_talcondition=[],
             container=self.folder,
         )
@@ -128,8 +128,8 @@ class TestWidget(BaseWidgetCase):
         vocabulary = widget._generate_vocabulary()
         self.assertEqual(len(vocabulary), 2)
         first_category, second_category = list(vocabulary.values())
-        self.assertEqual(u"Category 1", first_category["term"].title)
-        self.assertEqual(u"Category 2", second_category["term"].title)
+        self.assertEqual("Category 1", first_category["term"].title)
+        self.assertEqual("Category 2", second_category["term"].title)
         self.assertEqual(len(first_category["collections"]), 1)
         self.assertEqual(len(second_category["collections"]), 1)
         self.assertEqual(
@@ -149,10 +149,15 @@ class TestWidget(BaseWidgetCase):
         # if a category is private and not viewable by user
         # contained collections will not be displayed
         # make category1 folder not accessible by test_user_1_
+        # (Plone 6 catalogs "Access contents information", a workflow manages it with View)
         cat1 = self.portal.folder.category1
         cat1.manage_permission("View")
+        cat1.manage_permission("Access contents information")
         cat1.reindexObjectSecurity()
         self.collection1.manage_permission("View", ("Authenticated",))
+        self.collection1.manage_permission(
+            "Access contents information", ("Authenticated",)
+        )
         self.collection1.reindexObjectSecurity()
         member = api.user.get_current()
         self.assertTrue(not member.has_permission("View", cat1))
@@ -172,7 +177,7 @@ class TestWidget(BaseWidgetCase):
             [self.collection1.UID(), self.collection2.UID()],
         )
         self.assertNotIn(
-            u"Category 1", [c["term"].title for c in list(vocabulary.values())]
+            "Category 1", [c["term"].title for c in list(vocabulary.values())]
         )
         # with hide_category, every collection is listed without category,
         # even the one of the category the user can not see
@@ -187,30 +192,30 @@ class TestWidget(BaseWidgetCase):
 
     def test_hidealloption(self):
         data = Criterion()
-        data.hidealloption = u"0"
+        data.hidealloption = "0"
         widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertFalse(widget.hidealloption)
-        data.hidealloption = u"1"
+        data.hidealloption = "1"
         widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertTrue(widget.hidealloption)
 
     def test_sortreversed(self):
         data = Criterion()
-        data.sortreversed = u"0"
+        data.sortreversed = "0"
         widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertFalse(widget.sortreversed)
-        data.sortreversed = u"1"
+        data.sortreversed = "1"
         widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertTrue(widget.sortreversed)
 
     def test_default_term_value(self):
         data = Criterion(vocabulary=COLLECTION_VOCABULARY)
-        data.sortreversed = u"0"
+        data.sortreversed = "0"
         widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertEqual(
             widget.default_term_value, self.collection1.absolute_url_path()
         )
-        data.sortreversed = u"1"
+        data.sortreversed = "1"
         widget = CollectionWidget(self.folder, self.request, data=data)
         self.assertEqual(
             widget.default_term_value, self.collection2.absolute_url_path()
@@ -222,7 +227,7 @@ class TestWidget(BaseWidgetCase):
         self.assertEqual(len(widget.advanced_criteria), 3)
         self.assertEqual(
             widget.advanced_criteria,
-            {u"c3": u"Creator", u"c2": u"review_state", u"c4": "created"},
+            {"c3": "Creator", "c2": "review_state", "c4": "created"},
         )
 
     def test_kept_criteria_as_json(self):
@@ -236,7 +241,7 @@ class TestWidget(BaseWidgetCase):
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         # response is valid JSON
         self.assertEqual(
-            json.loads(kept_criteria_as_json), {u"c3": [], u"c2": [], u"c4": []}
+            json.loads(kept_criteria_as_json), {"c3": [], "c2": [], "c4": []}
         )
         # ok, now update collection1 so it manage 'review_state'
         collection1.query = [
@@ -250,13 +255,13 @@ class TestWidget(BaseWidgetCase):
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEqual(
             json.loads(kept_criteria_as_json),
-            {u"c3": [], u"c2": [u"private"], u"c4": []},
+            {"c3": [], "c2": ["private"], "c4": []},
         )
         # but it is still kept when using collection2
         collection2 = self.folder.category2.collection2
         kept_criteria_as_json = widget.kept_criteria_as_json(collection2.UID())
         self.assertEqual(
-            json.loads(kept_criteria_as_json), {u"c3": [], u"c2": [], u"c4": []}
+            json.loads(kept_criteria_as_json), {"c3": [], "c2": [], "c4": []}
         )
 
         # test case where value is a string, not a list
@@ -266,7 +271,7 @@ class TestWidget(BaseWidgetCase):
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
         self.assertEqual(
             json.loads(kept_criteria_as_json),
-            {u"c3": [u"test-user"], u"c2": [], u"c4": []},
+            {"c3": [TEST_USER_ID], "c2": [], "c4": []},
         )
 
         # test case where value is a DateTime
@@ -278,7 +283,7 @@ class TestWidget(BaseWidgetCase):
             },
         ]
         kept_criteria_as_json = widget.kept_criteria_as_json(collection1.UID())
-        self.assertEqual(json.loads(kept_criteria_as_json)["c4"][:10], u"2000-01-01")
+        self.assertEqual(json.loads(kept_criteria_as_json)["c4"][:10], "2000-01-01")
 
     def test_default(self):
         # no default value selected
@@ -322,14 +327,14 @@ class TestWidget(BaseWidgetCase):
         widget._generate_vocabulary()
         self.request.form["c1[]"] = self.collection1.UID()
         count_dico = widget.count(brains)
-        # with vocabulary
+        # with vocabulary: every cataloged object, the site root included (Plone 6)
         self.assertEqual(
-            count_dico, {self.collection1.UID(): 8, self.collection2.UID(): 8}
+            count_dico, {self.collection1.UID(): 9, self.collection2.UID(): 9}
         )
         # with sequence
-        sequence = {u"": 1, self.collection1.UID(): 2}
+        sequence = {"": 1, self.collection1.UID(): 2}
         count_dico = widget.count(brains, sequence=sequence)
-        self.assertEqual(count_dico, {u"": 1, self.collection1.UID(): 8})
+        self.assertEqual(count_dico, {"": 1, self.collection1.UID(): 9})
 
     def test_query(self):
         self.collection1.query = [
@@ -478,7 +483,7 @@ class TestWidget(BaseWidgetCase):
         self.assertEqual(li.xpath('a//span[@class="term-count"]'), [])
         # collection in a faceted sub-folder: link to that folder
         getMultiAdapter(
-            (self.category1, self.request), name=u"faceted_subtyper"
+            (self.category1, self.request), name="faceted_subtyper"
         ).enable()
         terms = dict((term.token, term) for term in widget.vocabulary())
         li = lxml.html.fromstring(widget.render_term(terms[uid1], self.category1.UID()))
@@ -503,7 +508,7 @@ class TestWidgetWithDefaultValueAdapter(BaseWidgetCase):
         sm = getGlobalSiteManager()
         sm.registerAdapter(
             factory=DefaultValue,
-            required=(Interface, Interface, Interface),
+            required=(Interface, Interface, IWidget),
             provided=IWidgetDefaultValue,
         )
 
@@ -511,7 +516,7 @@ class TestWidgetWithDefaultValueAdapter(BaseWidgetCase):
         sm = getGlobalSiteManager()
         sm.unregisterAdapter(
             factory=DefaultValue,
-            required=(Interface, Interface, Interface),
+            required=(Interface, Interface, IWidget),
             provided=IWidgetDefaultValue,
         )
         super(TestWidgetWithDefaultValueAdapter, self).tearDown()

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<registry>
+  <record name="plone.icon.contenttype/dashboardcollection" remove="True" />
+  <records interface="plone.base.interfaces.IBundleRegistry"
+           prefix="plone.bundles/collectionwidget"
+           remove="True" />
+  <records interface="plone.base.interfaces.IBundleRegistry"
+           prefix="plone.bundles/faceted.collectionwidget.view"
+           remove="True" />
+  <records interface="plone.base.interfaces.IBundleRegistry"
+           prefix="plone.bundles/faceted.collectionwidget.edit"
+           remove="True" />
+</registry>

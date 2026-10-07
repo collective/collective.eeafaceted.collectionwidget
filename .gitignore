@@ -30,3 +30,4 @@ temp_interactive_push.bat
 .plone*
 checkversion*.html
 .python-version
+CACHEDIR.TAG
