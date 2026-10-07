@@ -2,8 +2,11 @@
 
 from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
+from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
 from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
+from collective.eeafaceted.collectionwidget.widgets.widget import ICollectionSchema
 from DateTime import DateTime
+from eea.facetednavigation.interfaces import ICriteria
 from eea.facetednavigation.widgets.storage import Criterion
 from imio.helpers.cache import cleanRamCacheFor
 from plone import api
@@ -14,6 +17,7 @@ from zope.component import getMultiAdapter
 from zope.interface import Interface
 
 import json
+import lxml.html
 
 
 COLLECTION_VOCABULARY = (
@@ -72,6 +76,34 @@ class BaseWidgetCase(IntegrationTestCase):
 
 class TestWidget(BaseWidgetCase):
     """Test widget methods"""
+
+    def _render(self, widget):
+        """Render p_widget as an lxml tree, widget.default and categories are memoized on the request."""
+        IAnnotations(self.request).pop('plone.memoize', None)
+        return lxml.html.fromstring(widget())
+
+    def test_widget_type(self):
+        # registered as faceted widget, used by the 'c1' criterion of the faceted
+        criteria = ICriteria(self.folder)
+        self.assertEqual(CollectionWidget.widget_type, 'collection-link')
+        self.assertIs(criteria.widget(cid='c1'), CollectionWidget)
+        self.assertIs(criteria.schema(cid='c1'), ICollectionSchema)
+
+    def test_update(self):
+        # fields 'index' and 'catalog' are removed from the edit form
+        widget = CollectionWidget(self.folder, self.request, data=getCollectionLinkCriterion(self.folder))
+        widget.update()
+        default_group = widget.groups[0]
+        self.assertEqual(list(default_group.widgets.keys()),
+                         ['title', 'vocabulary', 'hidealloption', 'default', 'hide_category'])
+        self.assertNotIn('index', default_group.fields)
+        self.assertNotIn('catalog', default_group.fields)
+
+    def test_hide_category(self):
+        data = Criterion()
+        self.assertFalse(CollectionWidget(self.folder, self.request, data=data).hide_category)
+        data.hide_category = True
+        self.assertTrue(CollectionWidget(self.folder, self.request, data=data).hide_category)
 
     def test_get_category(self):
         data = dict(
@@ -137,6 +169,14 @@ class TestWidget(BaseWidgetCase):
             [elt.token for elt in widget.vocabulary()],
             [self.collection1.UID(), self.collection2.UID()])
         self.assertNotIn(u'Category 1', [c['term'].title for c in list(vocabulary.values())])
+        # with hide_category, every collection is listed without category,
+        # even the one of the category the user can not see
+        data = Criterion(vocabulary=COLLECTION_VOCABULARY, hide_category=True)
+        widget = CollectionWidget(self.folder, self.request, data=data)
+        vocabulary = widget._generate_vocabulary()
+        self.assertEqual(list(vocabulary.keys()), [''])
+        self.assertEqual([term.token for term in vocabulary['']['collections']],
+                         [self.collection1.UID(), self.collection2.UID()])
 
     def test_hidealloption(self):
         data = Criterion()
@@ -315,6 +355,80 @@ class TestWidget(BaseWidgetCase):
         html = widget()
         self.assertTrue(self.collection1.Title() in html)
         self.assertTrue(self.collection1.UID() in html)
+
+        # with the criterion of the faceted
+        uid1 = self.collection1.UID()
+        uid2 = self.collection2.UID()
+        criterion = getCollectionLinkCriterion(self.folder)
+        widget = CollectionWidget(self.folder, self.request, data=criterion)
+        tree = self._render(widget)
+        # option 'All', selected as there is no default, then the collections grouped by category
+        self.assertEqual([li.get('id') for li in tree.xpath('//li')], ['c1all', 'c1' + uid1, 'c1' + uid2])
+        all_option = tree.xpath('//li')[0]
+        self.assertEqual(all_option.get('class'), 'no-category-tag faceted-tag-selected')
+        self.assertEqual(json.loads(all_option.get('data-kept-criteria')), {'c2': [], 'c3': [], 'c4': []})
+        self.assertEqual([div.text for div in tree.xpath('//div[@class="category"]/div[@class="title"]')],
+                         ['Category 1', 'Category 2'])
+        # a default collection unselects 'All'
+        criterion.default = uid1
+        tree = self._render(widget)
+        self.assertEqual(tree.xpath('//li')[0].get('class'), 'no-category-tag')
+        # hidealloption
+        criterion.hidealloption = True
+        tree = self._render(widget)
+        self.assertEqual([li.get('id') for li in tree.xpath('//li')], ['c1' + uid1, 'c1' + uid2])
+        # hide_category
+        criterion.hide_category = True
+        tree = self._render(widget)
+        self.assertEqual(tree.xpath('//div[@class="title"]'), [])
+        self.assertEqual([li.get('id') for li in tree.xpath('//li')], ['c1' + uid1, 'c1' + uid2])
+        # no collection: nothing rendered, except in the faceted widgets edit form, with option 'All'
+        for collection in (self.collection1, self.collection2):
+            collection.enabled = False
+            collection.reindexObject(idxs=['enabled'])
+        IAnnotations(self.request).pop('plone.memoize', None)
+        self.assertEqual(widget().strip(), '')
+        self.request.set('URL0', self.folder.absolute_url() + '/@@faceted_widgets')
+        tree = self._render(widget)
+        self.assertEqual([li.get('id') for li in tree.xpath('//li')], ['c1all'])
+
+    def test_render_category(self):
+        widget = CollectionWidget(self.folder, self.request, data=getCollectionLinkCriterion(self.folder))
+        term = widget.categories.getTermByToken(self.category1.UID())
+        div = lxml.html.fromstring(widget.render_category(term))
+        self.assertEqual((div.get('class'), div.text), ('title', 'Category 1'))
+
+    def test_render_term(self):
+        uid1 = self.collection1.UID()
+        uid2 = self.collection2.UID()
+        self.collection1.query = [{'i': 'portal_type',
+                                   'o': 'plone.app.querystring.operation.selection.is',
+                                   'v': ['Folder']}]
+        self.collection2.showNumberOfItems = False
+        criterion = getCollectionLinkCriterion(self.folder)
+        criterion.default = uid1
+        widget = CollectionWidget(self.folder, self.request, data=criterion)
+        widget._initialize_widget()  # done by widget.__call__ before rendering the terms
+        terms = dict((term.token, term) for term in widget.vocabulary())
+        # term in a category, selected by default, with the number of items
+        li = lxml.html.fromstring(widget.render_term(terms[uid1], self.category1.UID()))
+        self.assertEqual(li.get('id'), 'c1' + uid1)
+        self.assertEqual(li.get('class'), 'category1-collection1 faceted-tag-selected')
+        self.assertEqual((li.get('value'), li.get('title')), (uid1, 'Collection 1'))
+        self.assertEqual(json.loads(li.get('data-kept-criteria')), {'c2': [], 'c3': [], 'c4': []})
+        self.assertEqual(li.xpath('a/@href'), ['javascript:;'])
+        self.assertEqual(li.xpath('a/span[@class="term-label"]/text()'), ['Collection 1'])
+        self.assertEqual(li.xpath('a//span[@class="term-count"]/text()'), ['4'])
+        # term without category, number of items not shown
+        li = lxml.html.fromstring(widget.render_term(terms[uid2], ''))
+        self.assertEqual(li.get('class'), 'category2-collection2 no-category-tag')
+        self.assertEqual(li.xpath('a//span[@class="term-count"]'), [])
+        # collection in a faceted sub-folder: link to that folder
+        getMultiAdapter((self.category1, self.request), name=u'faceted_subtyper').enable()
+        terms = dict((term.token, term) for term in widget.vocabulary())
+        li = lxml.html.fromstring(widget.render_term(terms[uid1], self.category1.UID()))
+        self.assertEqual(li.xpath('a/@href'),
+                         ['{0}?no_redirect=1#c1={1}'.format(self.category1.absolute_url(), uid1)])
 
 
 class DefaultValue(object):

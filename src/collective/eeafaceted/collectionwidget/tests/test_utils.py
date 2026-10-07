@@ -25,6 +25,11 @@ class TestUtils(BaseWidgetCase):
         # get the sorting widget
         self.assertEqual(_get_criterion(self.folder, SortingWidget.widget_type).widget,
                          SortingWidget.widget_type)
+        # no criterion of that type
+        self.assertIsNone(_get_criterion(self.folder, 'text'))
+        # on a folder without faceted navigation, raises or returns None
+        self.assertRaises(NoFacetedViewDefinedException, _get_criterion, self.category1, CollectionWidget.widget_type)
+        self.assertIsNone(_get_criterion(self.category1, CollectionWidget.widget_type, raise_on_error=False))
 
     def test_getCollectionLinkCriterion(self):
         """This method will return the Collection-link widget defined on a folder if ever."""
@@ -66,6 +71,16 @@ class TestUtils(BaseWidgetCase):
         request.form['facetedQuery'] = '{{"c3":["20"],"b_start":["0"],"{0}":"{1}"}}'.format(
             criterion.__name__, dashcoll.UID())
         self.assertEqual(getCurrentCollection(self.folder), dashcoll)
+
+        # the faceted sends a list, its first element is used
+        del request.form['facetedQuery']
+        del IAnnotations(request)[cache_key]
+        request.form[criterion_name] = [self.collection2.UID()]
+        self.assertEqual(getCurrentCollection(self.folder), self.collection2)
+        # the result is cached in the request, unless caching=False
+        request.form[criterion_name] = [dashcoll.UID()]
+        self.assertEqual(getCurrentCollection(self.folder), self.collection2)
+        self.assertEqual(getCurrentCollection(self.folder, caching=False), dashcoll)
 
     def test_updateDefaultCollectionFor(self):
         """This method will define the default collection used by the collection-link
