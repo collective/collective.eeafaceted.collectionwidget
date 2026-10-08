@@ -9,7 +9,7 @@ long_description = open("README.rst").read() + "\n" + open("CHANGES.rst").read()
 
 setup(
     name="collective.eeafaceted.collectionwidget",
-    version="1.19.dev0",
+    version="2.0.0.dev0",
     description=(
         "eea.facetednavigation widget that enables selecting "
         "a collection (among several) as base filter"

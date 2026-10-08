@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.19 (unreleased)
------------------
+2.0.0 (unreleased)
+------------------
 
 - Fix py3 errors.
   [fngaha]
