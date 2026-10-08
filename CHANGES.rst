@@ -5,6 +5,9 @@ Changelog
 2.0.0 (unreleased)
 ------------------
 
+- Migrated to Plone 6.2 / Python 3, based on the work started by @fngaha and
+  @laulaz on `python3`.
+  [fngaha, laulaz, chris-adam]
 - Fix py3 errors.
   [fngaha]
 - Migrated to Plone 6.2 (Python 3.13); Plone 4 support dropped.
