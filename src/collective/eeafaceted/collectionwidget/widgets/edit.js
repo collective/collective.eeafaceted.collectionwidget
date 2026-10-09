@@ -12,8 +12,6 @@ FacetedEdit.initializeTagsCloudCollectionWidget = function(evt){
   });
 };
 
-jQuery(document).ready(function(){
-  jQuery(FacetedEdit.Events).bind(
-    FacetedEdit.Events.INITIALIZE_WIDGETS,
-    FacetedEdit.initializeTagsCloudCollectionWidget);
-});
+// Initialize: bound now, eea.facetednavigation triggers INITIALIZE_WIDGETS from its own document ready handler
+jQuery(FacetedEdit.Events).on(
+  FacetedEdit.Events.INITIALIZE_WIDGETS, FacetedEdit.initializeTagsCloudCollectionWidget);

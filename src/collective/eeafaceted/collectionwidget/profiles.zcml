@@ -1,32 +1,25 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:zcml="http://namespaces.zope.org/zcml"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    xmlns:five="http://namespaces.zope.org/five"
     i18n_domain="collective.eeafaceted.collectionwidget">
 
     <genericsetup:registerProfile
-        zcml:condition="have plone-5"
         name="default"
-        directory="profiles/plone5"
+        directory="profiles/default"
         title="collective.eeafaceted.collectionwidget"
         description="Extension profile for collective.eeafaceted.collectionwidget."
         provides="Products.GenericSetup.interfaces.EXTENSION" />
 
     <genericsetup:registerProfile
-        zcml:condition="not-have plone-5"
-        name="default"
-        directory="profiles/plone4"
-        title="collective.eeafaceted.collectionwidget"
-        description="Extension profile for collective.eeafaceted.collectionwidget."
+        name="uninstall"
+        directory="profiles/uninstall"
+        title="collective.eeafaceted.collectionwidget (uninstall)"
+        description="Uninstall profile for collective.eeafaceted.collectionwidget."
         provides="Products.GenericSetup.interfaces.EXTENSION" />
 
-    <genericsetup:registerProfile
-        name="universal"
-        directory="profiles/common"
-        title="collective.eeafaceted.collectionwidget Common Configuration"
-        description="Extension profile for collective.eeafaceted.collectionwidget settings that aren't version dependent."
-        provides="Products.GenericSetup.interfaces.EXTENSION" />
+    <utility
+        factory=".setuphandlers.HiddenProfiles"
+        name="collective.eeafaceted.collectionwidget" />
 
     <genericsetup:importStep
         name="collective.eeafaceted.collectionwidget-postInstall"
@@ -34,36 +27,5 @@
         description="Post install import step from collective.eeafaceted.collectionwidget"
         handler=".setuphandlers.post_install">
     </genericsetup:importStep>
-
-    <genericsetup:upgradeSteps
-      source="1"
-      destination="2"
-      profile="collective.eeafaceted.collectionwidget:default">
-      <genericsetup:upgradeDepends
-          title="Register portal_types"
-          description=""
-          import_steps="typeinfo"
-          import_profile="collective.eeafaceted.collectionwidget:universal" />
-      <genericsetup:upgradeDepends
-          title="Register JS resources"
-          description=""
-          import_steps="jsregistry" />
-      <genericsetup:upgradeDepends
-          title="Register CSS resources"
-          description=""
-          import_steps="cssregistry" />
-      <genericsetup:upgradeDepends
-          title="Workflow for DashboardCollection (no workflow)"
-          description=""
-          import_steps="workflow" />
-    </genericsetup:upgradeSteps>
-
-    <genericsetup:upgradeStep
-        title="Correct collectionwidget vocabulary name"
-        description=""
-        source="2"
-        destination="3"
-        handler="collective.eeafaceted.collectionwidget.upgrades.upgrade_to_3"
-        profile="collective.eeafaceted.collectionwidget:default" />
 
 </configure>

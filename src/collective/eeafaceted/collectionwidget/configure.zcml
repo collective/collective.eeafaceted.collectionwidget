@@ -42,10 +42,11 @@
       factory=".categories.CategoriesFromFolder"
       />
 
+    <!-- not for (* * *): CMFCore's ++add++ traverser would take it as the add view -->
     <adapter
       for="*
            *
-           *"
+           eea.facetednavigation.interfaces.IWidget"
       provides=".interfaces.IWidgetDefaultValue"
       factory=".adapters.DefaultValue"
       />

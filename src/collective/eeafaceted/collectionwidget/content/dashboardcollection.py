@@ -15,32 +15,38 @@ class DashboardCollection(Collection):
 
     def displayCatalogQuery(self):
         """
-          Return the stored query as a readable catalog query."""
+        Return the stored query as a readable catalog query."""
         return parseFormquery(self, self.query)
 
     def brains_results(self, *args):
-        catalog = api.portal.get_tool('portal_catalog')
+        catalog = api.portal.get_tool("portal_catalog")
         query = parseFormquery(self, self.query)
-        if 'sort_on' not in query:
-            query['sort_on'] = 'created'
+        if "sort_on" not in query:
+            query["sort_on"] = "created"
         return catalog(**query)
 
-    def results(self, batch=True, b_start=0, b_size=None,
-                sort_on=None, limit=None, brains=False,
-                custom_query=None):
+    def results(
+        self,
+        batch=True,
+        b_start=0,
+        b_size=None,
+        sort_on=None,
+        limit=None,
+        brains=False,
+        custom_query=None,
+    ):
         """Overrided to not add the "path" in the qurey arbitrary,
-           we do not need it and this index is very slow."""
+        we do not need it and this index is very slow."""
         if custom_query is None:
             custom_query = {}
-        querybuilder = getMultiAdapter((self, self.REQUEST),
-                                       name='querybuilderresults')
-        sort_order = 'reverse' if self.sort_reversed else 'ascending'
+        querybuilder = getMultiAdapter((self, self.REQUEST), name="querybuilderresults")
+        sort_order = "reverse" if self.sort_reversed else "ascending"
         if not b_size:
-            b_size = getattr(self, 'item_count', 30)
+            b_size = getattr(self, "item_count", 30)
         if not sort_on:
-            sort_on = getattr(self, 'sort_on', None)
+            sort_on = getattr(self, "sort_on", None)
         if not limit:
-            limit = getattr(self, 'limit', 1000)
+            limit = getattr(self, "limit", 1000)
 
         query = self.query
 
@@ -74,7 +80,13 @@ class DashboardCollection(Collection):
         # End changes: comment this part adding the path
 
         return querybuilder(
-            query=query, batch=batch, b_start=b_start, b_size=b_size,
-            sort_on=sort_on, sort_order=sort_order,
-            limit=limit, brains=brains, custom_query=custom_query
+            query=query,
+            batch=batch,
+            b_start=b_start,
+            b_size=b_size,
+            sort_on=sort_on,
+            sort_order=sort_order,
+            limit=limit,
+            brains=brains,
+            custom_query=custom_query,
         )

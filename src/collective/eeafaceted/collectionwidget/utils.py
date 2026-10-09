@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from collective.eeafaceted.collectionwidget.config import NO_COLLECTIONWIDGET_EXCEPTION_MSG
+from collective.eeafaceted.collectionwidget.config import (
+    NO_COLLECTIONWIDGET_EXCEPTION_MSG,
+)
 from collective.eeafaceted.collectionwidget.config import NO_FACETED_EXCEPTION_MSG
-from collective.eeafaceted.collectionwidget.interfaces import NoCollectionWidgetDefinedException
-from collective.eeafaceted.collectionwidget.interfaces import NoFacetedViewDefinedException
+from collective.eeafaceted.collectionwidget.interfaces import (
+    NoCollectionWidgetDefinedException,
+)
+from collective.eeafaceted.collectionwidget.interfaces import (
+    NoFacetedViewDefinedException,
+)
 from collective.eeafaceted.collectionwidget.widgets.widget import CollectionWidget
 from eea.facetednavigation.criteria.interfaces import ICriteria
 from eea.facetednavigation.events import FacetedGlobalSettingsChangedEvent
 from eea.facetednavigation.subtypes.interfaces import IFacetedNavigable
-from imio.helpers.content import base_hasattr
 from imio.helpers.content import uuidToObject
 from zope.annotation.interfaces import IAnnotations
 from zope.event import notify
@@ -19,7 +24,7 @@ import json
 
 def _get_criterion(faceted_context, criterion_type, raise_on_error=True):
     """Return the given criterion_type instance of a
-       context with a faceted navigation/search view on it."""
+    context with a faceted navigation/search view on it."""
     if not IFacetedNavigable.providedBy(faceted_context):
         if raise_on_error:
             raise NoFacetedViewDefinedException(NO_FACETED_EXCEPTION_MSG)
@@ -34,8 +39,9 @@ def _get_criterion(faceted_context, criterion_type, raise_on_error=True):
 
 def getCollectionLinkCriterion(faceted_context):
     """Return the CollectionLink criterion used by faceted_context."""
-    criterion = _get_criterion(faceted_context,
-                               criterion_type=CollectionWidget.widget_type)
+    criterion = _get_criterion(
+        faceted_context, criterion_type=CollectionWidget.widget_type
+    )
     if not criterion:
         raise NoCollectionWidgetDefinedException(NO_COLLECTIONWIDGET_EXCEPTION_MSG)
 
@@ -44,14 +50,16 @@ def getCollectionLinkCriterion(faceted_context):
 
 def getCurrentCollection(faceted_context, caching=True):
     """Return the Collection currently used by the faceted :
-       - first get the collection criterion;
-       - then look in the request the used UID and get the corresponding Collection.
-       If p_caching is True, the collection is stored in request cache."""
+    - first get the collection criterion;
+    - then look in the request the used UID and get the corresponding Collection.
+    If p_caching is True, the collection is stored in request cache."""
     collection = None
     if caching:
         request = getRequest()
         if request:
-            key = 'collectionwidget-utils-getCurrentCollection-{0}'.format(faceted_context.UID())
+            key = "collectionwidget-utils-getCurrentCollection-{0}".format(
+                faceted_context.UID()
+            )
             cache = IAnnotations(request)
             collection = cache.get(key, None)
         else:
@@ -59,16 +67,20 @@ def getCurrentCollection(faceted_context, caching=True):
 
     if collection is None:
         criterion = getCollectionLinkCriterion(faceted_context)
-        collectionUID = faceted_context.REQUEST.form.get('{0}[]'.format(criterion.__name__))
+        collectionUID = faceted_context.REQUEST.form.get(
+            "{0}[]".format(criterion.__name__)
+        )
         # if not collectionUID, maybe we have a 'facetedQuery' in the REQUEST
-        if not collectionUID and \
-           ('facetedQuery' in faceted_context.REQUEST.form and faceted_context.REQUEST.form['facetedQuery']):
-            query = json.loads(faceted_context.REQUEST.form['facetedQuery'])
+        if not collectionUID and (
+            "facetedQuery" in faceted_context.REQUEST.form
+            and faceted_context.REQUEST.form["facetedQuery"]
+        ):
+            query = json.loads(faceted_context.REQUEST.form["facetedQuery"])
             collectionUID = query.get(criterion.__name__)
         if not collectionUID and criterion.default:
             collectionUID = criterion.default
         if collectionUID:
-            if base_hasattr(collectionUID, "__iter__"):
+            if isinstance(collectionUID, (list, tuple)):
                 collectionUID = collectionUID[0]
             collection = uuidToObject(collectionUID, unrestricted=True)
         if caching and collection:
@@ -79,13 +91,13 @@ def getCurrentCollection(faceted_context, caching=True):
 
 def _updateDefaultCollectionFor(folderObj, default_uid):
     """Use p_default_uid as the default collection selected
-       for the CollectionWidget used on p_folderObj."""
+    for the CollectionWidget used on p_folderObj."""
     # folder should be a facetednav
     if not IFacetedNavigable.providedBy(folderObj):
         raise NoFacetedViewDefinedException(NO_FACETED_EXCEPTION_MSG)
 
     criterion = getCollectionLinkCriterion(folderObj)
     # use ICriteria.edit so change is persisted
-    ICriteria(folderObj).edit(criterion.__name__, **{'default': default_uid})
+    ICriteria(folderObj).edit(criterion.__name__, **{"default": default_uid})
     # notify that settings changed
     notify(FacetedGlobalSettingsChangedEvent(folderObj))
