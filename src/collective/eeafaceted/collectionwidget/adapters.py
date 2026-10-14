@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from imio.helpers.content import uuidToObject
 from plone.app.querystring import queryparser
 from Products.CMFCore.utils import getToolByName
@@ -7,7 +5,7 @@ from Products.PluginIndexes.DateIndex.DateIndex import DateIndex
 from zope.globalrequest import getRequest
 
 
-class DefaultValue(object):
+class DefaultValue:
     """If we  have a default value, check if it is still available
     it could have been deleted or used vocabulary could not contain it anymore.
     If it is the case, we fall back to first available collection."""
@@ -22,7 +20,7 @@ class DefaultValue(object):
             self.value = existingCollectionUids and existingCollectionUids[0] or ""
 
 
-class KeptCriteria(object):
+class KeptCriteria:
     """This adapter makes it possible to override default implementation
     of which criteria are kept when changing from a collection to another.
     By default, this is done smartly by disabling criteria using indexes
@@ -38,7 +36,7 @@ class KeptCriteria(object):
         res = {}
         # special case for the 'all' option where every criteria are kept
         if collection_uid == "all":
-            res = dict([(k, []) for k in self.widget.advanced_criteria])
+            res = {k: [] for k in self.widget.advanced_criteria}
         else:
             collection = uuidToObject(collection_uid, unrestricted=True)
             if collection:

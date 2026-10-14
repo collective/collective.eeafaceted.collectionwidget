@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Setup/installation tests for this package."""
 
 from ..testing.testcase import IntegrationTestCase
@@ -200,7 +199,7 @@ class TestInstall(IntegrationTestCase):
     def test_translations(self):
         self.assertEqual(
             translate(_("DashboardCollection"), target_language="fr"),
-            "Collection pour tableau de bord",
+            "Collection pour tableau de bord",  # codespell:ignore bord
         )
         self.assertEqual(
             translate(_("Hide category"), target_language="fr"), "Cacher la catégorie"

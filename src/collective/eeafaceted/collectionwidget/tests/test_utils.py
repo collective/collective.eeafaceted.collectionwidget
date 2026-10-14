@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.eeafaceted.collectionwidget.interfaces import (
     NoCollectionWidgetDefinedException,
 )
@@ -72,7 +71,7 @@ class TestUtils(BaseWidgetCase):
 
         # current collection is get with collectionLink id in the REQUEST, not set for now
         criterion = getCollectionLinkCriterion(self.folder)
-        criterion_name = "{0}[]".format(criterion.__name__)
+        criterion_name = f"{criterion.__name__}[]"
         request = self.portal.REQUEST
         self.assertFalse(criterion_name in request)
         self.assertIsNone(getCurrentCollection(self.folder))
@@ -85,7 +84,7 @@ class TestUtils(BaseWidgetCase):
         # a template on a dashboard
         del request.form[criterion_name]
         # getcurrentCollection is cached, remove infos in request annotation
-        cache_key = "collectionwidget-utils-getCurrentCollection-{0}".format(
+        cache_key = "collectionwidget-utils-getCurrentCollection-{}".format(
             self.folder.UID()
         )
         del IAnnotations(request)[cache_key]

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from collective.eeafaceted.collectionwidget.config import (
     NO_COLLECTIONWIDGET_EXCEPTION_MSG,
 )
@@ -57,7 +55,7 @@ def getCurrentCollection(faceted_context, caching=True):
     if caching:
         request = getRequest()
         if request:
-            key = "collectionwidget-utils-getCurrentCollection-{0}".format(
+            key = "collectionwidget-utils-getCurrentCollection-{}".format(
                 faceted_context.UID()
             )
             cache = IAnnotations(request)
@@ -67,9 +65,7 @@ def getCurrentCollection(faceted_context, caching=True):
 
     if collection is None:
         criterion = getCollectionLinkCriterion(faceted_context)
-        collectionUID = faceted_context.REQUEST.form.get(
-            "{0}[]".format(criterion.__name__)
-        )
+        collectionUID = faceted_context.REQUEST.form.get(f"{criterion.__name__}[]")
         # if not collectionUID, maybe we have a 'facetedQuery' in the REQUEST
         if not collectionUID and (
             "facetedQuery" in faceted_context.REQUEST.form

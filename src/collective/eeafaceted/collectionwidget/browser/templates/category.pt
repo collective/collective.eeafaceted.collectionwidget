@@ -1,3 +1,5 @@
 <tal:defines>
-     <div class="title" tal:content="python: context.Title()">Category title</div>
+  <div class="title"
+       tal:content="python: context.Title()"
+  >Category title</div>
 </tal:defines>

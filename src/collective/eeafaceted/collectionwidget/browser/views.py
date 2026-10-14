@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from collective.eeafaceted.collectionwidget.content.dashboardcollection import (
     IDashboardCollection,
 )
@@ -35,7 +33,7 @@ class RenderCategoryView(BrowserView):
     def _get_category_template(self):
         """Base method that returns the ViewPageTemplate to
         use to display the category.
-        Made to be overrided, returns a ViewPageTemplate or None."""
+        Made to be overridden, returns a ViewPageTemplate or None."""
         return None
 
     def __call__(self, widget):
@@ -92,9 +90,7 @@ class FacetedDashboardView(FacetedContainerView):
         if criterion:
             # if we have the collection UID in the REQUEST, return self.index()
             # so we avoid the portal_catalog search for collection
-            collectionUID = self.context.REQUEST.form.get(
-                "{0}[]".format(criterion.__name__)
-            )
+            collectionUID = self.context.REQUEST.form.get(f"{criterion.__name__}[]")
             if collectionUID or not criterion.default:
                 return self.index()
             if (

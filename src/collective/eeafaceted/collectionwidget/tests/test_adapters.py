@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.eeafaceted.collectionwidget.adapters import DefaultValue
 from collective.eeafaceted.collectionwidget.adapters import KeptCriteria
 from collective.eeafaceted.collectionwidget.interfaces import IKeptCriteria

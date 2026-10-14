@@ -1,7 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <layers>
-  <layer
-    name="collective.eeafaceted.collectionwidget"
-    interface="collective.eeafaceted.collectionwidget.interfaces.ICollectiveEeafacetedCollectionwidgetLayer"
+  <layer interface="collective.eeafaceted.collectionwidget.interfaces.ICollectiveEeafacetedCollectionwidgetLayer"
+         name="collective.eeafaceted.collectionwidget"
   />
 </layers>

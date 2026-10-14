@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from plone.app.contenttypes.interfaces import ICollection
 from plone.indexer import indexer
 

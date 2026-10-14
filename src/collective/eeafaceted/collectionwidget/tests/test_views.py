@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.eeafaceted.collectionwidget.browser.views import QueryBuilder
 from collective.eeafaceted.collectionwidget.tests.test_widget import BaseWidgetCase
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion

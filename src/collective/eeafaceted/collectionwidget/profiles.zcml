@@ -1,31 +1,36 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="collective.eeafaceted.collectionwidget">
+    i18n_domain="collective.eeafaceted.collectionwidget"
+    >
 
-    <genericsetup:registerProfile
-        name="default"
-        directory="profiles/default"
-        title="collective.eeafaceted.collectionwidget"
-        description="Extension profile for collective.eeafaceted.collectionwidget."
-        provides="Products.GenericSetup.interfaces.EXTENSION" />
+  <genericsetup:registerProfile
+      name="default"
+      title="collective.eeafaceted.collectionwidget"
+      description="Extension profile for collective.eeafaceted.collectionwidget."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/default"
+      />
 
-    <genericsetup:registerProfile
-        name="uninstall"
-        directory="profiles/uninstall"
-        title="collective.eeafaceted.collectionwidget (uninstall)"
-        description="Uninstall profile for collective.eeafaceted.collectionwidget."
-        provides="Products.GenericSetup.interfaces.EXTENSION" />
+  <genericsetup:registerProfile
+      name="uninstall"
+      title="collective.eeafaceted.collectionwidget (uninstall)"
+      description="Uninstall profile for collective.eeafaceted.collectionwidget."
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/uninstall"
+      />
 
-    <utility
-        factory=".setuphandlers.HiddenProfiles"
-        name="collective.eeafaceted.collectionwidget" />
+  <utility
+      factory=".setuphandlers.HiddenProfiles"
+      name="collective.eeafaceted.collectionwidget"
+      />
 
-    <genericsetup:importStep
-        name="collective.eeafaceted.collectionwidget-postInstall"
-        title="collective.eeafaceted.collectionwidget post_install import step"
-        description="Post install import step from collective.eeafaceted.collectionwidget"
-        handler=".setuphandlers.post_install">
+  <genericsetup:importStep
+      name="collective.eeafaceted.collectionwidget-postInstall"
+      title="collective.eeafaceted.collectionwidget post_install import step"
+      description="Post install import step from collective.eeafaceted.collectionwidget"
+      handler=".setuphandlers.post_install"
+      >
     </genericsetup:importStep>
 
 </configure>

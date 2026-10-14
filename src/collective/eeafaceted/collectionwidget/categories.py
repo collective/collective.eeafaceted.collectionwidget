@@ -1,7 +1,7 @@
 from Products.CMFCore.utils import getToolByName
 
 
-class CategoriesFromFolder(object):
+class CategoriesFromFolder:
     def __init__(self, context):
         self.context = context
 

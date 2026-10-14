@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from collective.behavior.talcondition.interfaces import ITALConditionable
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
 from collective.eeafaceted.collectionwidget.vocabulary import (
@@ -169,13 +167,13 @@ class TestVocabulary(IntegrationTestCase):
         self.assertFalse(vocabulary.getTermByToken(c2.UID()).title[1])
         self.assertEqual(
             vocabulary.getTermByToken(c3.UID()).title[1],
-            "{0}?no_redirect=1#c44={1}".format(
+            "{}?no_redirect=1#c44={}".format(
                 self.folder.subfolder.absolute_url(), c3.UID()
             ),
         )
         self.assertEqual(
             vocabulary.getTermByToken(c4.UID()).title[1],
-            "{0}?no_redirect=1#c44={1}".format(
+            "{}?no_redirect=1#c44={}".format(
                 self.folder.subfolder.absolute_url(), c4.UID()
             ),
         )
@@ -194,11 +192,11 @@ class TestVocabulary(IntegrationTestCase):
         )
         self.assertEqual(
             vocabulary.getTermByToken(c1.UID()).title[1],
-            "{0}?no_redirect=1#c1={1}".format(self.folder.absolute_url(), c1.UID()),
+            f"{self.folder.absolute_url()}?no_redirect=1#c1={c1.UID()}",
         )
         self.assertEqual(
             vocabulary.getTermByToken(c2.UID()).title[1],
-            "{0}?no_redirect=1#c1={1}".format(self.folder.absolute_url(), c2.UID()),
+            f"{self.folder.absolute_url()}?no_redirect=1#c1={c2.UID()}",
         )
         self.assertFalse(vocabulary.getTermByToken(c3.UID()).title[1])
         self.assertFalse(vocabulary.getTermByToken(c4.UID()).title[1])
@@ -209,7 +207,7 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEqual(
             vocabulary.getTermByToken(c1.UID()).title[1],
-            "{0}?no_redirect=1#c1={1}&c5=effective&reversed=on".format(
+            "{}?no_redirect=1#c1={}&c5=effective&reversed=on".format(
                 self.folder.absolute_url(), c1.UID()
             ),
         )
@@ -218,7 +216,7 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEqual(
             vocabulary.getTermByToken(c1.UID()).title[1],
-            "{0}?no_redirect=1#c1={1}&c5=effective".format(
+            "{}?no_redirect=1#c1={}&c5=effective".format(
                 self.folder.absolute_url(), c1.UID()
             ),
         )
@@ -229,7 +227,7 @@ class TestVocabulary(IntegrationTestCase):
         vocabulary = CollectionVocabularyFactory(self.folder.subfolder, self.folder)
         self.assertEqual(
             vocabulary.getTermByToken(c1.UID()).title[1],
-            "{0}?no_redirect=1#c1={1}&c5=effective&c6=20".format(
+            "{}?no_redirect=1#c1={}&c5=effective&c6=20".format(
                 self.folder.absolute_url(), c1.UID()
             ),
         )
@@ -273,7 +271,7 @@ class TestVocabulary(IntegrationTestCase):
         # cache is user aware
         vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
-        # Now, desactivate bypass for manager
+        # Now, deactivate bypass for manager
         login(self.portal, TEST_USER_NAME)
         self.dashboardcollection.roles_bypassing_talcondition = []
         # ObjectModified event on DashboardCollection invalidate the vocabulary caching
@@ -321,7 +319,7 @@ class TestVocabulary(IntegrationTestCase):
         # cache is user aware
         vocab = factory(self.portal, self.portal)
         self.assertFalse(self.dashboardcollection.UID() in vocab.by_token)
-        # Now, desactivate bypass for manager
+        # Now, deactivate bypass for manager
         login(self.portal, TEST_USER_NAME)
         self.dashboardcollection.roles_bypassing_talcondition = []
         # ObjectModified event on DashboardCollection invalidate the vocabulary caching

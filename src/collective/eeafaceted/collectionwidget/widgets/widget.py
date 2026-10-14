@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from Acquisition import aq_parent
 from collections import OrderedDict
 from collective.eeafaceted.collectionwidget import FacetedCollectionMessageFactory as _
@@ -70,7 +68,7 @@ class CollectionWidget(RadioWidget):
     )
 
     def __init__(self, context, request, data=None):
-        super(CollectionWidget, self).__init__(context, request, data)
+        super().__init__(context, request, data)
         # widget context could not be current context but some distant context
         # look in eea.facetednavigation.criteria.handler.Criteria
         self.criteria = ICriteria(self.context)
@@ -85,7 +83,7 @@ class CollectionWidget(RadioWidget):
 
     def update(self):
         """Remove fields 'index' and 'catalog', unused."""
-        super(CollectionWidget, self).update()
+        super().update()
         default_group = self.groups[0]
         if "index" in default_group.fields:
             del default_group.fields["index"]
@@ -103,7 +101,7 @@ class CollectionWidget(RadioWidget):
     def __call__(self, **kwargs):
         # compute the vocabulary used in the widget
         self._initialize_widget()
-        return super(CollectionWidget, self).__call__(**kwargs)
+        return super().__call__(**kwargs)
 
     def query(self, form):
         """Get value from form and return a catalog dict query"""
@@ -127,7 +125,7 @@ class CollectionWidget(RadioWidget):
             for criterion_id, criterion in list(self.criteria.items()):
                 if criterion.widget == SortingWidget.widget_type:
                     # criterion id in the request.form is like c0[]
-                    if "{0}[]".format(criterion_id) in self.request.form:
+                    if f"{criterion_id}[]" in self.request.form:
                         sort_on_is_used = True
                     break
             if not sort_on_is_used:
@@ -158,7 +156,7 @@ class CollectionWidget(RadioWidget):
     @memoize
     def default(self):
         """Return the default value"""
-        default = super(CollectionWidget, self).default
+        default = super().default
         if not default:
             # it is possible to not select a default, it will have
             # same behaviour as selecting option "All"

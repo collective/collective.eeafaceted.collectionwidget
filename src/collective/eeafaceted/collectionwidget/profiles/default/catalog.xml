@@ -1,8 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object name="portal_catalog">
 
-    <index name="enabled" meta_type="BooleanIndex">
-      <indexed_attr value="enabled"/>
-    </index>
+  <index meta_type="BooleanIndex"
+         name="enabled"
+  >
+    <indexed_attr value="enabled" />
+  </index>
 
 </object>

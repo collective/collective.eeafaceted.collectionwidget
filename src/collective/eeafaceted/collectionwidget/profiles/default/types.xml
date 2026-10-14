@@ -1,5 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <object name="portal_types">
-  <object name="DashboardCollection" meta_type="Dexterity FTI" remove="true" />
-  <object name="DashboardCollection" meta_type="Dexterity FTI" />
+  <object meta_type="Dexterity FTI"
+          name="DashboardCollection"
+          remove="true"
+  />
+  <object meta_type="Dexterity FTI"
+          name="DashboardCollection"
+  />
 </object>

@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from collective.behavior.talcondition.behavior import ITALCondition
 from collective.behavior.talcondition.interfaces import ITALConditionable
 from collective.eeafaceted.collectionwidget.interfaces import ICollectionCategories
@@ -19,7 +17,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 
 @implementer(IVocabularyFactory)
-class CollectionVocabulary(object):
+class CollectionVocabulary:
     def __call__(self, context, real_context):
         self.context = context
         items = []
@@ -85,33 +83,31 @@ class CollectionVocabulary(object):
             # section omitting the collection widget
             if criterion.section == "default":
                 if criterion.widget == CollectionWidget.widget_type:
-                    default_criteria.append(
-                        "{0}={1}".format(criterion.__name__, collection.UID())
-                    )
+                    default_criteria.append(f"{criterion.__name__}={collection.UID()}")
                 elif criterion.default:
                     if criterion.widget == "sorting":
                         # manage sort order criterion, received as c0=effective(reverse),
                         # changed for c0=effective&reversed=on
                         if criterion.default.endswith("(reverse)"):
                             default_criteria.append(
-                                "{0}={1}&reversed=on".format(
+                                "{}={}&reversed=on".format(
                                     criterion.__name__,
                                     criterion.default.replace("(reverse)", ""),
                                 )
                             )
                         else:
                             default_criteria.append(
-                                "{0}={1}".format(criterion.__name__, criterion.default)
+                                f"{criterion.__name__}={criterion.default}"
                             )
                     else:
                         default_criteria.append(
-                            "{0}={1}".format(criterion.__name__, criterion.default)
+                            f"{criterion.__name__}={criterion.default}"
                         )
         query_url = "&".join(default_criteria)
         return redirect_to.format(collection_container.absolute_url(), query_url)
 
     def _extra_expr_ctx(self):
-        """To be overrided, this way, extra_expr_ctx is given to the
+        """To be overridden, this way, extra_expr_ctx is given to the
         expression evaluated on the DashboardCollection."""
         return {}
 
@@ -120,7 +116,7 @@ CollectionVocabularyFactory = CollectionVocabulary()
 
 
 @implementer(IVocabularyFactory)
-class CollectionCategoryVocabulary(object):
+class CollectionCategoryVocabulary:
     def __call___cachekey(method, self, context):
         """cachekey method for self.__call__."""
         root = context
@@ -179,7 +175,7 @@ class CachedCollectionVocabulary(CollectionVocabulary):
     @ram.cache(__call___cachekey)
     def CachedCollectionVocabulary__call__(self, context, real_context):
         """Same behaviour as the original CollectionVocabulary, just cached."""
-        terms = super(CachedCollectionVocabulary, self).__call__(context, real_context)
+        terms = super().__call__(context, real_context)
         return terms
 
     # do ram.cache have a different key name

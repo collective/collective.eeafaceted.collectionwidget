@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from eea.facetednavigation.interfaces import ICriteria
 from Products.GenericSetup.context import SnapshotImportContext
 from Products.GenericSetup.interfaces import IBody

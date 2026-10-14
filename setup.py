@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 """Installer for the collective.eeafaceted.collectionwidget package."""
 
 from setuptools import find_packages
 from setuptools import setup
-
 
 long_description = open("README.rst").read() + "\n" + open("CHANGES.rst").read() + "\n"
 
@@ -24,7 +22,11 @@ setup(
         "Framework :: Plone :: Addon",
         "License :: OSI Approved :: GNU General Public License (GPL)",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
     ],
     keywords="Plone faceted navigation widget collection",
     author="IMIO",
@@ -38,18 +40,32 @@ setup(
     zip_safe=False,
     python_requires=">=3.10",
     install_requires=[
-        "plone.api",
-        "setuptools",
         "collective.behavior.talcondition",
         "eea.facetednavigation >= 16.0",
         "imio.helpers",
+        "plone.api",
+        "plone.app.contentlisting",
         "plone.app.contenttypes",
+        "plone.app.querystring",
+        "plone.autoform",
         "plone.base",
+        "plone.indexer",
+        "plone.memoize",
+        "Products.CMFCore",
+        "Products.ZCatalog",
+        "z3c.form",
+        "Zope",
     ],
     extras_require={
         "test": [
-            "plone.app.testing",
+            "lxml",
             "plone.app.robotframework [debug]",
+            "plone.app.testing",
+            "plone.behavior",
+            "plone.browserlayer",
+            "plone.dexterity",
+            "plone.testing",
+            "robotsuite",
         ],
     },
     entry_points="""

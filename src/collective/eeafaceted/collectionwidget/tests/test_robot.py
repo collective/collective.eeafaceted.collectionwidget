@@ -13,7 +13,6 @@ import os
 import robotsuite
 import unittest
 
-
 # suites needing an optional integration layer, e.g. {'test_facetednav.robot': ADDONS_ACCEPTANCE}
 SUITE_LAYERS = {}
 

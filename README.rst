@@ -1,10 +1,7 @@
 
-.. image:: https://github.com/collective/collective.eeafaceted.collectionwidget/actions/workflows/main.yml/badge.svg
-    :target: https://github.com/collective/collective.eeafaceted.collectionwidget/actions/workflows/main.yml
+.. image:: https://github.com/collective/collective.eeafaceted.collectionwidget/actions/workflows/meta.yml/badge.svg?branch=master
+    :target: https://github.com/collective/collective.eeafaceted.collectionwidget/actions/workflows/meta.yml
 
-
-.. image:: https://coveralls.io/repos/github/collective/collective.eeafaceted.collectionwidget/badge.svg?branch=master
-  :target: https://coveralls.io/github/collective/collective.eeafaceted.collectionwidget?branch=master
 
 
 ==========================================================================

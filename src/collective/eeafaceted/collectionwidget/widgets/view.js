@@ -20,7 +20,7 @@ Faceted.TagsCloudCollectionWidget.prototype.tag_click =
     /* hide the advanced criteria */
     /* Faceted.Sections.advanced.hide("fast"); */
 
-    /* Here we could set arbitrarilly criteria, for example : Faceted.Query['c1'] = ["private"]; */
+    /* Here we could set arbitrarily criteria, for example : Faceted.Query['c1'] = ["private"]; */
     showRelevantAdvancedCriteria(tag);
 
     /* Update current page title */

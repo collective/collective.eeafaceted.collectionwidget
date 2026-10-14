@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-
-
 from collective.eeafaceted.collectionwidget.interfaces import IDashboardCollection
 from plone import api
 from plone.app.contenttypes.content import Collection
@@ -35,7 +32,7 @@ class DashboardCollection(Collection):
         brains=False,
         custom_query=None,
     ):
-        """Overrided to not add the "path" in the qurey arbitrary,
+        """Overridden to not add the "path" in the qurey arbitrary,
         we do not need it and this index is very slow."""
         if custom_query is None:
             custom_query = {}

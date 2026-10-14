@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from collective.eeafaceted.collectionwidget.interfaces import IWidgetDefaultValue
 from collective.eeafaceted.collectionwidget.testing.testcase import IntegrationTestCase
 from collective.eeafaceted.collectionwidget.utils import getCollectionLinkCriterion
@@ -16,11 +14,11 @@ from Products.CMFCore.utils import getToolByName
 from zope.annotation import IAnnotations
 from zope.component import getGlobalSiteManager
 from zope.component import getMultiAdapter
+from zope.interface import alsoProvides
 from zope.interface import Interface
 
 import json
 import lxml.html
-
 
 COLLECTION_VOCABULARY = "collective.eeafaceted.collectionwidget.collectionvocabulary"
 
@@ -355,7 +353,7 @@ class TestWidget(BaseWidgetCase):
         # make also getCurrentCollection happy
         self.request.form["c1[]"] = self.collection1.UID()
         query_dico = widget.query(self.request.form)
-        # the sort_on paramter of the collection is taken into account
+        # the sort_on parameter of the collection is taken into account
         self.assertTrue(self.collection1.sort_on == "sortable_title")
         self.assertTrue(self.collection1.sort_reversed is False)
         self.assertEqual(
@@ -463,7 +461,7 @@ class TestWidget(BaseWidgetCase):
         criterion.default = uid1
         widget = CollectionWidget(self.folder, self.request, data=criterion)
         widget._initialize_widget()  # done by widget.__call__ before rendering the terms
-        terms = dict((term.token, term) for term in widget.vocabulary())
+        terms = {term.token: term for term in widget.vocabulary()}
         # term in a category, selected by default, with the number of items
         li = lxml.html.fromstring(widget.render_term(terms[uid1], self.category1.UID()))
         self.assertEqual(li.get("id"), "c1" + uid1)
@@ -485,15 +483,20 @@ class TestWidget(BaseWidgetCase):
         getMultiAdapter(
             (self.category1, self.request), name="faceted_subtyper"
         ).enable()
-        terms = dict((term.token, term) for term in widget.vocabulary())
+        terms = {term.token: term for term in widget.vocabulary()}
         li = lxml.html.fromstring(widget.render_term(terms[uid1], self.category1.UID()))
         self.assertEqual(
             li.xpath("a/@href"),
-            ["{0}?no_redirect=1#c1={1}".format(self.category1.absolute_url(), uid1)],
+            [f"{self.category1.absolute_url()}?no_redirect=1#c1={uid1}"],
         )
 
 
-class DefaultValue(object):
+class IDefaultValueFolder(Interface):
+    """Limits DefaultValue to the test folder: a cached lookup of the adapter
+    outlives its unregistration and broke the robot tests run after it."""
+
+
+class DefaultValue:
     def __init__(self, context, request, widget):
         self.value = context.category1.collection1
 
@@ -504,11 +507,12 @@ class TestWidgetWithDefaultValueAdapter(BaseWidgetCase):
         self.assertEqual(widget.adapter_default_value, self.collection1)
 
     def setUp(self):
-        super(TestWidgetWithDefaultValueAdapter, self).setUp()
+        super().setUp()
+        alsoProvides(self.folder, IDefaultValueFolder)
         sm = getGlobalSiteManager()
         sm.registerAdapter(
             factory=DefaultValue,
-            required=(Interface, Interface, IWidget),
+            required=(IDefaultValueFolder, Interface, IWidget),
             provided=IWidgetDefaultValue,
         )
 
@@ -516,7 +520,7 @@ class TestWidgetWithDefaultValueAdapter(BaseWidgetCase):
         sm = getGlobalSiteManager()
         sm.unregisterAdapter(
             factory=DefaultValue,
-            required=(Interface, Interface, IWidget),
+            required=(IDefaultValueFolder, Interface, IWidget),
             provided=IWidgetDefaultValue,
         )
-        super(TestWidgetWithDefaultValueAdapter, self).tearDown()
+        super().tearDown()
