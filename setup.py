@@ -1,6 +1,5 @@
 """Installer for the collective.eeafaceted.collectionwidget package."""
 
-from setuptools import find_packages
 from setuptools import setup
 
 long_description = open("README.rst").read() + "\n" + open("CHANGES.rst").read() + "\n"
@@ -33,9 +32,6 @@ setup(
     author_email="support@imio.be",
     url="http://pypi.python.org/pypi/collective.eeafaceted.collectionwidget",
     license="GPL",
-    packages=find_packages("src", exclude=["ez_setup"]),
-    namespace_packages=["collective", "collective.eeafaceted"],
-    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.10",
