@@ -1,16 +1,10 @@
 graft src/collective
 graft docs
-include *.cfg *.rst *.in *.txt
-include *.py
-include Makefile
-recursive-include docs *.GPL
-recursive-include docs *.rst
-exclude buildout.d
-exclude buildout.d/*
+include *.cfg *.rst *.in Makefile mx.ini requirements*.txt
+exclude *-mxdev.txt
+exclude .coveragerc
 exclude .installed.cfg
 exclude .mr.developer.cfg
-exclude *.yml
-exclude .coveragerc
+recursive-include docs *.GPL
+recursive-include docs *.rst
 global-exclude *.pyc
-exclude .github
-recursive-exclude .github *

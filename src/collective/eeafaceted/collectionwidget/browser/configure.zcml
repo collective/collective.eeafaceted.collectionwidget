@@ -2,47 +2,48 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:plone="http://namespaces.plone.org/plone"
-    i18n_domain="collective.eeafaceted.collectionwidget">
+    i18n_domain="collective.eeafaceted.collectionwidget"
+    >
 
-    <!-- Publish static files -->
-    <browser:resourceDirectory
+  <!-- Publish static files -->
+  <browser:resourceDirectory
       name="collective.eeafaceted.collectionwidget"
       directory="static"
       />
 
+  <browser:page
+      name="render_collection_widget_category"
+      for="*"
+      class=".views.RenderCategoryView"
+      template="templates/category.pt"
+      permission="zope2.View"
+      />
+
+  <browser:page
+      name="render_collection_widget_term"
+      for="*"
+      class=".views.RenderTermView"
+      template="templates/term.pt"
+      permission="zope2.View"
+      />
+
+  <configure package="eea.facetednavigation">
     <browser:page
-        for="*"
-        name="render_collection_widget_category"
-        class=".views.RenderCategoryView"
-        template="templates/category.pt"
+        name="facetednavigation_view"
+        for="eea.facetednavigation.interfaces.IFacetedNavigable"
+        class="collective.eeafaceted.collectionwidget.browser.views.FacetedDashboardView"
+        template="browser/template/view.pt"
         permission="zope2.View"
+        layer="collective.eeafaceted.collectionwidget.interfaces.ICollectiveEeafacetedCollectionwidgetLayer"
         />
+  </configure>
 
-    <browser:page
-        for="*"
-        name="render_collection_widget_term"
-        class=".views.RenderTermView"
-        template="templates/term.pt"
-        permission="zope2.View"
-        />
-
-    <configure package="eea.facetednavigation">
-        <browser:page
-            for="eea.facetednavigation.interfaces.IFacetedNavigable"
-            name="facetednavigation_view"
-            template="browser/template/view.pt"
-            class="collective.eeafaceted.collectionwidget.browser.views.FacetedDashboardView"
-            permission="zope2.View"
-            layer="collective.eeafaceted.collectionwidget.interfaces.ICollectiveEeafacetedCollectionwidgetLayer"
-        />
-    </configure>
-
-    <!-- override the querybuilderresults to avoid forced "path" index -->
-    <browser:page
+  <!-- override the querybuilderresults to avoid forced "path" index -->
+  <browser:page
       name="querybuilderresults"
+      for="*"
       class=".views.QueryBuilder"
       permission="zope2.View"
-      for="*"
       layer="collective.eeafaceted.collectionwidget.interfaces.ICollectiveEeafacetedCollectionwidgetLayer"
       />
 

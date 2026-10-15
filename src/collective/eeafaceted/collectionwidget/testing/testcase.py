@@ -10,8 +10,8 @@ class IntegrationTestCase(unittest.TestCase):
     layer = INTEGRATION
 
     def setUp(self):
-        super(IntegrationTestCase, self).setUp()
-        self.portal = self.layer['portal']
+        super().setUp()
+        self.portal = self.layer["portal"]
 
 
 class FunctionalTestCase(unittest.TestCase):

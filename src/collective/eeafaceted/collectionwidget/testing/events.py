@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 from eea.facetednavigation.interfaces import ICriteria
 from Products.GenericSetup.context import SnapshotImportContext
 from Products.GenericSetup.interfaces import IBody
@@ -12,7 +10,11 @@ def collection_faceted_enabled(context, event):
     add_default_collection_widgets(context)
 
     # Reindex
-    context.reindexObject(['object_provides', ])
+    context.reindexObject(
+        [
+            "object_provides",
+        ]
+    )
 
 
 def add_default_collection_widgets(context):
@@ -21,21 +23,21 @@ def add_default_collection_widgets(context):
         return
 
     # Configure widgets only for canonical (LinguaPlone only)
-    getCanonical = getattr(context, 'getCanonical', None)
+    getCanonical = getattr(context, "getCanonical", None)
     if getCanonical:
         canonical = getCanonical()
         if context != canonical:
             return
 
-    if criteria.keys():
+    if list(criteria.keys()):
         criteria.criteria = []
 
-    widgets = context.unrestrictedTraverse('@@default_collection_widgets.xml')
+    widgets = context.unrestrictedTraverse("@@default_collection_widgets.xml")
     if not widgets:
         return
 
     xml = widgets()
-    environ = SnapshotImportContext(context, 'utf-8')
+    environ = SnapshotImportContext(context, "utf-8")
     importer = queryMultiAdapter((context, environ), IBody)
     if not importer:
         return

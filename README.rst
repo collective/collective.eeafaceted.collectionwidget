@@ -1,10 +1,7 @@
 
-.. image:: https://travis-ci.org/collective/collective.eeafaceted.collectionwidget.svg
-  :target: https://travis-ci.org/collective/collective.eeafaceted.collectionwidget
+.. image:: https://github.com/collective/collective.eeafaceted.collectionwidget/actions/workflows/meta.yml/badge.svg?branch=master
+    :target: https://github.com/collective/collective.eeafaceted.collectionwidget/actions/workflows/meta.yml
 
-
-.. image:: https://coveralls.io/repos/github/collective/collective.eeafaceted.collectionwidget/badge.svg?branch=master
-  :target: https://coveralls.io/github/collective/collective.eeafaceted.collectionwidget?branch=master
 
 
 ==========================================================================
@@ -14,7 +11,7 @@ collective.eeafaceted.collectionwidget
 Package adding a widget for eea.facetednavigation that list collections as base searches
 
 * `Source code @ GitHub <https://github.com/collective/collective.eeafaceted.collectionwidget>`_
-* `Continuous Integration @ Travis-CI <http://travis-ci.org/collective/collective.eeafaceted.collectionwidget>`_
+* `Continuous Integration @ GitHub Actions <https://github.com/collective/collective.eeafaceted.collectionwidget/actions/workflows/main.yml>`_
 
 How it works
 ============
