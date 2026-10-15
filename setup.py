@@ -29,7 +29,7 @@ setup(
     ],
     keywords="Plone faceted navigation widget collection",
     author="IMIO",
-    author_email="support@imio.be",
+    author_email="support-docs@imio.be",
     url="http://pypi.python.org/pypi/collective.eeafaceted.collectionwidget",
     license="GPL",
     include_package_data=True,
