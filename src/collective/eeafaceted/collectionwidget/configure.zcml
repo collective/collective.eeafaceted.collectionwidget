@@ -1,59 +1,71 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:five="http://namespaces.zope.org/five"
-    xmlns:i18n="http://namespaces.zope.org/i18n"
     xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
-    i18n_domain="collective.eeafaceted.collectionwidget">
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="collective.eeafaceted.collectionwidget"
+    >
 
-    <i18n:registerTranslations directory="locales" />
+  <i18n:registerTranslations directory="locales" />
 
-    <five:registerPackage package="." initialize=".initialize" />
-
-    <include package="plone.api" />
-    <include package="collective.behavior.talcondition"/>
-    <include package="eea.facetednavigation" />
-    <include file="events.zcml" />
-    <include file="permissions.zcml" />
-    <include file="profiles.zcml" />
-
-    <include package=".browser" />
-    <include package=".content" />
-    <include package=".widgets" />
-
-    <!-- Vocabularies -->
-    <utility component=".vocabulary.CachedCollectionVocabularyFactory"
-             name="collective.eeafaceted.collectionwidget.cachedcollectionvocabulary" />
-
-    <utility component=".vocabulary.CollectionVocabularyFactory"
-             name="collective.eeafaceted.collectionwidget.collectionvocabulary" />
-
-    <utility component=".vocabulary.CollectionCategoryVocabularyFactory"
-             name="collective.eeafaceted.collectionwidget.collectioncategoryvocabulary" />
-
-    <adapter
-        for="*
-             eea.facetednavigation.interfaces.IWidget"
-        factory=".adapters.KeptCriteria"
-        provides=".interfaces.IKeptCriteria" />
-
-    <adapter
-      for="*"
-      provides=".interfaces.ICollectionCategories"
-      factory=".categories.CategoriesFromFolder"
+  <five:registerPackage
+      package="."
+      initialize=".initialize"
       />
 
-    <adapter
+  <include package="plone.api" />
+  <include package="collective.behavior.talcondition" />
+  <include package="eea.facetednavigation" />
+  <include file="events.zcml" />
+  <include file="permissions.zcml" />
+  <include file="profiles.zcml" />
+
+  <include package=".browser" />
+  <include package=".content" />
+  <include package=".widgets" />
+
+  <!-- Vocabularies -->
+  <utility
+      name="collective.eeafaceted.collectionwidget.cachedcollectionvocabulary"
+      component=".vocabulary.CachedCollectionVocabularyFactory"
+      />
+
+  <utility
+      name="collective.eeafaceted.collectionwidget.collectionvocabulary"
+      component=".vocabulary.CollectionVocabularyFactory"
+      />
+
+  <utility
+      name="collective.eeafaceted.collectionwidget.collectioncategoryvocabulary"
+      component=".vocabulary.CollectionCategoryVocabularyFactory"
+      />
+
+  <adapter
+      factory=".adapters.KeptCriteria"
+      provides=".interfaces.IKeptCriteria"
+      for="*
+           eea.facetednavigation.interfaces.IWidget"
+      />
+
+  <adapter
+      factory=".categories.CategoriesFromFolder"
+      provides=".interfaces.ICollectionCategories"
+      for="*"
+      />
+
+  <!-- not for (* * *): CMFCore's ++add++ traverser would take it as the add view -->
+  <adapter
+      factory=".adapters.DefaultValue"
+      provides=".interfaces.IWidgetDefaultValue"
       for="*
            *
-           *"
-      provides=".interfaces.IWidgetDefaultValue"
-      factory=".adapters.DefaultValue"
+           eea.facetednavigation.interfaces.IWidget"
       />
 
-    <!-- indexes -->
-    <adapter
-      name="enabled"
+  <!-- indexes -->
+  <adapter
       factory=".indexes.enabled"
+      name="enabled"
       />
 
 </configure>

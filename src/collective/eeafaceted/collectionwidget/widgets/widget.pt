@@ -1,58 +1,82 @@
 <div class="faceted-widget faceted-tagscloud-collection-widget"
-     i18n:domain="eea" tal:define="
-  error_view nocall:context/@@faceted.widget.error;
-  wid python:view.data.getId();
-  hidden python:view.hidden;
-  hidezerocount python:view.hidezerocount;
-  sortcountable python:view.sortcountable;
-  default_value python:view.default or '';
-  css string:faceted-widget ${view/css_class};
-  css python:hidden and css + ' faceted-widget-hidden' or css;
-  css python:view.countable and css + ' faceted-count' or css;
-  css python:hidezerocount and css + ' faceted-zero-count-hidden' or css;
-  css python:sortcountable and css + ' faceted-sortcountable' or css;
-  maxitems python:view.data.get('maxitems', 0) or 0;
-  edit_mode python:request.URL0.endswith('@@faceted_widgets');
-  display_fieldset view/display_fieldset;
-  grouped_vocabulary view/grouped_vocabulary;
-  hide_category view/hide_category;"
-  tal:condition="python:edit_mode or grouped_vocabulary"
-  tal:attributes="id string:${wid}_widget; class css">
+     tal:define="
+       error_view nocall:context/@@faceted.widget.error;
+       wid python:view.data.getId();
+       hidden python:view.hidden;
+       hidezerocount python:view.hidezerocount;
+       sortcountable python:view.sortcountable;
+       default_value python:view.default or '';
+       css string:faceted-widget ${view/css_class};
+       css python:hidden and css + ' faceted-widget-hidden' or css;
+       css python:view.countable and css + ' faceted-count' or css;
+       css python:hidezerocount and css + ' faceted-zero-count-hidden' or css;
+       css python:sortcountable and css + ' faceted-sortcountable' or css;
+       maxitems python:view.data.get('maxitems', 0) or 0;
+       edit_mode python:request.URL0.endswith('@@faceted_widgets');
+       display_fieldset view/display_fieldset;
+       grouped_vocabulary view/grouped_vocabulary;
+       hide_category view/hide_category;
+     "
+     tal:condition="python:edit_mode or grouped_vocabulary"
+     tal:attributes="
+       id string:${wid}_widget;
+       class css;
+     "
+     i18n:domain="eea"
+>
 
-<fieldset class="widget-fieldset" tal:omit-tag="not:display_fieldset">
-  <legend tal:define="title python:view.data.get('title', '')"
-          tal:omit-tag="not:display_fieldset"
-          tal:content="python:display_fieldset and view.translate(title) or ''"
-          i18n:translate="">HTML Widget</legend>
-  <form action="." method="get"
-  tal:on-error="structure python:error_view(error=error, cid=wid)">
-  <ul tal:attributes="data-advanced-criteria view/advanced_criteria_as_json">
-    <li tal:condition="python: not view.data.get('hidealloption', False) or not grouped_vocabulary"
-        tal:attributes="class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
-                        value string:'';
-                        data-kept-criteria python:view.kept_criteria_as_json('all');
-                        title string:All;
-                        id string:${wid}all;"
-        i18n:attributes="title">
-        <a href="javascript:;"
-           tal:content="string:All"
-           i18n:translate="">All</a>
-    </li>
-    <tal:categories repeat="grouped_element python:grouped_vocabulary.items()">
-      <tal:category define="category python:grouped_element[0];
-                            category_term python:grouped_element[1].get('term', None) ;
-                            collection_terms python:grouped_element[1]['collections'];">
-          <div class="category">
-            <tal:renderCategory condition="python:category and not hide_category"
-                replace="structure python: view.render_category(category_term)" />
-            <tal:items repeat="term collection_terms">
-              <tal:renderTerm replace="structure python: view.render_term(term, category)" />
-            </tal:items>
-          </div>
-      </tal:category>
-    </tal:categories>
-  </ul>
-  </form>
-  <span style="display:none" tal:content="maxitems" />
-</fieldset>
+  <fieldset class="widget-fieldset"
+            tal:omit-tag="not:display_fieldset"
+  >
+    <legend tal:define="
+              title python:view.data.get('title', '');
+            "
+            tal:content="python:display_fieldset and view.translate(title) or ''"
+            tal:omit-tag="not:display_fieldset"
+            i18n:translate=""
+    >HTML Widget</legend>
+    <form action="."
+          method="get"
+          tal:on-error="structure python:error_view(error=error, cid=wid)"
+    >
+      <ul tal:attributes="
+            data-advanced-criteria view/advanced_criteria_as_json;
+          ">
+        <li tal:condition="python: not view.data.get('hidealloption', False) or not grouped_vocabulary"
+            tal:attributes="
+              class python:default_value == '' and 'no-category-tag faceted-tag-selected' or 'no-category-tag';
+              value string:'';
+              data-kept-criteria python:view.kept_criteria_as_json('all');
+              title string:All;
+              id string:${wid}all;
+            "
+            i18n:attributes="title"
+        >
+          <a href="javascript:;"
+             tal:content="string:All"
+             i18n:translate=""
+          >All</a>
+        </li>
+        <tal:categories repeat="grouped_element python:grouped_vocabulary.items()">
+          <tal:category define="
+                          category python:grouped_element[0];
+                          category_term python:grouped_element[1].get('term', None);
+                          collection_terms python:grouped_element[1]['collections'];
+                        ">
+            <div class="category">
+              <tal:rendercategory condition="python:category and not hide_category"
+                                  replace="structure python: view.render_category(category_term)"
+              />
+              <tal:items repeat="term collection_terms">
+                <tal:renderterm replace="structure python: view.render_term(term, category)" />
+              </tal:items>
+            </div>
+          </tal:category>
+        </tal:categories>
+      </ul>
+    </form>
+    <span style="display:none"
+          tal:content="maxitems"
+    ></span>
+  </fieldset>
 </div>

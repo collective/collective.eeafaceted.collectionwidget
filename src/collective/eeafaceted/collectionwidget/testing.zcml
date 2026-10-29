@@ -1,28 +1,29 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
-    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
     xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="collective.eeafaceted.collectionwidget">
+    xmlns:genericsetup="http://namespaces.zope.org/genericsetup"
+    i18n_domain="collective.eeafaceted.collectionwidget"
+    >
 
-    <include file="configure.zcml" />
-    <include package="plone.app.contenttypes" />
+  <include file="configure.zcml" />
+  <include package="plone.app.contenttypes" />
 
-    <genericsetup:registerProfile
-        name="testing"
-        title="collective.eeafaceted.collectionwidget tests"
-        directory="profiles/testing"
-        description="Steps to ease tests of collective.eeafaceted.collectionwidget"
-        provides="Products.GenericSetup.interfaces.EXTENSION"
-        />
+  <genericsetup:registerProfile
+      name="testing"
+      title="collective.eeafaceted.collectionwidget tests"
+      description="Steps to ease tests of collective.eeafaceted.collectionwidget"
+      provides="Products.GenericSetup.interfaces.EXTENSION"
+      directory="profiles/testing"
+      />
 
-    <browser:page
-      for="eea.facetednavigation.interfaces.IFacetedNavigable"
+  <browser:page
       name="default_collection_widgets.xml"
+      for="eea.facetednavigation.interfaces.IFacetedNavigable"
       template="testing/default_collection.xml"
       permission="eea.faceted.configure"
       />
 
-    <subscriber
+  <subscriber
       for="eea.facetednavigation.interfaces.IFacetedNavigable
            eea.facetednavigation.interfaces.IFacetedEnabledEvent"
       handler=".testing.events.collection_faceted_enabled"

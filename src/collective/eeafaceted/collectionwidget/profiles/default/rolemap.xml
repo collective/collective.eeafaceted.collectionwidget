@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rolemap>
+  <roles>
+    <role name="Manager" />
+  </roles>
+  <permissions>
+    <permission acquire="True"
+                name="collective.eeafaceted.collectionwidget: Add DashboardCollection"
+    >
+      <role name="Manager" />
+      <role name="Site Administrator" />
+    </permission>
+  </permissions>
+</rolemap>

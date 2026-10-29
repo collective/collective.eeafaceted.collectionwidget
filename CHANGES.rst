@@ -2,10 +2,30 @@ Changelog
 =========
 
 
-1.19 (unreleased)
------------------
+2.0.0 (unreleased)
+------------------
 
-- Nothing changed yet.
+- Migrated to Plone 6.2 / Python 3, based on the work started by @fngaha and
+  @laulaz on `python3`.
+  [fngaha, laulaz, chris-adam]
+- Fix py3 errors.
+  [fngaha]
+- Migrated to Plone 6.2 (Python 3.13); Plone 4 support dropped.
+  [chris-adam]
+- Widget JS/CSS registered as `faceted.collectionwidget.view`/`.edit` bundles (eea.facetednavigation 16).
+  [chris-adam]
+- `IWidgetDefaultValue` adapter registered for the widget only: it broke the `++add++` forms on Plone 6.
+  [chris-adam]
+- The page heading follows the selected collection again with Plone 6.2's plain `h1`.
+  [chris-adam]
+- DashboardCollection icon registered for the Plone 6 icon resolver (`contenttype/dashboardcollection`).
+  [chris-adam]
+- Removed the upgrade steps to profile versions 2 and 3.
+  [chris-adam]
+- Added plone.meta configuration (tox, pre-commit, GitHub Actions).
+  [chris-adam]
+- Switched to PEP 420 native namespace packages.
+  [chris-adam]
 
 
 1.18 (2026-03-03)
@@ -28,7 +48,7 @@ Changelog
 
 - Use default value if available and if there is no parameter in request
   [mpeeters]
-- Fix for Python 3 compatibilty
+- Fix for Python 3 compatibility
   [mpeeters]
 
 
@@ -141,7 +161,7 @@ Changelog
 1.4 (2018-11-29)
 ----------------
 
-- Migrate IFacetedNavigable criterias, replacing old vocabulary by
+- Migrate IFacetedNavigable criteria, replacing old vocabulary by
   `cachedcollectionvocabulary`.
   [sgeulette]
 - Added method `RenderCategoryView._get_category_template` to formalize how to
@@ -155,7 +175,7 @@ Changelog
   because of a bug in plone.api==1.8.4.
   See https://github.com/plone/plone.api/pull/414
   [gbastien]
-- Define a `csscompilation` name for collection widget own CSS ressource.
+- Define a `csscompilation` name for collection widget own CSS resource.
   Do redefine as little as possible when including widget view/edit css/js into
   eea.facetednavigation existing bundles.
   [gbastien]
@@ -272,7 +292,7 @@ Changelog
   the id could be different than current faceted Collection widget id
   [gbastien]
 
-- If we use functionnality of sub folders where faceted navigation is enabled,
+- If we use functionality of sub folders where faceted navigation is enabled,
   and the default collection is on one of these subfolders, do not redirect to
   this default collection if we use the 'folder_contents' of the root folder or
   user is systematically redirected to the subfolder and it is not possible
