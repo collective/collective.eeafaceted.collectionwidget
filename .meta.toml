@@ -31,6 +31,7 @@ test_environment_variables = """
 """
 test_deps_additional = """
     horse-with-no-namespace
+    collective.fingerpointing @ file://{toxinidir}/sources/collective.fingerpointing
     eea.facetednavigation @ file://{toxinidir}/sources/eea.facetednavigation
     imio.helpers @ file://{toxinidir}/sources/imio.helpers
 """
